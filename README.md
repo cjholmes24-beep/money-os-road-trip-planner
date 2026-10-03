@@ -1,25 +1,36 @@
 # Road Trip Ledger
 
-A zero-cost static travel-planning utility site. It includes focused calculators for gas, complete road trips, rental cars, airport transfers, travel eSIM data, activities, and luggage storage, plus a factual flight-delay compensation guide.
+A zero-cost static travel-planning utility site designed for high-intent organic search traffic and Travelpayouts Drive monetization.
+
+## Public tools
+
+Eight calculators: gas, complete road trip, rental car, flight cost, airport transfer, travel eSIM, activities, and luggage storage.
+
+Two guides: flight-delay compensation and travel insurance.
 
 ## Run locally
-
-Serve the repository root with any static server, for example:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`. No build, account, database, paid API, or external package is required. Calculations run locally in the browser.
+No build, database, paid API, external package, or paid hosting is required.
 
 ## Search setup
 
-The repository contains `sitemap.xml`, `robots.txt`, canonical links, Open Graph tags, and JSON-LD. After GitHub Pages publishes, add the GitHub Pages URL as a URL-prefix property in Google Search Console, verify it using a supported no-cost method, and submit `sitemap.xml`. The same sitemap can be submitted to Bing Webmaster Tools.
+The repository includes sitemap.xml, robots.txt, canonical URLs, unique titles/descriptions, Open Graph metadata, internal links, and JSON-LD.
 
-## Monetization and disclosure
+After GitHub Pages publishes, add the Pages URL as a URL-prefix property in Google Search Console and submit:
+https://cjholmes24-beep.github.io/money-os-road-trip-planner/sitemap.xml
 
-The existing Travelpayouts Drive loader remains installed. Pages contain an affiliate disclosure explaining that eligible links or offers may generate a commission at no additional cost to the traveler. No unverified direct affiliate program URLs are hard-coded.
+The same sitemap can be submitted to Bing Webmaster Tools.
 
-## Privacy and costs
+## Monetization
 
-The site requires no paid hosting, domain, API, SEO tool, advertising, or social posting. It collects no form submissions; calculator inputs remain in the browser. Estimates are planning aids and should be checked against current provider prices and terms.
+Travelpayouts Drive remains installed on every indexed page. Affiliate disclosures explain that eligible offers or links may generate a commission at no additional cost to the traveler.
+
+Direct provider URLs are intentionally not invented or hard-coded. Verified account-specific links/widgets can be added later with per-page attribution.
+
+## Cost and privacy
+
+Owner cost remains $0. No paid ads, hosting, domain, API, SEO tool, database, or account system is required. Calculator entries remain in the visitor's browser. Travelpayouts Drive may perform monetization/interaction processing as disclosed on the site.
