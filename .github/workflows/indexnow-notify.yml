@@ -1,0 +1,37 @@
+name: Notify IndexNow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.html"
+      - "*.html"
+      - "*.js"
+      - "*.css"
+      - "data/*.json"
+      - "sitemap.xml"
+      - "robots.txt"
+      - "96df4ff75cc652635ffb9a6b80af194e.txt"
+      - "scripts/indexnow_submit.py"
+      - ".github/workflows/indexnow-notify.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate IndexNow ownership file
+        shell: bash
+        run: |
+          test "$(tr -d '\r\n' < 96df4ff75cc652635ffb9a6b80af194e.txt)" = "96df4ff75cc652635ffb9a6b80af194e"
+      - name: Notify participating search engines
+        run: python scripts/indexnow_submit.py
