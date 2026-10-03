@@ -74,3 +74,8 @@ The static architecture remains $0: semantic HTML/CSS, framework-free JavaScript
 IndexNow is wired at $0 owner cost. The public ownership file `96df4ff75cc652635ffb9a6b80af194e.txt` verifies the GitHub Pages host path, and `.github/workflows/indexnow-notify.yml` automatically submits sitemap URLs to IndexNow after relevant main-branch updates. This is a discovery notification, not a guarantee of crawl or ranking.
 
 Google Search Console still requires account/property verification and is not replaced by IndexNow.
+
+
+## Durable handoff
+
+Before starting a new Suitcase Brain engineering thread, read `docs/CURRENT_HANDOFF.md` and `docs/BUILD_LEDGER.md`. They preserve the verified main SHA, finished bricks, failures/repairs, operating doctrine, build workflow, and immediate next engineering target.
