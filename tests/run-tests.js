@@ -1,0 +1,13 @@
+"use strict";
+const assert=require("assert"),B=require("../trip-intelligence.js"),S=require("../source-intelligence.js");
+let t=B.createTrip();assert.equal(t.schema_version,1);assert(B.validateTrip(t).valid);assert(B.validateTrip(JSON.parse(JSON.stringify(t))).valid,"canonical serialization");
+t.budget={total:1000,reserve:200,currency:"USD"};t.traveler_count=4;t.travelers=[1,2,3,4].map((x,i)=>({label:`T${x}`,amount_committed:250,amount_paid:i<3?250:0,commitment_state:i<3?"FULL_SHARE_FUNDED":"ACCEPTED"}));
+let m=B.budgetMetrics(t);assert.deepEqual([m.spendable,m.plannedShare,m.fundedAmount,m.unfundedGap,m.committed,m.funded],[800,250,750,250,4,3]);
+let d=B.dropoutScenario(t,1);assert.equal(d.remaining,3);assert(Math.abs(d.newShare-333.3333333333333)<.001);assert(Math.abs(d.increasePerRemaining-83.33333333333331)<.001);
+let u=B.dropoutScenario(t,0,true,true);assert.equal(u.dropouts,1);assert.equal(u.totalFundingShortage,250);
+let c=B.cancellationExposure([{booking_price:500,deposit_paid:200,amount_paid_beyond_deposit:100,refundable_amount:150,nonrefundable_amount:150,change_rebooking_fee:25,provider_cancellation_fee:10,provider_no_show_fee:0,credit_voucher_possibility:"UNKNOWN",policy_status:"USER-ENTERED"}]);assert.deepEqual([c.totalBookedValue,c.totalAlreadyPaid,c.estimatedRecoverable,c.estimatedNonrefundable,c.estimatedFees,c.netEstimatedLoss],[500,300,150,150,35,185]);
+let f=B.hiddenFeeMetrics([{status:"UNKNOWN",amount:null},{status:"USER-ENTERED",amount:25},{status:"NOT APPLICABLE",amount:99}]);assert.deepEqual(f,{total:25,counted:1,unknown:1});
+assert(!B.validateTrip({...t,schema_version:99}).valid);assert(!B.validateTrip(null).valid);assert(!B.validateTrip({...t,budget:{total:1,reserve:2}}).valid);
+assert.equal(B.budgetMetrics(B.createTrip()).plannedShare,0);assert.equal(B.dropoutScenario(B.createTrip(),2).remaining,0);
+let fresh=S.classifyFreshness({fact_type:"LIVE",retrieved_at:"2026-01-01T00:00:00Z",freshness_seconds:3600},Date.parse("2026-01-01T00:30:00Z"));assert.deepEqual([fresh.label,fresh.status],["LIVE","fresh"]);assert.equal(S.classifyFreshness({fact_type:"LIVE",retrieved_at:"2026-01-01T00:00:00Z",freshness_seconds:3600},Date.parse("2026-01-01T03:00:00Z")).status,"stale");assert.equal(S.classifyFreshness({}).label,"UNKNOWN");
+console.log("Suitcase Brain: 18 assertions passed");

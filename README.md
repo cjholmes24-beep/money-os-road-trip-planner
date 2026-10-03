@@ -2,7 +2,13 @@
 
 A zero-cost travel-intelligence property powered by Money OS. The current static site remains the revenue-capable foundation while Suitcase Brain grows into a budget-first trip, local-discovery, event, group-logistics and vendor-opportunity engine.
 
-## Suitcase Brain V1\n\n`/plan-my-trip/` is the first canonical trip-intake surface. It models purpose, budget, travelers, actual funding, contingency reserve, trip vibe, interests and resilience without fabricating live prices.\n\nSee `docs/TRAVEL_INTELLIGENCE_DOCTRINE.md` for the canonical product architecture and `docs/BRAND_CLEARANCE_SUITCASE_BRAIN_2026-10-03.md` for the preliminary working-name check.\n\n## Public tools
+## Suitcase Brain Travel Intelligence V1
+
+`/plan-my-trip/` is a nine-stage, browser-local trip workspace. Its versioned canonical record covers intent, people, dates, preferences, needs, modes, traveler commitments, reservations, hidden fees, and emergency planning. The resulting blueprint calculates spendable budget, actual funding, dropout scenarios, cancellation exposure, fee totals, and explainable resilience indicators. Save/load uses `localStorage`; import/export uses validated JSON. No trip record is sent to a Money OS backend because there is no backend.
+
+Source-backed intelligence currently consists of the official weekly EIA gasoline snapshot and an explicit opt-in National Weather Service current-location forecast. Every other live module says it is not connected rather than inventing results. See `docs/SUITCASE_BRAIN_STATUS.md`, `docs/TRAVEL_INTELLIGENCE_DOCTRINE.md`, and `docs/BRAND_CLEARANCE_SUITCASE_BRAIN_2026-10-03.md`.
+
+## Public tools
 
 Eight calculators: gas, complete road trip, rental car, flight cost, airport transfer, travel eSIM, activities, and luggage storage.
 
@@ -45,6 +51,22 @@ Owner cost remains $0. No paid ads, hosting, domain, API, SEO tool, database, or
 - `source-intelligence.js` shows the most relevant available EIA reference for the entered destination and provides opt-in live National Weather Service weather for the traveler's current location.
 
 No paid data service or API key is required for this brick.
+
+## Tests
+
+```sh
+node tests/run-tests.js
+python3 tests/validate-site.py
+node --check trip-intelligence.js
+node --check source-intelligence.js
+node --check plan-my-trip/planner-ui.js
+```
+
+The dependency-free harness covers schema serialization/import validation, budget and reserve math, funding and dropout scenarios, cancellation exposure, hidden fees, boundary cases, and freshness classification. Site validation checks JSON, local links, sitemap targets, disclosure/Travelpayouts preservation, expected truth labels, and common secret patterns.
+
+## Architecture and next build order
+
+The static architecture remains $0: semantic HTML/CSS, framework-free JavaScript, versioned browser-local JSON, checked-in government snapshots, and keyless official endpoints. New providers should normalize facts through the Source & Freshness Contract and must not add a link until the relationship and URL are account-verified. Next: connect official/provider-supported transportation and lodging facts, including provider cancellation terms, then add verified event/activity sources.
 
 
 ## Automated search distribution
