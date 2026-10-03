@@ -1,38 +1,36 @@
 # Road Trip Ledger
 
-A free, faceless, static road-trip and travel-budget calculator.
+A zero-cost static travel-planning utility site designed for high-intent organic search traffic and Travelpayouts Drive monetization.
 
-## What it does
+## Public tools
 
-Road Trip Ledger estimates:
+Eight calculators: gas, complete road trip, rental car, flight cost, airport transfer, travel eSIM, activities, and luggage storage.
 
-- fuel cost
-- lodging cost
-- food cost
-- miscellaneous trip expenses
-- total trip budget
-- per-person trip cost
+Two guides: flight-delay compensation and travel insurance.
 
-## Privacy and architecture
+## Run locally
 
-The site is intentionally simple:
+```sh
+python3 -m http.server 8000
+```
 
-- no accounts
-- no analytics
-- no advertising
-- no affiliate links at launch
-- no database
-- no server
-- no paid API
-- no external runtime assets
-- no collection of personal information
+No build, database, paid API, external package, or paid hosting is required.
 
-All calculations run in the visitor's browser using static HTML, CSS, and JavaScript.
+## Search setup
 
-## Hosting
+The repository includes sitemap.xml, robots.txt, canonical URLs, unique titles/descriptions, Open Graph metadata, internal links, and JSON-LD.
 
-The project is designed for free static hosting such as GitHub Pages.
+After GitHub Pages publishes, add the Pages URL as a URL-prefix property in Google Search Console and submit:
+https://cjholmes24-beep.github.io/money-os-road-trip-planner/sitemap.xml
 
-## Disclaimer
+The same sitemap can be submitted to Bing Webmaster Tools.
 
-Calculations are estimates only. Travelers should verify current fuel, lodging, toll, parking, food, and destination prices before spending money.
+## Monetization
+
+Travelpayouts Drive remains installed on every indexed page. Affiliate disclosures explain that eligible offers or links may generate a commission at no additional cost to the traveler.
+
+Direct provider URLs are intentionally not invented or hard-coded. Verified account-specific links/widgets can be added later with per-page attribution.
+
+## Cost and privacy
+
+Owner cost remains $0. No paid ads, hosting, domain, API, SEO tool, database, or account system is required. Calculator entries remain in the visitor's browser. Travelpayouts Drive may perform monetization/interaction processing as disclosed on the site.

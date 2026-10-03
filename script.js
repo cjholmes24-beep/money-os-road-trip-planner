@@ -1,119 +1,23 @@
 (() => {
-  "use strict";
-
-  const form = document.getElementById("tripForm");
-  const resetBtn = document.getElementById("resetBtn");
-  const errorBox = document.getElementById("formError");
-
-  const ids = ["miles","mpg","fuelPrice","hotelNight","hotelNights","foodPerDay","days","travelers","misc"];
-  const fields = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
-
-  const output = {
-    fuel: document.getElementById("fuelResult"),
-    hotel: document.getElementById("hotelResult"),
-    food: document.getElementById("foodResult"),
-    misc: document.getElementById("miscResult"),
-    total: document.getElementById("totalResult"),
-    perPerson: document.getElementById("perPersonResult"),
-    note: document.getElementById("formulaNote")
-  };
-
-  const money = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-  });
-
-  function value(name, fallback = 0) {
-    const raw = fields[name].value.trim();
-    if (raw === "") return fallback;
-    return Number(raw);
-  }
-
-  function clearInvalid() {
-    ids.forEach(id => fields[id].removeAttribute("aria-invalid"));
-    errorBox.textContent = "";
-  }
-
-  function fail(message, field) {
-    errorBox.textContent = message;
-    if (field) {
-      field.setAttribute("aria-invalid", "true");
-      field.focus();
-    }
-    return false;
-  }
-
-  function validate() {
-    clearInvalid();
-
-    const required = ["miles","mpg","fuelPrice","days","travelers"];
-    for (const name of required) {
-      if (fields[name].value.trim() === "") {
-        return fail("Please complete all required fields.", fields[name]);
-      }
-    }
-
-    for (const name of ids) {
-      if (fields[name].value.trim() === "") continue;
-      const n = value(name);
-      if (!Number.isFinite(n)) return fail("Enter valid numeric values.", fields[name]);
-      if (n < 0) return fail("Costs and distances cannot be negative.", fields[name]);
-    }
-
-    if (value("mpg") <= 0) return fail("MPG must be greater than zero.", fields.mpg);
-    if (value("days") < 1 || !Number.isInteger(value("days"))) {
-      return fail("Travel days must be a whole number of at least 1.", fields.days);
-    }
-    if (value("travelers") < 1 || !Number.isInteger(value("travelers"))) {
-      return fail("Travelers must be a whole number of at least 1.", fields.travelers);
-    }
-    if (fields.hotelNights.value.trim() !== "" && !Number.isInteger(value("hotelNights"))) {
-      return fail("Hotel nights must be a whole number.", fields.hotelNights);
-    }
-    return true;
-  }
-
-  function calculate() {
-    if (!validate()) return;
-
-    const miles = value("miles");
-    const mpg = value("mpg");
-    const fuelPrice = value("fuelPrice");
-    const hotelNight = value("hotelNight");
-    const hotelNights = value("hotelNights");
-    const foodPerDay = value("foodPerDay");
-    const days = value("days");
-    const travelers = value("travelers");
-    const misc = value("misc");
-
-    const fuel = (miles / mpg) * fuelPrice;
-    const hotel = hotelNight * hotelNights;
-    const food = foodPerDay * days * travelers;
-    const total = fuel + hotel + food + misc;
-    const perPerson = total / travelers;
-
-    output.fuel.textContent = money.format(fuel);
-    output.hotel.textContent = money.format(hotel);
-    output.food.textContent = money.format(food);
-    output.misc.textContent = money.format(misc);
-    output.total.textContent = money.format(total);
-    output.perPerson.textContent = money.format(perPerson);
-    output.note.textContent =
-      `Fuel uses ${miles.toLocaleString()} miles ÷ ${mpg.toLocaleString()} MPG × ${money.format(fuelPrice)} per gallon.`;
-  }
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    calculate();
-  });
-
-  resetBtn.addEventListener("click", () => {
-    form.reset();
-    clearInvalid();
-    ["fuel","hotel","food","misc","total","perPerson"].forEach(key => {
-      output[key].textContent = "$0.00";
-    });
-    output.note.textContent = "Fuel = (trip miles ÷ MPG) × fuel price.";
-    fields.miles.focus();
-  });
+"use strict";
+const money=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}),number=new Intl.NumberFormat("en-US",{maximumFractionDigits:2});
+const navButton=document.querySelector(".nav-toggle");
+if(navButton)navButton.addEventListener("click",()=>{const open=navButton.getAttribute("aria-expanded")==="true";navButton.setAttribute("aria-expanded",String(!open));document.getElementById("tool-nav")?.classList.toggle("open",!open)});
+const form=document.querySelector("form[data-calculator]");if(!form)return;
+const error=form.querySelector(".error"),byId=id=>document.getElementById(id),raw=id=>byId(id)?.value?.trim()??"",val=id=>raw(id)===""?0:Number(raw(id)),setMoney=(id,v)=>{if(byId(id))byId(id).textContent=money.format(v)},setText=(id,v)=>{if(byId(id))byId(id).textContent=v};
+function fail(input,message){error.textContent=message;input.setAttribute("aria-invalid","true");input.focus();return false}
+function validate(){error.textContent="";const inputs=[...form.querySelectorAll('input[type="number"]')];inputs.forEach(i=>i.removeAttribute("aria-invalid"));for(const input of inputs){const value=input.value.trim();if(input.required&&value==="")return fail(input,"Complete all required fields.");if(value==="")continue;const numeric=Number(value);if(!Number.isFinite(numeric))return fail(input,"Enter valid numeric values.");const min=input.min===""?null:Number(input.min);if(min!==null&&numeric<min)return fail(input,`Enter a value of at least ${input.min}.`);if(input.step==="1"&&!Number.isInteger(numeric))return fail(input,"Use a whole number for this field.")}return true}
+const calculators={
+gas(){const miles=val("miles")*(byId("roundTrip").checked?2:1),gallons=miles/val("mpg");setText("gallonsResult",`${number.format(gallons)} gal`);setMoney("fuelCostResult",gallons*val("fuelPrice"))},
+road(){const fuel=val("miles")/val("mpg")*val("fuelPrice"),food=val("foodDaily")*val("travelers")*val("days"),values={fuelResult:fuel,lodgingResult:val("lodging"),foodResult:food,tollsResult:val("tolls"),parkingResult:val("parking"),miscResult:val("misc")};Object.entries(values).forEach(([id,v])=>setMoney(id,v));const total=Object.values(values).reduce((a,b)=>a+b,0);setMoney("totalResult",total);setMoney("perPersonResult",total/val("travelers"))},
+rental(){const base=val("dailyRate")*val("days"),ground=val("parking")+val("tolls");setMoney("baseResult",base);setMoney("feesResult",val("fees"));setMoney("fuelResult",val("fuel"));setMoney("groundResult",ground);setMoney("totalResult",base+val("fees")+val("fuel")+ground)},
+transfer(){const journeys=Number(byId("tripType").value),total=val("oneWayCost")*journeys;setText("journeysResult",journeys===1?"1 one-way transfer":"2 one-way transfers");setMoney("totalResult",total);setMoney("perPersonResult",total/val("travelers"))},
+esim(){const data=val("days")*val("dailyData");setText("dataResult",`${number.format(data)} GB`);setMoney("budgetResult",data*val("pricePerGb"))},
+activities(){const admissions=val("travelers")*val("perDay")*val("days"),total=admissions*val("averageCost");setText("ticketsResult",number.format(admissions));setMoney("totalResult",total);setMoney("perPersonResult",total/val("travelers"))},
+luggage(){const units=val("bags")*val("duration"),unit=byId("unit").value;setText("bagUnitsResult",`${number.format(units)} bag-${unit}${units===1?"":"s"}`);setMoney("totalResult",units*val("rate"))},
+flight(){const travelers=val("travelers"),airfare=val("airfare")*travelers,baggage=val("baggage")*travelers,seatFees=val("seatFees")*travelers,airportTransport=val("airportTransport"),total=airfare+baggage+seatFees+airportTransport;setMoney("airfareResult",airfare);setMoney("baggageResult",baggage);setMoney("seatFeesResult",seatFees);setMoney("airportTransportResult",airportTransport);setMoney("totalResult",total);setMoney("perPersonResult",total/travelers)}
+};
+const defaults={gas:{gallonsResult:"0 gal",fuelCostResult:"$0.00"},road:{fuelResult:"$0.00",lodgingResult:"$0.00",foodResult:"$0.00",tollsResult:"$0.00",parkingResult:"$0.00",miscResult:"$0.00",totalResult:"$0.00",perPersonResult:"$0.00"},rental:{baseResult:"$0.00",feesResult:"$0.00",fuelResult:"$0.00",groundResult:"$0.00",totalResult:"$0.00"},transfer:{journeysResult:"0",totalResult:"$0.00",perPersonResult:"$0.00"},esim:{dataResult:"0 GB",budgetResult:"$0.00"},activities:{ticketsResult:"0",totalResult:"$0.00",perPersonResult:"$0.00"},luggage:{bagUnitsResult:"0",totalResult:"$0.00"},flight:{airfareResult:"$0.00",baggageResult:"$0.00",seatFeesResult:"$0.00",airportTransportResult:"$0.00",totalResult:"$0.00",perPersonResult:"$0.00"}};
+form.addEventListener("submit",e=>{e.preventDefault();if(validate())calculators[form.dataset.calculator]?.()});
+document.querySelector(".reset")?.addEventListener("click",()=>{form.reset();error.textContent="";form.querySelectorAll('[aria-invalid="true"]').forEach(e=>e.removeAttribute("aria-invalid"));Object.entries(defaults[form.dataset.calculator]||{}).forEach(([id,v])=>setText(id,v));form.querySelector("input")?.focus()});
 })();

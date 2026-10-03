@@ -1,147 +1,16 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Free road-trip fuel and travel budget calculator.">
-  <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tp-em.com https://*.tp-em.com https://*.travelpayouts.com; connect-src 'self' https://tp-em.com https://*.tp-em.com https://*.travelpayouts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https:; base-uri 'none'; form-action 'self' https://*.travelpayouts.com; frame-ancestors 'none'">
-  <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
-    (function () {
-      var script = document.createElement("script");
-      script.async = 1;
-      script.setAttribute("data-cmp-ab","2");
-      script.src = 'https://tp-em.com/NTgxMDU0.js?t=581054';
-      document.head.appendChild(script);
-    })();
-  </script>
-  <title>Road Trip Ledger</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <main class="wrap">
-    <header class="hero">
-      <p class="eyebrow">FREE TRAVEL PLANNING TOOL</p>
-      <h1>Road Trip Ledger</h1>
-      <p class="lede">Estimate fuel, lodging, food, miscellaneous costs, total trip cost, and cost per traveler without creating an account.</p>
-    </header>
-
-    <section class="card" aria-labelledby="planner-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">TRIP BUDGET</p>
-          <h2 id="planner-title">Build your estimate</h2>
-        </div>
-        <button id="resetBtn" class="secondary" type="button">Reset</button>
-      </div>
-
-      <form id="tripForm" novalidate>
-        <div class="grid">
-          <label>
-            Trip miles
-            <input id="miles" name="miles" type="number" min="0" step="0.1" inputmode="decimal" placeholder="850" required>
-            <span class="hint">Total driving miles for the trip.</span>
-          </label>
-
-          <label>
-            Vehicle MPG
-            <input id="mpg" name="mpg" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="28" required>
-            <span class="hint">Use your realistic highway average.</span>
-          </label>
-
-          <label>
-            Fuel price per gallon
-            <input id="fuelPrice" name="fuelPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3.35" required>
-            <span class="hint">Use the average price you expect.</span>
-          </label>
-
-          <label>
-            Hotel cost per night
-            <input id="hotelNight" name="hotelNight" type="number" min="0" step="0.01" inputmode="decimal" placeholder="120">
-            <span class="hint">Enter 0 if you are not paying for lodging.</span>
-          </label>
-
-          <label>
-            Hotel nights
-            <input id="hotelNights" name="hotelNights" type="number" min="0" step="1" inputmode="numeric" placeholder="2">
-            <span class="hint">Whole nights only.</span>
-          </label>
-
-          <label>
-            Food per person / day
-            <input id="foodPerDay" name="foodPerDay" type="number" min="0" step="0.01" inputmode="decimal" placeholder="45">
-            <span class="hint">Daily meal/snack budget for one traveler.</span>
-          </label>
-
-          <label>
-            Travel days
-            <input id="days" name="days" type="number" min="1" step="1" inputmode="numeric" placeholder="3" required>
-            <span class="hint">Whole days, minimum 1.</span>
-          </label>
-
-          <label>
-            Travelers
-            <input id="travelers" name="travelers" type="number" min="1" step="1" inputmode="numeric" placeholder="2" required>
-            <span class="hint">Whole number of people sharing the trip.</span>
-          </label>
-
-          <label>
-            Miscellaneous expenses
-            <input id="misc" name="misc" type="number" min="0" step="0.01" inputmode="decimal" placeholder="75">
-            <span class="hint">Parking, tolls, local transit, attractions, etc.</span>
-          </label>
-        </div>
-
-        <div id="formError" class="error" role="alert" aria-live="polite"></div>
-        <button class="primary" type="submit">Calculate trip budget</button>
-      </form>
-    </section>
-
-    <section class="card results" aria-labelledby="results-title">
-      <p class="eyebrow">ESTIMATE</p>
-      <h2 id="results-title">Trip totals</h2>
-      <div class="result-grid">
-        <div><span>Fuel</span><strong id="fuelResult">$0.00</strong></div>
-        <div><span>Hotels</span><strong id="hotelResult">$0.00</strong></div>
-        <div><span>Food</span><strong id="foodResult">$0.00</strong></div>
-        <div><span>Misc.</span><strong id="miscResult">$0.00</strong></div>
-        <div class="total"><span>Total trip</span><strong id="totalResult">$0.00</strong></div>
-        <div class="total"><span>Per person</span><strong id="perPersonResult">$0.00</strong></div>
-      </div>
-      <p id="formulaNote" class="formula">Fuel = (trip miles ÷ MPG) × fuel price.</p>
-    </section>
-
-    <section class="card prose">
-      <p class="eyebrow">HOW TO PLAN BETTER</p>
-      <h2>Use estimates as a buffer, not a promise</h2>
-      <p>Real trips rarely match a perfect spreadsheet. Construction, detours, weather, idling, traffic, and extra local driving can increase fuel use. A small mileage buffer can make the estimate more realistic.</p>
-      <p>Your real-world MPG can differ from the dashboard rating because of speed, cargo weight, terrain, wind, tire pressure, and air-conditioning use. If you are unsure, use a slightly lower MPG number so the budget is less optimistic.</p>
-      <p>Lodging totals can also change because of taxes, parking charges, resort fees, or refundable deposits. Check the full price shown by the hotel before making a reservation.</p>
-      <p>For longer drives, plan rest stops and overnight breaks conservatively. Fatigue can turn a cheap trip into an unsafe one. Keep offline directions available when traveling through areas with weak cellular service.</p>
-    </section>
-
-    <section class="card prose">
-      <p class="eyebrow">FORMULAS</p>
-      <h2>What the calculator is doing</h2>
-      <p><strong>Fuel cost:</strong> trip miles divided by MPG, multiplied by fuel price per gallon.</p>
-      <p><strong>Hotel cost:</strong> nightly rate multiplied by number of hotel nights.</p>
-      <p><strong>Food cost:</strong> food budget per person per day multiplied by travelers and travel days.</p>
-      <p><strong>Total trip:</strong> fuel + hotels + food + miscellaneous expenses.</p>
-      <p><strong>Per-person cost:</strong> total trip cost divided by number of travelers.</p>
-      <p class="muted">These are planning estimates only. Verify current fuel, lodging, toll, parking, food, and destination prices before spending money.</p>
-    </section>
-
-    <section class="card prose" aria-labelledby="affiliate-title">
-      <p class="eyebrow">AFFILIATE DISCLOSURE</p>
-      <h2 id="affiliate-title">How this free tool may earn money</h2>
-      <p>Road Trip Ledger may use Travelpayouts Drive to show relevant travel offers or convert eligible travel links into affiliate links. If you choose to book through an eligible affiliate link, this site may earn a commission at no additional cost to you.</p>
-      <p class="muted">Travelpayouts Drive may analyze page content and visitor interactions to decide when travel offers are relevant. You do not need an account to use this calculator.</p>
-    </section>
-
-    <footer>
-      <p>Road Trip Ledger is free to use and does not require an account. Core trip-budget calculations run in your browser. Travelpayouts Drive may provide travel monetization and interaction analytics as described above.</p>
-    </footer>
-  </main>
-  <script src="script.js" defer></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free Travel Planning Calculators | Road Trip Ledger</title><meta name="description" content="Free travel calculators and guides for road trips, flights, rental cars, airport transfers, eSIMs, activities, luggage storage, delay claims, and insurance planning."><link rel="canonical" href="https://cjholmes24-beep.github.io/money-os-road-trip-planner/"><meta property="og:type" content="website"><meta property="og:site_name" content="Road Trip Ledger"><meta property="og:title" content="Road Trip Ledger — Free Travel Planning Tools"><meta property="og:description" content="Plan the real cost of a trip with fast, focused browser-based calculators and guides."><meta property="og:url" content="https://cjholmes24-beep.github.io/money-os-road-trip-planner/"><meta name="twitter:card" content="summary"><meta name="theme-color" content="#08101c"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="stylesheet" href="styles.css"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Road Trip Ledger","url":"https://cjholmes24-beep.github.io/money-os-road-trip-planner/","description":"Free browser-based travel planning calculators and guides.","publisher":{"@type":"Organization","name":"Road Trip Ledger"}}</script><script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">(function(){var script=document.createElement("script");script.async=1;script.setAttribute("data-cmp-ab","2");script.src="https://tp-em.com/NTgxMDU0.js?t=581054";document.head.appendChild(script)})();</script></head>
+<body><nav aria-label="Primary navigation"><a class="brand" href="/money-os-road-trip-planner/"><span class="brand-mark" aria-hidden="true">R</span><span>Road Trip Ledger</span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="tool-nav">Tools <span aria-hidden="true">☰</span></button><div id="tool-nav" class="nav-links"><a href="/money-os-road-trip-planner/gas-trip-calculator/">Gas</a><a href="/money-os-road-trip-planner/road-trip-cost-calculator/">Road trip</a><a href="/money-os-road-trip-planner/rental-car-trip-cost/">Rental car</a><a href="/money-os-road-trip-planner/flight-cost-planner/">Flights</a><a href="/money-os-road-trip-planner/airport-transfer-cost-planner/">Airport</a><a href="/money-os-road-trip-planner/travel-esim-cost-planner/">eSIM</a><a href="/money-os-road-trip-planner/travel-activities-budget/">Activities</a><a href="/money-os-road-trip-planner/luggage-storage-cost-planner/">Luggage</a><a href="/money-os-road-trip-planner/flight-delay-compensation-guide/">Delay help</a><a href="/money-os-road-trip-planner/travel-insurance-guide/">Insurance</a></div></nav><main class="wrap"><header class="hero home"><div class="hero-copy"><p class="eyebrow">FREE TRAVEL PLANNING TOOLS</p><h1>Plan the trip.<br><span>See the real cost.</span></h1><p class="lede">Focused calculators and practical guides for the decisions that actually change a travel budget. No signup, no paywall, and no made-up “average” price pretending to fit everybody.</p><div class="trust-row"><span>Runs in your browser</span><span>No account</span><span>Free to use</span><span>Mobile-first</span></div></div><aside class="hero-panel"><p class="panel-kicker">START WITH THE DECISION</p><div class="snapshot"><div><span>Driving</span><strong>Fuel & full trip cost</strong></div><div><span>Flying</span><strong>Ticket + trip add-ons</strong></div><div><span>On arrival</span><strong>Car, transfer, data</strong></div><div class="snapshot-total"><span>Then</span><strong>Activities, storage & protection</strong></div></div><p class="panel-note">Enter prices you have actually seen. The tools do the math without inventing provider prices.</p></aside></header>
+<section aria-labelledby="tools-title"><div class="section-intro"><p class="eyebrow">TRAVEL TOOLKIT</p><h2 id="tools-title">Choose what you are planning</h2><p>Each tool is built around a specific travel decision, so you can get an answer quickly instead of digging through a giant form.</p></div><div class="tool-grid home-grid">
+<a href="gas-trip-calculator/"><span class="tool-number">01</span><h2>Gas Trip Calculator</h2><p>One-way or round-trip fuel gallons and cost from miles, MPG, and fuel price.</p><strong>Open tool →</strong></a>
+<a href="road-trip-cost-calculator/"><span class="tool-number">02</span><h2>Road Trip Cost Calculator</h2><p>Fuel, lodging, food, tolls, parking, miscellaneous costs, total, and per-person share.</p><strong>Open tool →</strong></a>
+<a href="rental-car-trip-cost/"><span class="tool-number">03</span><h2>Rental Car Trip Cost</h2><p>Daily rental rate, fees, fuel, parking and tolls combined into one estimate.</p><strong>Open tool →</strong></a>
+<a href="flight-cost-planner/"><span class="tool-number">04</span><h2>Flight Cost Planner</h2><p>Airfare plus baggage, seat fees and airport transportation for the whole group.</p><strong>Open tool →</strong></a>
+<a href="airport-transfer-cost-planner/"><span class="tool-number">05</span><h2>Airport Transfer Planner</h2><p>One-way or return transfer cost with a per-traveler view.</p><strong>Open tool →</strong></a>
+<a href="travel-esim-cost-planner/"><span class="tool-number">06</span><h2>Travel eSIM Cost Planner</h2><p>Estimate data needs and a realistic mobile-connectivity budget.</p><strong>Open tool →</strong></a>
+<a href="travel-activities-budget/"><span class="tool-number">07</span><h2>Activities Budget</h2><p>Estimate paid attractions for the group without confusing per-person and group prices.</p><strong>Open tool →</strong></a>
+<a href="luggage-storage-cost-planner/"><span class="tool-number">08</span><h2>Luggage Storage Planner</h2><p>Estimate temporary bag-storage cost by duration and number of bags.</p><strong>Open tool →</strong></a>
+<a href="flight-delay-compensation-guide/"><span class="tool-number">09</span><h2>Flight Delay Guide</h2><p>Know what records to keep and when a disruption may be worth investigating.</p><strong>Read guide →</strong></a>
+<a href="travel-insurance-guide/"><span class="tool-number">10</span><h2>Travel Insurance Guide</h2><p>Understand common coverage categories and what to compare before choosing a policy.</p><strong>Read guide →</strong></a>
+</div></section>
+<section class="split-info"><article class="card prose"><p class="eyebrow">HOW IT WORKS</p><h2>Useful math, not fake certainty</h2><p>Road Trip Ledger does not scrape prices or pretend a national average matches your trip. Use a current quote, route distance, or price you already found, then calculate the full cost around it.</p><p>That makes the tools useful whether you are still comparing options or already have a quote in front of you.</p></article><article class="card prose"><p class="eyebrow">MONETIZATION</p><h2>Offers stay secondary to the tool</h2><p>Travelpayouts Drive may surface relevant travel offers or affiliate links. The calculator remains usable without clicking an offer, and any commission is earned at no additional cost to the traveler.</p></article></section></main><footer class="site-footer"><div><strong>Road Trip Ledger</strong><p>Free browser-based travel planning tools. No account required.</p></div><div><strong>Affiliate disclosure</strong><p>Road Trip Ledger uses Travelpayouts Drive. It may show relevant travel offers or convert eligible travel links into affiliate links. We may earn a commission if you book through an eligible link, at no additional cost to you.</p></div></footer><script src="script.js" defer></script></body></html>
