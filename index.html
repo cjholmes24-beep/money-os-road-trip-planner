@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Free road-trip fuel and travel budget calculator.">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://tp-em.com https://*.tp-em.com https://*.travelpayouts.com; connect-src 'self' https://tp-em.com https://*.tp-em.com https://*.travelpayouts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src https:; base-uri 'none'; form-action 'self' https://*.travelpayouts.com; frame-ancestors 'none'">
+  <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
+    (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.setAttribute("data-cmp-ab","2");
+      script.src = 'https://tp-em.com/NTgxMDU0.js?t=581054';
+      document.head.appendChild(script);
+    })();
+  </script>
   <title>Road Trip Ledger</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -122,8 +131,15 @@
       <p class="muted">These are planning estimates only. Verify current fuel, lodging, toll, parking, food, and destination prices before spending money.</p>
     </section>
 
+    <section class="card prose" aria-labelledby="affiliate-title">
+      <p class="eyebrow">AFFILIATE DISCLOSURE</p>
+      <h2 id="affiliate-title">How this free tool may earn money</h2>
+      <p>Road Trip Ledger may use Travelpayouts Drive to show relevant travel offers or convert eligible travel links into affiliate links. If you choose to book through an eligible affiliate link, this site may earn a commission at no additional cost to you.</p>
+      <p class="muted">Travelpayouts Drive may analyze page content and visitor interactions to decide when travel offers are relevant. You do not need an account to use this calculator.</p>
+    </section>
+
     <footer>
-      <p>Road Trip Ledger runs entirely in your browser. No account, advertising, analytics, or personal-data collection is required.</p>
+      <p>Road Trip Ledger is free to use and does not require an account. Core trip-budget calculations run in your browser. Travelpayouts Drive may provide travel monetization and interaction analytics as described above.</p>
     </footer>
   </main>
   <script src="script.js" defer></script>
