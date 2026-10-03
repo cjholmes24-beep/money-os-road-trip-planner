@@ -9,7 +9,7 @@ Suitcase Brain must never present a sourced fact without enough metadata to expl
 
 Every normalized external fact must include, directly or through its source record:
 
-- `fact_type`: LIVE, PUBLISHED, RECENT, WEEKLY_GOVERNMENT_DATA, HISTORICAL_TYPICAL, USER_ENTERED, or COMMUNITY_REPORTED
+- `fact_type`: LIVE, PUBLISHED, RECENT, WEEKLY_GOVERNMENT_DATA, HISTORICAL_TYPICAL, USER_ENTERED, COMMUNITY_REPORTED, or UNKNOWN
 - `source_id`
 - `source_name`
 - `source_url`
@@ -35,6 +35,11 @@ A fact does not become false merely because it is old, but its label must change
 - reviews: show review recency and sample size; do not turn a few comments into a universal claim
 - safety: time-stamp all alerts/incidents and avoid permanent neighborhood labels
 - community reports: clearly separated from official facts and decayed over time
+- missing or unverifiable source metadata: label UNKNOWN; never infer recency, price, or provider policy
+
+## Reusable fact presentation
+
+Every fact surface should be able to show the human-readable freshness label, source name and link, retrieval time, effective/period date, confidence, and material limitations. Display labels use spaces (for example, `WEEKLY GOVERNMENT DATA` and `HISTORICAL / TYPICAL`) while normalized records may use underscore forms. User-entered values must remain distinguishable from externally verified facts.
 
 ## Source hierarchy
 

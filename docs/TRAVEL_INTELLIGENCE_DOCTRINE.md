@@ -24,7 +24,7 @@ Revenue may occur only where a legitimate provider relationship exists. Recommen
 ## Hard rules
 
 1. Never fabricate a live price, fee, event, review, safety fact, discount, availability state, eligibility rule, or commission.
-2. Every externally sourced fact must carry source, retrieval time, geography, freshness, and fact type: LIVE, PUBLISHED, RECENT, HISTORICAL/TYPICAL, USER-ENTERED, or COMMUNITY-REPORTED.
+2. Every externally sourced fact must carry source, retrieval time, geography, freshness, and fact type: LIVE, PUBLISHED, RECENT, WEEKLY GOVERNMENT DATA, HISTORICAL/TYPICAL, USER-ENTERED, COMMUNITY-REPORTED, or UNKNOWN.
 3. Public recommendations must not rank an affiliate partner above a better-fitting non-partner merely because the affiliate pays.
 4. Money OS must not count attributed or pending affiliate revenue as cleared money.
 5. No paid ads, paid data, paid APIs, paid hosting, domains, subscriptions, inventory, deposits, or speculative spend without explicit owner approval.
