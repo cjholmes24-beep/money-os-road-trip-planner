@@ -45,3 +45,10 @@ Owner cost remains $0. No paid ads, hosting, domain, API, SEO tool, database, or
 - `source-intelligence.js` shows the most relevant available EIA reference for the entered destination and provides opt-in live National Weather Service weather for the traveler's current location.
 
 No paid data service or API key is required for this brick.
+
+
+## Automated search distribution
+
+IndexNow is wired at $0 owner cost. The public ownership file `96df4ff75cc652635ffb9a6b80af194e.txt` verifies the GitHub Pages host path, and `.github/workflows/indexnow-notify.yml` automatically submits sitemap URLs to IndexNow after relevant main-branch updates. This is a discovery notification, not a guarantee of crawl or ranking.
+
+Google Search Console still requires account/property verification and is not replaced by IndexNow.
