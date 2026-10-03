@@ -12,7 +12,8 @@
   const COMMITTED_STATES = new Set(["ACCEPTED", "DEPOSIT_PAID", ...FUNDED_STATES]);
   const FEE_CATEGORIES = ["airline baggage", "overweight baggage", "seat selection", "airport parking", "airport transfer", "rental taxes/fees", "young driver fee", "additional driver", "one-way/drop fee", "rental refueling", "tolls", "hotel parking", "resort/destination fee", "cleaning fee", "security deposit", "pet fee", "event parking", "gratuity", "cruise port charges", "cruise gratuity", "Wi-Fi", "drink package", "specialty dining", "excursion", "late checkout", "early check-in", "miscellaneous"];
   const FEE_STATUSES = ["KNOWN", "USER-ENTERED", "VERIFIED", "UNKNOWN", "NOT APPLICABLE"];
-  const RESERVATION_CATEGORIES = ["flight", "hotel/lodging", "rental vehicle", "bus", "rail", "transfer", "cruise", "activity", "event", "parking", "other"];\n  const POLICY_STATUSES = ["UNKNOWN", "USER-ENTERED", "VERIFIED"];
+  const RESERVATION_CATEGORIES = ["flight", "hotel/lodging", "rental vehicle", "bus", "rail", "transfer", "cruise", "activity", "event", "parking", "other"];
+  const POLICY_STATUSES = ["UNKNOWN", "USER-ENTERED", "VERIFIED"];
   const num = value => Number.isFinite(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
   const text = value => typeof value === "string" ? value.trim().slice(0, 1000) : "";
   const uid = () => (globalThis.crypto?.randomUUID?.() || `local-${Date.now()}-${Math.random().toString(16).slice(2)}`);
