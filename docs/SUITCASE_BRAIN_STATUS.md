@@ -55,3 +55,6 @@ Truth standard: rendered UI is not treated as a connected data product.
 Trip records and imports remain in the browser. Users should not store secrets. Browser geolocation runs only after an explicit click and is not written into the trip record. Travelpayouts may perform its separately disclosed interaction processing.
 
 Owner cost remains $0: no paid hosting, database, API, domain, ads, inventory, or subscription was added. Earn first → reinvest second → scale third. Commission must never outrank traveler fit, truthful information, or personal safety.
+
+- Cleanup audit corrected planned-vs-recorded traveler commitment math, dropout exposure assumptions, stricter imported-trip validation, cancellation-loss handling, short state-code fuel matching, and weekly fuel freshness classification.
+- GitHub Actions now runs dependency-free Suitcase Brain unit/static validation checks on pull requests and main-branch pushes.
