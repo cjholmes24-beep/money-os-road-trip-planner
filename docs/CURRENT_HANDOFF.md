@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-03
 Canonical repository: `cjholmes24-beep/money-os-road-trip-planner`
-Current verified main: `54642af42e0bb3d52166a3c3e79d13a5f77a1d75`
+Last verified product-code baseline before handoff-document commits: `54642af42e0bb3d52166a3c3e79d13a5f77a1d75`\n\n**Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
 
 ## Purpose of this file
 
@@ -166,7 +166,7 @@ Only cleared provider-paid revenue counts as earned Money OS revenue.
 
 After every meaningful build, cleanup, merge, provider integration, revenue milestone, deployment change, architecture decision, failure, or repair:
 
-- update this file with the current main SHA and immediate next brick
+- update this file with the last verified product baseline, current capability state, and immediate next brick; always resolve the actual current main SHA live before issuing a work order
 - append the event to `docs/BUILD_LEDGER.md`
 - update `docs/SUITCASE_BRAIN_STATUS.md` when capability status changes
 - record failures and repairs, not just successes
