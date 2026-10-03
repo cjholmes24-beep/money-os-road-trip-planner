@@ -1,0 +1,35 @@
+name: Refresh EIA gasoline reference
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 21 * * 2"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Refresh official weekly gasoline data
+        run: python scripts/refresh_eia_gas.py
+      - name: Validate JSON
+        run: python -m json.tool data/eia-gas-latest.json >/dev/null
+      - name: Commit only when official data changed
+        shell: bash
+        run: |
+          if git diff --quiet -- data/eia-gas-latest.json; then
+            echo "No gasoline data change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/eia-gas-latest.json
+          git commit -m "Refresh EIA weekly gasoline reference"
+          git push
