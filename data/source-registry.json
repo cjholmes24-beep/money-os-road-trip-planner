@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-03T18:30:00Z",
+  "sources": [
+    {
+      "id": "eia_weekly_gasoline",
+      "name": "U.S. Energy Information Administration",
+      "authority": "official_government",
+      "purpose": "Weekly U.S. retail gasoline reference prices",
+      "url": "https://www.eia.gov/petroleum/gasdiesel/",
+      "machine_source": "https://api.eia.gov/bulk/PET.zip",
+      "cost_usd": 0,
+      "authentication": "none_bulk_download",
+      "cadence": "weekly",
+      "fact_type": "WEEKLY_GOVERNMENT_DATA",
+      "notes": "Reference averages including taxes; not a station-specific live pump price."
+    },
+    {
+      "id": "nws_forecast",
+      "name": "National Weather Service",
+      "authority": "official_government",
+      "purpose": "On-demand U.S. point forecasts and alerts",
+      "url": "https://www.weather.gov/documentation/services-web-api",
+      "machine_source": "https://api.weather.gov",
+      "cost_usd": 0,
+      "authentication": "none",
+      "cadence": "source_lifecycle_on_demand",
+      "fact_type": "LIVE",
+      "notes": "Coordinates are requested only after the traveler explicitly asks for current-location weather."
+    },
+    {
+      "id": "travelpayouts_drive",
+      "name": "Travelpayouts Drive",
+      "authority": "approved_affiliate_platform",
+      "purpose": "Eligible travel offer and affiliate routing",
+      "url": "https://www.travelpayouts.com/",
+      "cost_usd": 0,
+      "authentication": "existing_site_loader",
+      "cadence": "provider_managed",
+      "fact_type": "PUBLISHED",
+      "notes": "Monetization source; never used to invent unrelated prices, quality or safety claims."
+    }
+  ]
+}

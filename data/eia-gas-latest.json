@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "fact_type": "WEEKLY_GOVERNMENT_DATA",
+  "product": "All Grades All Formulations Retail Gasoline Prices",
+  "unit": "USD_per_gallon_including_taxes",
+  "source": {
+    "id": "eia_weekly_gasoline",
+    "name": "U.S. Energy Information Administration",
+    "url": "https://www.eia.gov/dnav/pet/pet_pri_gnd_a_epm0_pte_dpgal_w.htm",
+    "machine_source": "https://api.eia.gov/bulk/PET.zip"
+  },
+  "period_end": "2026-09-28",
+  "source_release_date": "2026-09-29",
+  "retrieved_at": "2026-10-03T18:30:00Z",
+  "status": "fresh",
+  "confidence": "high",
+  "note": "Weekly reference averages, not a promise of the price at a specific station.",
+  "places": [
+    {
+      "label": "U.S. average",
+      "series_id": "PET.EMM_EPM0_PTE_NUS_DPG.W",
+      "aliases": [
+        "united states",
+        "us",
+        "u.s."
+      ],
+      "value": 4.603
+    },
+    {
+      "label": "East Coast",
+      "series_id": "PET.EMM_EPM0_PTE_R10_DPG.W",
+      "aliases": [
+        "east coast"
+      ],
+      "value": 4.407
+    },
+    {
+      "label": "New England",
+      "series_id": "PET.EMM_EPM0_PTE_R1X_DPG.W",
+      "aliases": [
+        "new england"
+      ],
+      "value": 4.506
+    },
+    {
+      "label": "Central Atlantic",
+      "series_id": "PET.EMM_EPM0_PTE_R1Y_DPG.W",
+      "aliases": [
+        "central atlantic"
+      ],
+      "value": 4.533
+    },
+    {
+      "label": "Lower Atlantic",
+      "series_id": "PET.EMM_EPM0_PTE_R1Z_DPG.W",
+      "aliases": [
+        "lower atlantic"
+      ],
+      "value": 4.302
+    },
+    {
+      "label": "Midwest",
+      "series_id": "PET.EMM_EPM0_PTE_R20_DPG.W",
+      "aliases": [
+        "midwest"
+      ],
+      "value": 4.383
+    },
+    {
+      "label": "Gulf Coast",
+      "series_id": "PET.EMM_EPM0_PTE_R30_DPG.W",
+      "aliases": [
+        "gulf coast"
+      ],
+      "value": 4.026
+    },
+    {
+      "label": "Rocky Mountain",
+      "series_id": "PET.EMM_EPM0_PTE_R40_DPG.W",
+      "aliases": [
+        "rocky mountain",
+        "rockies"
+      ],
+      "value": 4.623
+    },
+    {
+      "label": "West Coast",
+      "series_id": "PET.EMM_EPM0_PTE_R50_DPG.W",
+      "aliases": [
+        "west coast"
+      ],
+      "value": 5.861
+    },
+    {
+      "label": "California",
+      "series_id": "PET.EMM_EPM0_PTE_SCA_DPG.W",
+      "aliases": [
+        "california",
+        "ca"
+      ],
+      "value": 6.3
+    },
+    {
+      "label": "Colorado",
+      "series_id": "PET.EMM_EPM0_PTE_SCO_DPG.W",
+      "aliases": [
+        "colorado",
+        "co"
+      ],
+      "value": 4.25
+    },
+    {
+      "label": "Florida",
+      "series_id": "PET.EMM_EPM0_PTE_SFL_DPG.W",
+      "aliases": [
+        "florida",
+        "fl"
+      ],
+      "value": 4.383
+    },
+    {
+      "label": "Massachusetts",
+      "series_id": "PET.EMM_EPM0_PTE_SMA_DPG.W",
+      "aliases": [
+        "massachusetts",
+        "ma"
+      ],
+      "value": 4.491
+    },
+    {
+      "label": "Minnesota",
+      "series_id": "PET.EMM_EPM0_PTE_SMN_DPG.W",
+      "aliases": [
+        "minnesota",
+        "mn"
+      ],
+      "value": 4.388
+    },
+    {
+      "label": "New York",
+      "series_id": "PET.EMM_EPM0_PTE_SNY_DPG.W",
+      "aliases": [
+        "new york",
+        "ny"
+      ],
+      "value": 4.538
+    },
+    {
+      "label": "Ohio",
+      "series_id": "PET.EMM_EPM0_PTE_SOH_DPG.W",
+      "aliases": [
+        "ohio",
+        "oh"
+      ],
+      "value": 4.363
+    },
+    {
+      "label": "Texas",
+      "series_id": "PET.EMM_EPM0_PTE_STX_DPG.W",
+      "aliases": [
+        "texas",
+        "tx"
+      ],
+      "value": 3.949
+    },
+    {
+      "label": "Washington",
+      "series_id": "PET.EMM_EPM0_PTE_SWA_DPG.W",
+      "aliases": [
+        "washington state",
+        "washington",
+        "wa"
+      ],
+      "value": 5.548
+    },
+    {
+      "label": "Boston",
+      "series_id": "PET.EMM_EPM0_PTE_YBOS_DPG.W",
+      "aliases": [
+        "boston"
+      ],
+      "value": 4.522
+    },
+    {
+      "label": "Chicago",
+      "series_id": "PET.EMM_EPM0_PTE_YORD_DPG.W",
+      "aliases": [
+        "chicago"
+      ],
+      "value": 4.946
+    },
+    {
+      "label": "Cleveland",
+      "series_id": "PET.EMM_EPM0_PTE_YCLE_DPG.W",
+      "aliases": [
+        "cleveland"
+      ],
+      "value": 4.449
+    },
+    {
+      "label": "Denver",
+      "series_id": "PET.EMM_EPM0_PTE_YDEN_DPG.W",
+      "aliases": [
+        "denver"
+      ],
+      "value": 4.222
+    },
+    {
+      "label": "Houston",
+      "series_id": "PET.EMM_EPM0_PTE_Y44HO_DPG.W",
+      "aliases": [
+        "houston"
+      ],
+      "value": 3.99
+    },
+    {
+      "label": "Los Angeles",
+      "series_id": "PET.EMM_EPM0_PTE_Y05LA_DPG.W",
+      "aliases": [
+        "los angeles",
+        "la"
+      ],
+      "value": 6.274
+    },
+    {
+      "label": "Miami",
+      "series_id": "PET.EMM_EPM0_PTE_YMIA_DPG.W",
+      "aliases": [
+        "miami"
+      ],
+      "value": 4.436
+    },
+    {
+      "label": "New York City",
+      "series_id": "PET.EMM_EPM0_PTE_Y35NY_DPG.W",
+      "aliases": [
+        "new york city",
+        "nyc"
+      ],
+      "value": 4.549
+    },
+    {
+      "label": "San Francisco",
+      "series_id": "PET.EMM_EPM0_PTE_Y05SF_DPG.W",
+      "aliases": [
+        "san francisco"
+      ],
+      "value": 6.406
+    },
+    {
+      "label": "Seattle",
+      "series_id": "PET.EMM_EPM0_PTE_Y48SE_DPG.W",
+      "aliases": [
+        "seattle"
+      ],
+      "value": 5.789
+    }
+  ]
+}
