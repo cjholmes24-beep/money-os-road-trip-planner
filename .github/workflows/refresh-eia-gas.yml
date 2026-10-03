@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 21 * * 2"
+  pull_request:
+    paths:
+      - "scripts/refresh_eia_gas.py"
+      - "data/eia-gas-latest.json"
+      - ".github/workflows/refresh-eia-gas.yml"
 
 permissions:
   contents: write
@@ -22,6 +27,7 @@ jobs:
       - name: Validate JSON
         run: python -m json.tool data/eia-gas-latest.json >/dev/null
       - name: Commit only when official data changed
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           if git diff --quiet -- data/eia-gas-latest.json; then
