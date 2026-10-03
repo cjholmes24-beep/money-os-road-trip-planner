@@ -87,3 +87,12 @@ Post-merge:
 ## Current next brick
 
 Live Transportation + Lodging Intelligence, using lawful/provider-supported $0 data paths, truthful source/freshness states, provider-neutral comparison, and no fabricated availability.
+
+
+## 2026-10-03 — Durable handoff protocol
+
+- Added `docs/CURRENT_HANDOFF.md` as the canonical thread-to-thread operational handoff.
+- Added `docs/BUILD_LEDGER.md` as the append-style lifecycle record.
+- README now points future sessions to both files.
+- Handoff policy explicitly requires resolving the live GitHub `main` HEAD before each new Codex order so documentation-only commits cannot cause a stale starting SHA.
+- Progress records must include failures and repairs, not only successful outcomes.
