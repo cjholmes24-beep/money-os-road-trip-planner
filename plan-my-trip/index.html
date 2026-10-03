@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan My Trip | Suitcase Brain</title>
+<meta name="description" content="Build a budget-first trip brief around who is going, why you are traveling, what you want to do, and how much you can spend.">
+<link rel="canonical" href="https://cjholmes24-beep.github.io/money-os-road-trip-planner/plan-my-trip/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Suitcase Brain">
+<meta property="og:title" content="Plan My Trip | Suitcase Brain"><meta property="og:description" content="Start with your people, purpose and budget. Suitcase Brain turns that into a trip-planning brief without inventing live prices.">
+<meta name="theme-color" content="#08101c"><meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="../styles.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Suitcase Brain Plan My Trip","applicationCategory":"TravelApplication","operatingSystem":"Any","isAccessibleForFree":true,"url":"https://cjholmes24-beep.github.io/money-os-road-trip-planner/plan-my-trip/"}</script>
+<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">(function(){var script=document.createElement("script");script.async=1;script.setAttribute("data-cmp-ab","2");script.src="https://tp-em.com/NTgxMDU0.js?t=581054";document.head.appendChild(script)})();</script></head>
+<body>
+<nav aria-label="Primary navigation"><a class="brand" href="/money-os-road-trip-planner/"><span class="brand-mark" aria-hidden="true">S</span><span>Suitcase Brain</span></a><a class="secondary" href="/money-os-road-trip-planner/">All tools</a></nav>
+<main class="wrap">
+<header class="hero"><p class="eyebrow">POWERED BY MONEY OS · V1</p><h1>What are you trying to <span>do?</span></h1><p class="lede">Start with the people, purpose and money. Suitcase Brain builds the planning brief first so later live-data modules can price the right trip instead of dumping generic listings on you.</p></header>
+
+<form id="trip-intake" class="card planner-form" novalidate>
+<div class="section-head"><div><p class="eyebrow">TRIP INTAKE</p><h2>Build the trip profile</h2></div><button class="secondary reset-plan" type="button">Reset</button></div>
+<div class="grid planner-grid">
+<label>What kind of trip?
+<select id="purpose" required>
+<option value="">Choose one</option><option>Friends getaway</option><option>Couple / romantic</option><option>Family vacation</option><option>Solo trip</option><option>Stress-reset getaway</option><option>Business trip</option><option>Family reunion</option><option>Class / military / organization reunion</option><option>Festival / concert / event trip</option><option>Culture / heritage trip</option><option>Adventure / outdoors</option><option>Cruise</option><option>Vendor / exhibitor opportunity</option><option>Other</option>
+</select></label>
+<label>Total trip budget
+<input id="budget" type="number" min="1" step="0.01" inputmode="decimal" placeholder="2500" required><span class="hint">Use the amount the group can actually spend.</span></label>
+<label>Origin
+<input id="origin" type="text" maxlength="100" placeholder="Atlanta, GA"></label>
+<label>Destination
+<input id="destination" type="text" maxlength="100" placeholder="Miami, FL or leave blank to discover"></label>
+<label>Start date
+<input id="startDate" type="date"></label>
+<label>End date
+<input id="endDate" type="date"></label>
+<label>Total travelers
+<input id="travelers" type="number" min="1" step="1" value="2" required></label>
+<label>Travelers who have actually funded their share
+<input id="fundedTravelers" type="number" min="0" step="1" value="2" required><span class="hint">A verbal “I'm coming” is not funded.</span></label>
+<label>Transportation preference
+<select id="transport"><option>Compare everything practical</option><option>Drive</option><option>Fly</option><option>Bus / rail</option><option>Rental car</option><option>Group / charter transportation</option><option>Cruise</option></select></label>
+<label>Lodging preference
+<select id="lodging"><option>Compare best fit</option><option>Hotel</option><option>Apartment / vacation rental</option><option>Cabin</option><option>Resort</option><option>Hostel / budget</option><option>No lodging needed</option></select></label>
+<label>Vibe
+<select id="vibe"><option>Balanced</option><option>Budget</option><option>Relaxed</option><option>Romantic</option><option>Family</option><option>Adventure</option><option>Culture</option><option>Nightlife</option><option>Mature nightlife</option><option>Luxury</option><option>Quiet / introvert-friendly</option><option>Business</option></select></label>
+<label>Emergency / contingency reserve %
+<input id="reservePct" type="number" min="0" max="50" step="1" value="10"></label>
+</div>
+
+<fieldset class="planner-fieldset"><legend>What matters on this trip?</legend><div class="choice-grid">
+<label class="check"><input type="checkbox" name="interest" value="Food & restaurants"> Food & restaurants</label>
+<label class="check"><input type="checkbox" name="interest" value="Beaches / water"> Beaches / water</label>
+<label class="check"><input type="checkbox" name="interest" value="Mountains / cabins"> Mountains / cabins</label>
+<label class="check"><input type="checkbox" name="interest" value="Nightlife"> Nightlife</label>
+<label class="check"><input type="checkbox" name="interest" value="Culture / heritage"> Culture / heritage</label>
+<label class="check"><input type="checkbox" name="interest" value="Festivals / events"> Festivals / events</label>
+<label class="check"><input type="checkbox" name="interest" value="Museums / learning"> Museums / learning</label>
+<label class="check"><input type="checkbox" name="interest" value="Fishing / outdoors"> Fishing / outdoors</label>
+<label class="check"><input type="checkbox" name="interest" value="Adventure activities"> Adventure activities</label>
+<label class="check"><input type="checkbox" name="interest" value="Shopping / collecting"> Shopping / collecting</label>
+<label class="check"><input type="checkbox" name="interest" value="Wellness / spa / gym"> Wellness / spa / gym</label>
+<label class="check"><input type="checkbox" name="interest" value="Vendor / business opportunity"> Vendor / business opportunity</label>
+</div></fieldset>
+
+<fieldset class="planner-fieldset"><legend>Special planning modes</legend><div class="choice-grid">
+<label class="check"><input id="groupMode" type="checkbox"> Group cost-sharing / dropout protection</label>
+<label class="check"><input id="businessMode" type="checkbox"> Business expense recordkeeping</label>
+<label class="check"><input id="petMode" type="checkbox"> Pet / service-animal planning</label>
+<label class="check"><input id="accessibilityMode" type="checkbox"> Accessibility / mobility planning</label>
+<label class="check"><input id="safeNightMode" type="checkbox"> Nightlife / no-driving plan</label>
+<label class="check"><input id="flexDestination" type="checkbox"> I want Suitcase Brain to suggest the destination</label>
+</div></fieldset>
+
+<p id="planError" class="error" role="alert"></p><button class="primary" type="submit">Build my planning brief</button>
+</form>
+
+<section id="planResults" class="card results planner-results" hidden aria-live="polite">
+<p class="eyebrow">YOUR TRIP BLUEPRINT</p><h2 id="planTitle">Planning brief</h2>
+<div class="result-grid">
+<div><span>Spendable after reserve</span><strong id="spendableResult">$0.00</strong></div>
+<div><span>Emergency reserve</span><strong id="reserveResult">$0.00</strong></div>
+<div><span>Budget per traveler</span><strong id="perPersonResult">$0.00</strong></div>
+<div><span>Current funded share</span><strong id="fundedShareResult">$0.00</strong></div>
+<div class="total-result"><span>If one funded traveler drops</span><strong id="dropoutResult">Not applicable</strong></div>
+</div>
+<div class="planner-output"><h3>What the engine needs to solve</h3><ul id="moduleList"></ul></div>
+<div class="planner-output"><h3>Your selected interests</h3><p id="interestSummary" class="muted"></p></div>
+<div class="source-note"><strong>V1 truth rule:</strong> this page does not invent live airfare, hotel rates, event schedules, gas prices, reviews or safety facts. Those become visible only as verified data modules are connected.</div>
+</section>
+
+<section class="split-info">
+<article class="card prose"><p class="eyebrow">WHERE THIS IS GOING</p><h2>One intake. Many intelligence modules.</h2><p>This canonical trip record will feed weather, fuel, flights, lodging, fees, events, food, culture, reviews, safety, group logistics, cancellation exposure, vendor opportunities and verified booking routes.</p></article>
+<article class="card prose"><p class="eyebrow">MONEY RULE</p><h2>Useful first. Commission second.</h2><p>Suitcase Brain may surface eligible affiliate offers through Travelpayouts Drive. The planner remains useful without clicking an offer, and provider relationships do not override trip fit.</p></article>
+</section>
+</main>
+<footer class="site-footer"><div><strong>Suitcase Brain</strong><p>Travel intelligence powered by Money OS. Working brand pending final trademark clearance.</p></div><div><strong>Affiliate disclosure</strong><p>Travelpayouts Drive may show relevant travel offers or convert eligible travel links into affiliate links. We may earn a commission if you book through an eligible link, at no additional cost to you.</p></div></footer>
+<script src="../trip-intelligence.js" defer></script></body></html>
