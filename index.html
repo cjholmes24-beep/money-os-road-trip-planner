@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Free road-trip fuel and travel budget calculator.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+  <title>Road Trip Ledger</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <p class="eyebrow">FREE TRAVEL PLANNING TOOL</p>
+      <h1>Road Trip Ledger</h1>
+      <p class="lede">Estimate fuel, lodging, food, miscellaneous costs, total trip cost, and cost per traveler without creating an account.</p>
+    </header>
+
+    <section class="card" aria-labelledby="planner-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">TRIP BUDGET</p>
+          <h2 id="planner-title">Build your estimate</h2>
+        </div>
+        <button id="resetBtn" class="secondary" type="button">Reset</button>
+      </div>
+
+      <form id="tripForm" novalidate>
+        <div class="grid">
+          <label>
+            Trip miles
+            <input id="miles" name="miles" type="number" min="0" step="0.1" inputmode="decimal" placeholder="850" required>
+            <span class="hint">Total driving miles for the trip.</span>
+          </label>
+
+          <label>
+            Vehicle MPG
+            <input id="mpg" name="mpg" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="28" required>
+            <span class="hint">Use your realistic highway average.</span>
+          </label>
+
+          <label>
+            Fuel price per gallon
+            <input id="fuelPrice" name="fuelPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3.35" required>
+            <span class="hint">Use the average price you expect.</span>
+          </label>
+
+          <label>
+            Hotel cost per night
+            <input id="hotelNight" name="hotelNight" type="number" min="0" step="0.01" inputmode="decimal" placeholder="120">
+            <span class="hint">Enter 0 if you are not paying for lodging.</span>
+          </label>
+
+          <label>
+            Hotel nights
+            <input id="hotelNights" name="hotelNights" type="number" min="0" step="1" inputmode="numeric" placeholder="2">
+            <span class="hint">Whole nights only.</span>
+          </label>
+
+          <label>
+            Food per person / day
+            <input id="foodPerDay" name="foodPerDay" type="number" min="0" step="0.01" inputmode="decimal" placeholder="45">
+            <span class="hint">Daily meal/snack budget for one traveler.</span>
+          </label>
+
+          <label>
+            Travel days
+            <input id="days" name="days" type="number" min="1" step="1" inputmode="numeric" placeholder="3" required>
+            <span class="hint">Whole days, minimum 1.</span>
+          </label>
+
+          <label>
+            Travelers
+            <input id="travelers" name="travelers" type="number" min="1" step="1" inputmode="numeric" placeholder="2" required>
+            <span class="hint">Whole number of people sharing the trip.</span>
+          </label>
+
+          <label>
+            Miscellaneous expenses
+            <input id="misc" name="misc" type="number" min="0" step="0.01" inputmode="decimal" placeholder="75">
+            <span class="hint">Parking, tolls, local transit, attractions, etc.</span>
+          </label>
+        </div>
+
+        <div id="formError" class="error" role="alert" aria-live="polite"></div>
+        <button class="primary" type="submit">Calculate trip budget</button>
+      </form>
+    </section>
+
+    <section class="card results" aria-labelledby="results-title">
+      <p class="eyebrow">ESTIMATE</p>
+      <h2 id="results-title">Trip totals</h2>
+      <div class="result-grid">
+        <div><span>Fuel</span><strong id="fuelResult">$0.00</strong></div>
+        <div><span>Hotels</span><strong id="hotelResult">$0.00</strong></div>
+        <div><span>Food</span><strong id="foodResult">$0.00</strong></div>
+        <div><span>Misc.</span><strong id="miscResult">$0.00</strong></div>
+        <div class="total"><span>Total trip</span><strong id="totalResult">$0.00</strong></div>
+        <div class="total"><span>Per person</span><strong id="perPersonResult">$0.00</strong></div>
+      </div>
+      <p id="formulaNote" class="formula">Fuel = (trip miles ÷ MPG) × fuel price.</p>
+    </section>
+
+    <section class="card prose">
+      <p class="eyebrow">HOW TO PLAN BETTER</p>
+      <h2>Use estimates as a buffer, not a promise</h2>
+      <p>Real trips rarely match a perfect spreadsheet. Construction, detours, weather, idling, traffic, and extra local driving can increase fuel use. A small mileage buffer can make the estimate more realistic.</p>
+      <p>Your real-world MPG can differ from the dashboard rating because of speed, cargo weight, terrain, wind, tire pressure, and air-conditioning use. If you are unsure, use a slightly lower MPG number so the budget is less optimistic.</p>
+      <p>Lodging totals can also change because of taxes, parking charges, resort fees, or refundable deposits. Check the full price shown by the hotel before making a reservation.</p>
+      <p>For longer drives, plan rest stops and overnight breaks conservatively. Fatigue can turn a cheap trip into an unsafe one. Keep offline directions available when traveling through areas with weak cellular service.</p>
+    </section>
+
+    <section class="card prose">
+      <p class="eyebrow">FORMULAS</p>
+      <h2>What the calculator is doing</h2>
+      <p><strong>Fuel cost:</strong> trip miles divided by MPG, multiplied by fuel price per gallon.</p>
+      <p><strong>Hotel cost:</strong> nightly rate multiplied by number of hotel nights.</p>
+      <p><strong>Food cost:</strong> food budget per person per day multiplied by travelers and travel days.</p>
+      <p><strong>Total trip:</strong> fuel + hotels + food + miscellaneous expenses.</p>
+      <p><strong>Per-person cost:</strong> total trip cost divided by number of travelers.</p>
+      <p class="muted">These are planning estimates only. Verify current fuel, lodging, toll, parking, food, and destination prices before spending money.</p>
+    </section>
+
+    <footer>
+      <p>Road Trip Ledger runs entirely in your browser. No account, advertising, analytics, or personal-data collection is required.</p>
+    </footer>
+  </main>
+  <script src="script.js" defer></script>
+</body>
+</html>
