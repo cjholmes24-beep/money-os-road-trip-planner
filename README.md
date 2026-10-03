@@ -1,38 +1,25 @@
 # Road Trip Ledger
 
-A free, faceless, static road-trip and travel-budget calculator.
+A zero-cost static travel-planning utility site. It includes focused calculators for gas, complete road trips, rental cars, airport transfers, travel eSIM data, activities, and luggage storage, plus a factual flight-delay compensation guide.
 
-## What it does
+## Run locally
 
-Road Trip Ledger estimates:
+Serve the repository root with any static server, for example:
 
-- fuel cost
-- lodging cost
-- food cost
-- miscellaneous trip expenses
-- total trip budget
-- per-person trip cost
+```sh
+python3 -m http.server 8000
+```
 
-## Privacy and architecture
+Then visit `http://localhost:8000`. No build, account, database, paid API, or external package is required. Calculations run locally in the browser.
 
-The site is intentionally simple:
+## Search setup
 
-- no accounts
-- no analytics
-- no advertising
-- no affiliate links at launch
-- no database
-- no server
-- no paid API
-- no external runtime assets
-- no collection of personal information
+The repository contains `sitemap.xml`, `robots.txt`, canonical links, Open Graph tags, and JSON-LD. After GitHub Pages publishes, add the GitHub Pages URL as a URL-prefix property in Google Search Console, verify it using a supported no-cost method, and submit `sitemap.xml`. The same sitemap can be submitted to Bing Webmaster Tools.
 
-All calculations run in the visitor's browser using static HTML, CSS, and JavaScript.
+## Monetization and disclosure
 
-## Hosting
+The existing Travelpayouts Drive loader remains installed. Pages contain an affiliate disclosure explaining that eligible links or offers may generate a commission at no additional cost to the traveler. No unverified direct affiliate program URLs are hard-coded.
 
-The project is designed for free static hosting such as GitHub Pages.
+## Privacy and costs
 
-## Disclaimer
-
-Calculations are estimates only. Travelers should verify current fuel, lodging, toll, parking, food, and destination prices before spending money.
+The site requires no paid hosting, domain, API, SEO tool, advertising, or social posting. It collects no form submissions; calculator inputs remain in the browser. Estimates are planning aids and should be checked against current provider prices and terms.
