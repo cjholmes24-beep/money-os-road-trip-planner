@@ -34,3 +34,14 @@ Direct provider URLs are intentionally not invented or hard-coded. Verified acco
 ## Cost and privacy
 
 Owner cost remains $0. No paid ads, hosting, domain, API, SEO tool, database, or account system is required. Calculator entries remain in the visitor's browser. Travelpayouts Drive may perform monetization/interaction processing as disclosed on the site.
+
+
+## Connected source/freshness brick
+
+- `data/source-registry.json` declares source authority, purpose, cost, auth and cadence.
+- `data/eia-gas-latest.json` seeds the current official weekly EIA gasoline reference.
+- `scripts/refresh_eia_gas.py` refreshes that snapshot from EIA's keyless PET bulk file.
+- `.github/workflows/refresh-eia-gas.yml` refreshes the snapshot weekly after merge to the default branch and commits only when data changes.
+- `source-intelligence.js` shows the most relevant available EIA reference for the entered destination and provides opt-in live National Weather Service weather for the traveler's current location.
+
+No paid data service or API key is required for this brick.
