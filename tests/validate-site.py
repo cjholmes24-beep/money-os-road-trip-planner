@@ -24,10 +24,10 @@ for url in re.findall(r'<loc>(.*?)</loc>',sitemap):
     if url.endswith('/'): target=target/'index.html'
     if not target.exists(): errors.append(f'sitemap missing: {rel}')
 html=(root/'plan-my-trip/index.html').read_text()
-for required in ['tp-em.com/NTgxMDU0.js','Affiliate disclosure','I NEED TO LEAVE THIS TRIP','Live source not connected yet.']:
+for required in ['tp-em.com/NTgxMDU0.js','Affiliate disclosure','I NEED TO LEAVE THIS TRIP','Live source not connected yet.','TRANSPORTATION INTELLIGENCE','LODGING INTELLIGENCE','transport-lodging-intelligence.js']:
     if required not in html: errors.append(f'planner missing: {required}')
-secret_pattern = '(sk' + r'_live_|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC )?PRIVATE KEY)'
+secret_pattern = '(sk' + r'_live_[A-Za-z0-9]{12,}|AKIA[0-9A-Z]{16}|Bearer\s+[A-Za-z0-9._-]{20,}|-----BEGIN (RSA |EC )?PRIVATE KEY|password\s*[:=]\s*[\"\'][^\"\']{8,})'
 for p in root.rglob('*'):
     if p.is_file() and '.git' not in p.parts and re.search(secret_pattern,p.read_text(errors='ignore')): errors.append(f'possible secret: {p.relative_to(root)}')
 if errors: print('\n'.join(errors));sys.exit(1)
-print('Site validation passed: JSON, internal links, sitemap, disclosure, Drive, and secret patterns')
+print('Site validation passed: JSON, internal links, sitemap, disclosure, Drive, intelligence UI, and secret patterns')

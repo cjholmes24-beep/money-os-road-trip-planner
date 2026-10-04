@@ -5,8 +5,9 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
-  const SCHEMA_VERSION = 1;
-  const STORAGE_KEY = "suitcase-brain.trip.v1";
+  const SCHEMA_VERSION = 2;
+  const STORAGE_KEY = "suitcase-brain.trip.v2";
+  const LEGACY_STORAGE_KEY = "suitcase-brain.trip.v1";
   const COMMITMENT_STATES = ["INVITED", "ACCEPTED", "DEPOSIT_PAID", "FULL_SHARE_FUNDED", "BOOKED", "TRAVELING", "COMPLETE", "DROPPED_OUT", "CANCELED"];
   const FUNDED_STATES = new Set(["FULL_SHARE_FUNDED", "BOOKED", "TRAVELING", "COMPLETE"]);
   const COMMITTED_STATES = new Set(["ACCEPTED", "DEPOSIT_PAID", ...FUNDED_STATES]);
@@ -26,8 +27,21 @@
       traveler_count: 1, travelers: [], preferences: { lodging: "compare", transport: "compare", walking: "moderate", driving: "flexible", interests: [], culture_community: "", food: "", nightlife: "", outdoor_adventure: "" },
       needs: { pet_service_animal: "", accessibility: "" }, modes: { business: false, group: false, safe_night_no_driving: false, vendor_business_opportunity: false },
       reservations: [], hidden_fees: FEE_CATEGORIES.map(category => ({ id: uid(), category, status: "UNKNOWN", amount: null, source: "", notes: "" })),
-      emergency: { scenario: "", personal_safety: false, contacts: "", documents_notes: "", booking_owners: "" }
+      emergency: { scenario: "", personal_safety: false, contacts: "", documents_notes: "", booking_owners: "" },
+      transportation_options: [], lodging_options: []
     }, overrides);
+  }
+
+  function migrateTrip(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Trip JSON must be an object.");
+    if (value.schema_version === SCHEMA_VERSION) return JSON.parse(JSON.stringify(value));
+    if (value.schema_version !== 1) throw new Error(`Unsupported schema_version ${String(value.schema_version)}.`);
+    return Object.assign({}, JSON.parse(JSON.stringify(value)), {
+      schema_version: SCHEMA_VERSION,
+      transportation_options: [],
+      lodging_options: [],
+      updated_at: new Date().toISOString()
+    });
   }
 
   function validateTrip(value) {
@@ -40,22 +54,23 @@
     }
     if (!nonnegative(value.budget?.total) || !nonnegative(value.budget?.reserve) || num(value.budget?.reserve) > num(value.budget?.total)) errors.push("Budget values must be nonnegative and reserve cannot exceed total budget.");
     if (!Number.isInteger(Number(value.traveler_count)) || Number(value.traveler_count) < 1) errors.push("traveler_count must be a positive integer.");
-    if (!Array.isArray(value.travelers) || !Array.isArray(value.reservations) || !Array.isArray(value.hidden_fees)) errors.push("Travelers, reservations, and hidden_fees must be arrays.");
-    const activeTravelers = (value.travelers || []).filter(t => !["DROPPED_OUT", "CANCELED"].includes(t?.commitment_state)).length;
+    if (!Array.isArray(value.travelers) || !Array.isArray(value.reservations) || !Array.isArray(value.hidden_fees) || !Array.isArray(value.transportation_options) || !Array.isArray(value.lodging_options)) errors.push("Travelers, reservations, hidden_fees, transportation_options, and lodging_options must be arrays.");
+    const travelers = Array.isArray(value.travelers) ? value.travelers : [], reservations = Array.isArray(value.reservations) ? value.reservations : [], hiddenFees = Array.isArray(value.hidden_fees) ? value.hidden_fees : [];
+    const activeTravelers = travelers.filter(t => !["DROPPED_OUT", "CANCELED"].includes(t?.commitment_state)).length;
     if (Number(value.traveler_count) < activeTravelers) errors.push("traveler_count cannot be smaller than active traveler records.");
     if (value.dates?.start && value.dates?.end && Date.parse(value.dates.end) < Date.parse(value.dates.start)) errors.push("Trip end date cannot be before start date.");
-    (value.travelers || []).forEach((traveler, i) => {
+    travelers.forEach((traveler, i) => {
       if (!traveler || !COMMITMENT_STATES.includes(traveler.commitment_state)) errors.push(`Traveler ${i + 1} has an invalid commitment state.`);
       if (!nonnegative(traveler?.amount_committed) || !nonnegative(traveler?.amount_paid)) errors.push(`Traveler ${i + 1} has invalid money values.`);
       if (num(traveler?.amount_paid) > num(traveler?.amount_committed)) errors.push(`Traveler ${i + 1} paid amount cannot exceed committed amount.`);
     });
-    (value.hidden_fees || []).forEach((fee, i) => {
+    hiddenFees.forEach((fee, i) => {
       if (!FEE_CATEGORIES.includes(fee?.category)) errors.push(`Hidden fee ${i + 1} has an invalid category.`);
       if (!FEE_STATUSES.includes(fee?.status)) errors.push(`Hidden fee ${i + 1} has an invalid status.`);
       if (!nonnegative(fee?.amount, true)) errors.push(`Hidden fee ${i + 1} has an invalid amount.`);
     });
     const reservationMoneyFields = ["booking_price","deposit_paid","amount_paid_beyond_deposit","remaining_balance","refundable_amount","nonrefundable_amount","change_rebooking_fee","provider_cancellation_fee","provider_no_show_fee"];
-    (value.reservations || []).forEach((reservation, i) => {
+    reservations.forEach((reservation, i) => {
       if (!RESERVATION_CATEGORIES.includes(reservation?.category)) errors.push(`Reservation ${i + 1} has an invalid category.`);
       if (reservation?.policy_status && !POLICY_STATUSES.includes(reservation.policy_status)) errors.push(`Reservation ${i + 1} has an invalid policy status.`);
       reservationMoneyFields.forEach(field => { if (!nonnegative(reservation?.[field], true)) errors.push(`Reservation ${i + 1} has an invalid ${field}.`); });
@@ -139,5 +154,5 @@
   }
   function moneyRaw(n) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(num(n)); }
 
-  return { SCHEMA_VERSION, STORAGE_KEY, COMMITMENT_STATES, FEE_CATEGORIES, FEE_STATUSES, RESERVATION_CATEGORIES, POLICY_STATUSES, createTrip, validateTrip, budgetMetrics, dropoutScenario, cancellationExposure, hiddenFeeMetrics, resilience };
+  return { SCHEMA_VERSION, STORAGE_KEY, LEGACY_STORAGE_KEY, COMMITMENT_STATES, FEE_CATEGORIES, FEE_STATUSES, RESERVATION_CATEGORIES, POLICY_STATUSES, createTrip, migrateTrip, validateTrip, budgetMetrics, dropoutScenario, cancellationExposure, hiddenFeeMetrics, resilience };
 });

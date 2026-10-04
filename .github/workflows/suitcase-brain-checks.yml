@@ -25,6 +25,7 @@ jobs:
         run: |
           node --check trip-intelligence.js
           node --check source-intelligence.js
+          node --check transport-lodging-intelligence.js
           node --check plan-my-trip/planner-ui.js
           node --check script.js
       - name: Suitcase Brain unit checks
@@ -35,3 +36,4 @@ jobs:
         run: |
           python3 -m json.tool data/source-registry.json >/dev/null
           python3 -m json.tool data/eia-gas-latest.json >/dev/null
+          python3 -m json.tool data/provider-capability-registry.json >/dev/null
