@@ -220,7 +220,7 @@
       if (option.driving_details.mpg === 0) errors.push("driving_details.mpg must be positive when provided.");
     }
     if (!/^[A-Z]{3}$/.test(option.currency || "")) errors.push("currency must be a three-letter code.");
-    if (!["USER_ENTERED", "SOURCE_BACKED"].includes(option.record_origin)) errors.push("Invalid record origin.");
+    if (!["USER_ENTERED", "SOURCE_BACKED", "IMPORTED"].includes(option.record_origin)) errors.push("Invalid record origin.");
     if (!option.source || typeof option.source !== "object" || Array.isArray(option.source)) errors.push("Missing source metadata.");
     if (!option.booking || typeof option.booking !== "object" || Array.isArray(option.booking)) errors.push("Missing booking metadata.");
     if (option.booking && !RELATIONSHIP_STATES.includes(option.booking.relationship_status)) errors.push("Invalid booking relationship status.");
@@ -426,6 +426,30 @@
     return option.booking.url_status === "VERIFIED" ? validHttpsUrl(option.booking.verified_booking_url) || null : null;
   }
 
+  function sanitizePersistedTripOptions(trip) {
+    const clone = JSON.parse(JSON.stringify(trip));
+    const sanitize = option => {
+      if (!option || typeof option !== "object") return option;
+      if (option.record_origin === "SOURCE_BACKED") {
+        option.record_origin = "IMPORTED";
+        option.source = {
+          ...(option.source || {}),
+          status: "unverified_import",
+          notes: [option.source?.notes, "Imported source-backed snapshot is not runtime-verified; refresh from the source before treating it as current."].filter(Boolean).join(" ")
+        };
+      }
+      if (option.booking?.url_status === "VERIFIED") {
+        option.booking.url_status = "NOT_VERIFIED";
+        option.booking.verified_booking_url = "";
+        option.booking.notes = [option.booking.notes, "Persisted/imported booking links must be re-verified at runtime."].filter(Boolean).join(" ");
+      }
+      return option;
+    };
+    clone.transportation_options = (clone.transportation_options || []).map(sanitize);
+    clone.lodging_options = (clone.lodging_options || []).map(sanitize);
+    return clone;
+  }
+
   function validateTripOptions(trip) {
     const errors = [];
     if (!Array.isArray(trip?.transportation_options)) errors.push("transportation_options must be an array.");
@@ -445,7 +469,7 @@
     TRANSPORT_MANDATORY_BY_MODE, AMENITIES, component, normalizeTransportOption, normalizeLodgingOption,
     validateTransportOption: x => validateOption(x, "transport"),
     validateLodgingOption: x => validateOption(x, "lodging"),
-    validateTripOptions, expectedCosts, priceCompleteness, cancellationExposure, compareTransport,
+    sanitizePersistedTripOptions, validateTripOptions, expectedCosts, priceCompleteness, cancellationExposure, compareTransport,
     compareLodging, drivingFuelCost, normalizeGtfsSchedule, sourceMetadata, bookingOpportunity,
     bookingUrl, isolateProvider
   };
