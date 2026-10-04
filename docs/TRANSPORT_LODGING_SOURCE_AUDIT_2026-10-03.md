@@ -89,7 +89,7 @@ Connected now: the existing EIA weekly gasoline snapshot and existing Travelpayo
 - **Category:** flight and hotel APIs
 - **Official documentation URL:** https://developers.amadeus.com/self-service
 - **Authority type:** distribution provider
-- **Cost:** test quota may be $0; production and commercial conditions require review
+- **Cost:** production/commercial cost is not asserted as $0; any test quota or pricing must be re-verified before connection
 - **Authentication / approval:** OAuth client credentials and account
 - **Server-side secret required?** Yes
 - **Safe for static browser?** No
@@ -104,7 +104,7 @@ Connected now: the existing EIA weekly gasoline snapshot and existing Travelpayo
 - **Category:** accommodation inventory
 - **Official documentation URL:** https://developers.booking.com/demand/docs/open-api/demand-api/
 - **Authority type:** booking provider
-- **Cost:** no paid service added, but eligible affiliate access is required
+- **Cost:** commercial/API cost is not asserted as $0; eligible affiliate access and current terms must be verified before connection
 - **Authentication / approval / secret:** partner credentials required; access not verified
 - **Safe for static browser?** No
 - **CORS / technical limitations:** authenticated partner integration
@@ -118,7 +118,7 @@ Connected now: the existing EIA weekly gasoline snapshot and existing Travelpayo
 - **Category:** lodging inventory
 - **Official documentation URL:** https://developers.expediagroup.com/rapid/lodging
 - **Authority type:** booking provider
-- **Cost:** no paid service added; partner onboarding is required
+- **Cost:** commercial/API cost is not asserted as $0; partner onboarding and current terms must be verified before connection
 - **Authentication / approval / secret:** key/signature and approved partner access
 - **Safe for static browser?** No
 - **CORS / technical limitations:** signed requests and commercial/launch requirements
