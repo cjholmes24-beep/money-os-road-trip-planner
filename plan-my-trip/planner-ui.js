@@ -322,7 +322,7 @@
       change_cancel_fee:optionalNumber("quoteTransportCancelFee"),
       cancellation_deadline:value("quoteTransportCancelDeadline"),
       policy_status:value("quoteTransportPolicy"),
-      currency:trip.budget.currency,
+      currency:value("currency")||trip.budget.currency||"USD",
       source:{fact_type:"USER_ENTERED",source_name:"Traveler"}
     });
   }
@@ -364,7 +364,7 @@
       change_fee:optionalNumber("quoteLodgingChangeFee"),
       cancellation_deadline:value("quoteLodgingCancelDeadline"),
       policy_status:value("quoteLodgingPolicy"),
-      currency:trip.budget.currency,
+      currency:value("currency")||trip.budget.currency||"USD",
       amenities:{parking:parkingIncluded,breakfast:breakfastIncluded},
       location_fit:checked("quoteLodgingLocationFit")?"MATCH":"UNKNOWN",
       distance_location_context:value("quoteLodgingLocationContext"),
