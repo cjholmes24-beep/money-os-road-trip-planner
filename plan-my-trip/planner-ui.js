@@ -458,7 +458,7 @@
     try{
       const raw=localStorage.getItem(B.STORAGE_KEY)||localStorage.getItem(B.LEGACY_STORAGE_KEY);
       if(!raw)throw Error("No saved trip found in this browser.");
-      const original=JSON.parse(raw),t=B.migrateTrip(original),v=validateWholeTrip(t);
+      const original=JSON.parse(raw),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
       $("persistenceStatus").textContent=original.schema_version===1?"Saved V1 trip migrated to V2 in memory. Save to retain the migration.":"Saved trip loaded.";
@@ -481,7 +481,7 @@
   $("importTrip").onchange=async e=>{
     try{
       if(!e.target.files?.[0])return;
-      const original=JSON.parse(await e.target.files[0].text()),t=B.migrateTrip(original),v=validateWholeTrip(t);
+      const original=JSON.parse(await e.target.files[0].text()),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
       $("persistenceStatus").textContent=`Validated trip imported${original.schema_version===1?" and migrated from V1":""}. Save it to retain it in this browser.`;
