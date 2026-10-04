@@ -2,7 +2,9 @@
 
 Last updated: 2026-10-03
 Canonical repository: `cjholmes24-beep/money-os-road-trip-planner`
-Last verified product-code baseline before handoff-document commits: `3e8ee86876e29ec6c0daaa0f7f620ed0f8e57380`\n\n**Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
+Last verified product-code baseline before handoff-document commits: `3e8ee86876e29ec6c0daaa0f7f620ed0f8e57380`
+
+**Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
 
 ## Purpose of this file
 
