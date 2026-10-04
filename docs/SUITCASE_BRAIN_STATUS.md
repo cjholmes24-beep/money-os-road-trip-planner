@@ -26,3 +26,24 @@ The UI says `UNKNOWN`, `NOT CONNECTED`, `PROVIDER ACCESS REQUIRED`, or `UNAVAILA
 ## Privacy, money, and failure behavior
 
 Trip data stays in browser storage or user-triggered JSON files. No provider secret, payment credential, backend, customer custody, booking fee or service fee was introduced. Provider failure is isolated; user-entered records and the trip remain. Stale snapshots retain their real dates. Affiliate state stays separate from fact authority and traveler ranking.
+
+
+## Cleanup audit before merge
+
+Independent PR cleanup strengthened the V1 transport/lodging layer before merge:
+
+- transportation cost completeness is mode-aware rather than requiring unrelated mode fees
+- quote forms expose separate canonical fee fields so known-total math can actually resolve
+- null/blank amounts remain unknown instead of coercing to zero
+- cancellation comparisons require complete known cancellation amounts
+- mixed currencies fail closed until FX conversion exists
+- comparison lenses require a real comparison population
+- imported and reloaded provider-backed facts are downgraded until runtime re-verification
+- persisted booking URLs cannot recreate trusted clickable provider links
+- EIA fuel basis can only be claimed after loading the official snapshot and is blocked for non-USD trip currency until FX exists
+- provider capability records no longer assert zero commercial/API cost where current cost has not been verified
+- user quote controls cannot self-declare provider-published or provider-verified policy status
+- async provider failures are isolated
+- transport/lodging option bodies are validated on save, load, import, export, and blueprint generation
+
+Browser automation was unavailable for this engineering environment, so no browser smoke run is claimed. GitHub Actions supplies syntax, unit, static-site, JSON, provider-boundary, and secret-pattern validation.
