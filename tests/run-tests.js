@@ -242,7 +242,9 @@ const T = require("../transport-lodging-intelligence.js");
   const booking=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"javascript:alert(1)"});
   eq(booking.url_status,"NOT_VERIFIED");
   eq(T.bookingUrl({booking}),null);
-  const verified=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"});
+  const forgedPersisted=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://attacker.example/book"});
+  eq(T.bookingUrl({booking:forgedPersisted}),null);
+  const verified=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"},{trusted:true});
   ok(T.bookingUrl({booking:verified}).startsWith("https://provider.example/"));
 
   // GTFS foundation does not claim service-date eligibility without calendar evaluation.
