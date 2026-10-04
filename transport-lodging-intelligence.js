@@ -37,6 +37,7 @@
     OTHER: ["base_price", "taxes", "mandatory_fees", "other_known_cost"]
   };
 
+  const TRUSTED_BOOKINGS = new WeakSet();
   const uid = () => globalThis.crypto?.randomUUID?.() || `local-${Date.now()}-${Math.random().toString(16).slice(2)}`;
   const numeric = value => value !== null && value !== undefined && !(typeof value === "string" && value.trim() === "") && Number.isFinite(Number(value)) && Number(value) >= 0;
   const optionalNumber = value => numeric(value) ? Number(value) : null;
@@ -84,12 +85,12 @@
     }
   }
 
-  function bookingOpportunity(input = {}) {
+  function bookingOpportunity(input = {}, context = {}) {
     const relationship_status = RELATIONSHIP_STATES.includes(input.relationship_status) ? input.relationship_status : "UNKNOWN";
     const requestedStatus = LINK_STATES.includes(input.url_status) ? input.url_status : "NOT_AVAILABLE";
     const url = validHttpsUrl(input.verified_booking_url);
     const url_status = requestedStatus === "VERIFIED" ? (url ? "VERIFIED" : "NOT_VERIFIED") : requestedStatus;
-    return {
+    const result = {
       category: safeText(input.category),
       provider: safeText(input.provider),
       relationship_status,
@@ -101,6 +102,8 @@
       last_verified: safeText(input.last_verified),
       notes: safeText(input.notes)
     };
+    if (context.trusted === true && url_status === "VERIFIED") TRUSTED_BOOKINGS.add(result);
+    return result;
   }
 
   function baseCosts(names, raw = {}, defaultState = "UNKNOWN") {
@@ -152,7 +155,7 @@
       mileage_limit: safeText(input.mileage_limit) || "UNKNOWN",
       insurance_selection: safeText(input.insurance_selection) || "UNKNOWN",
       source: sourceMetadata(input.source, user ? "USER_ENTERED" : "UNKNOWN"),
-      booking: bookingOpportunity(input.booking),
+      booking: bookingOpportunity(input.booking, { trusted: context.trustedBooking === true }),
       notes: safeText(input.notes)
     };
   }
@@ -190,7 +193,7 @@
       policy_status: POLICY_STATES.includes(input.policy_status) ? input.policy_status : "UNKNOWN",
       availability_status: AVAILABILITY_STATES.includes(input.availability_status) ? input.availability_status : (user ? "USER_ENTERED" : "UNKNOWN"),
       source: sourceMetadata(input.source, user ? "USER_ENTERED" : "UNKNOWN"),
-      booking: bookingOpportunity(input.booking),
+      booking: bookingOpportunity(input.booking, { trusted: context.trustedBooking === true }),
       notes: safeText(input.notes)
     };
   }
@@ -217,6 +220,11 @@
       if (option.driving_details.mpg === 0) errors.push("driving_details.mpg must be positive when provided.");
     }
     if (!/^[A-Z]{3}$/.test(option.currency || "")) errors.push("currency must be a three-letter code.");
+    if (!["USER_ENTERED", "SOURCE_BACKED"].includes(option.record_origin)) errors.push("Invalid record origin.");
+    if (!option.source || typeof option.source !== "object" || Array.isArray(option.source)) errors.push("Missing source metadata.");
+    if (!option.booking || typeof option.booking !== "object" || Array.isArray(option.booking)) errors.push("Missing booking metadata.");
+    if (option.booking && !RELATIONSHIP_STATES.includes(option.booking.relationship_status)) errors.push("Invalid booking relationship status.");
+    if (option.booking && !LINK_STATES.includes(option.booking.url_status)) errors.push("Invalid booking link status.");
     if (!POLICY_STATES.includes(option.policy_status)) errors.push("Invalid policy status.");
     if (!AVAILABILITY_STATES.includes(option.availability_status)) errors.push("Invalid availability status.");
     return { valid: errors.length === 0, errors };
@@ -406,7 +414,8 @@
   }
 
   function bookingUrl(option) {
-    return option?.booking?.url_status === "VERIFIED" ? validHttpsUrl(option.booking.verified_booking_url) || null : null;
+    if (!option?.booking || !TRUSTED_BOOKINGS.has(option.booking)) return null;
+    return option.booking.url_status === "VERIFIED" ? validHttpsUrl(option.booking.verified_booking_url) || null : null;
   }
 
   function validateTripOptions(trip) {
