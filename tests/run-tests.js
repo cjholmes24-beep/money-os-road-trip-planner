@@ -210,6 +210,8 @@ const T = require("../transport-lodging-intelligence.js");
   eq(T.compareTransport([ta,tb]).find(x=>x.label==="LOWEST KNOWN COST").winner_id,ta.id);
   eq(T.compareTransport([ta,tb]).find(x=>x.label==="FASTEST KNOWN OPTION").winner_id,tb.id);
   eq(T.compareTransport([ta,tb]).find(x=>x.label==="LOWEST KNOWN COST PER TRAVELER").winner_id,ta.id);
+  const incompleteForCompare=T.normalizeTransportOption({mode:"BUS",provider:"Partial",traveler_count:2,base_price:50,currency:"USD"});
+  eq(T.compareTransport([ta,incompleteForCompare]).find(x=>x.label==="LOWEST KNOWN COST").status,"NOT ENOUGH VERIFIED DATA TO COMPARE");
 
   // Affiliate payout is ignored by traveler ranking.
   const richAffiliate = completeTransport("BUS","High payout",150,"USD","VERY_HIGH");
@@ -246,6 +248,16 @@ const T = require("../transport-lodging-intelligence.js");
   eq(T.bookingUrl({booking:forgedPersisted}),null);
   const verified=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"},{trusted:true});
   ok(T.bookingUrl({booking:verified}).startsWith("https://provider.example/"));
+  const liveSourceOption=T.normalizeTransportOption({
+    mode:"BUS",traveler_count:1,base_price:10,
+    source:{fact_type:"PUBLISHED",source_name:"Official source"},
+    booking:{relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"}
+  },{origin:"SOURCE_BACKED",trustedBooking:true});
+  ok(T.bookingUrl(liveSourceOption)?.startsWith("https://provider.example/"));
+  const persisted=T.sanitizePersistedTripOptions({...B.createTrip(),transportation_options:[liveSourceOption]});
+  eq(persisted.transportation_options[0].record_origin,"IMPORTED");
+  eq(persisted.transportation_options[0].booking.url_status,"NOT_VERIFIED");
+  eq(T.bookingUrl(persisted.transportation_options[0]),null);
 
   // GTFS foundation does not claim service-date eligibility without calendar evaluation.
   const gtfs=T.normalizeGtfsSchedule({
