@@ -268,6 +268,9 @@
     let fuelSource=null;
 
     if (basis==="EIA WEEKLY REFERENCE") {
+      if ((value("currency") || trip.budget.currency || "USD") !== "USD") {
+        throw new Error("EIA gasoline is published in USD per gallon. Currency conversion is not connected; use USD or enter your own converted pump quote.");
+      }
       if (!activeEiaFuel || fuelPrice==null || Math.abs(fuelPrice-activeEiaFuel.value)>0.0005) {
         throw new Error("Load the current EIA reference with the button before labeling this quote as EIA-based.");
       }
@@ -325,16 +328,20 @@
   }
 
   function lodgingFromForm() {
+    const parkingIncluded=checked("quoteLodgingParkingIncluded");
+    const breakfastIncluded=checked("quoteLodgingBreakfastIncluded");
+    const parkingCost=optionalNumber("quoteLodgingParking");
+    const breakfastCost=optionalNumber("quoteLodgingBreakfastCost");
     const costs={
       base_stay_price:fieldComponent("quoteLodgingBase"),
       taxes:fieldComponent("quoteLodgingTaxes"),
       mandatory_fees:fieldComponent("quoteLodgingMandatory"),
       resort_destination_fees:fieldComponent("quoteLodgingResort"),
       cleaning_fee:fieldComponent("quoteLodgingCleaning"),
-      parking:fieldComponent("quoteLodgingParking"),
+      parking:parkingCost==null&&parkingIncluded?T.component(0,"USER_ENTERED"):fieldComponent("quoteLodgingParking"),
       pet_fee:fieldComponent("quoteLodgingPet"),
       deposit_hold:fieldComponent("quoteLodgingDeposit"),
-      breakfast:fieldComponent("quoteLodgingBreakfastCost"),
+      breakfast:breakfastCost==null&&breakfastIncluded?T.component(0,"USER_ENTERED"):fieldComponent("quoteLodgingBreakfastCost"),
       wifi:fieldComponent("quoteLodgingWifiCost"),
       other_mandatory_cost:fieldComponent("quoteLodgingOtherMandatory"),
       optional_cost:fieldComponent("quoteLodgingOptional")
@@ -358,7 +365,7 @@
       cancellation_deadline:value("quoteLodgingCancelDeadline"),
       policy_status:value("quoteLodgingPolicy"),
       currency:trip.budget.currency,
-      amenities:{parking:checked("quoteLodgingParkingIncluded"),breakfast:checked("quoteLodgingBreakfastIncluded")},
+      amenities:{parking:parkingIncluded,breakfast:breakfastIncluded},
       location_fit:checked("quoteLodgingLocationFit")?"MATCH":"UNKNOWN",
       distance_location_context:value("quoteLodgingLocationContext"),
       source:{fact_type:"USER_ENTERED",source_name:"Traveler"}
@@ -518,6 +525,12 @@
   $("cancelLodgingEdit").onclick=()=>resetQuoteForm("lodging");
 
   $("useEiaFuelReference").onclick=async()=>{
+    const selectedCurrency=value("currency")||trip.budget.currency||"USD";
+    if(selectedCurrency!=="USD"){
+      activeEiaFuel=null;
+      $("quoteTransportFuelSourceStatus").textContent="EIA gasoline is USD per gallon. FX conversion is not connected; use USD or enter your own converted pump quote.";
+      return;
+    }
     const api=window.SourceIntelligence;
     if(!api?.loadFuelReference){
       $("quoteTransportFuelSourceStatus").textContent="EIA adapter is not available yet.";
