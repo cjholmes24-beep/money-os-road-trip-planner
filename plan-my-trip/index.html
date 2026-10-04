@@ -70,7 +70,7 @@
 <label>Nonrefundable amount<input id="quoteTransportNonrefundable" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
 <label>Cancellation / change fee<input id="quoteTransportCancelFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
 <label>Cancellation deadline<input id="quoteTransportCancelDeadline" type="date"></label>
-<label>Policy status<select id="quoteTransportPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option><option>PUBLISHED</option><option>VERIFIED</option></select></label>
+<label>Policy status<select id="quoteTransportPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option></select><span class="hint">Provider-published/verified states come only from trusted source adapters.</span></label>
 </div></details>
 <div class="button-row"><button class="primary" type="submit">Save transport quote</button><button id="cancelTransportEdit" class="secondary" type="button">Cancel edit</button></div>
 <p id="transportFormError" class="error" role="alert"></p></form></details>
@@ -113,7 +113,7 @@
 <label>Cancellation fee<input id="quoteLodgingCancelFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
 <label>Change fee<input id="quoteLodgingChangeFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
 <label>Cancellation deadline<input id="quoteLodgingCancelDeadline" type="date"></label>
-<label>Policy status<select id="quoteLodgingPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option><option>PUBLISHED</option><option>VERIFIED</option></select></label>
+<label>Policy status<select id="quoteLodgingPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option></select><span class="hint">Provider-published/verified states come only from trusted source adapters.</span></label>
 <label class="check"><input id="quoteLodgingParkingIncluded" type="checkbox"> Parking included</label>
 <label class="check"><input id="quoteLodgingBreakfastIncluded" type="checkbox"> Breakfast included</label>
 <label class="check"><input id="quoteLodgingLocationFit" type="checkbox"> Matches my entered location preference</label>
