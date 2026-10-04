@@ -15,26 +15,26 @@
 
   const TRANSPORT_COSTS = ["base_price", "taxes", "mandatory_fees", "optional_fees", "baggage", "seat_fees", "parking", "tolls", "fuel", "rental_fees", "young_driver_fee", "additional_driver_fee", "one_way_drop_fee", "refueling_exposure", "airport_terminal_transport", "estimated_local_transport", "gratuity", "deposit_hold", "other_known_cost"];
   const LODGING_COSTS = ["base_stay_price", "taxes", "mandatory_fees", "resort_destination_fees", "cleaning_fee", "parking", "pet_fee", "deposit_hold", "breakfast", "wifi", "other_mandatory_cost", "optional_cost"];
-  const LODGING_MANDATORY = ["base_stay_price", "taxes", "mandatory_fees", "resort_destination_fees", "cleaning_fee", "parking", "pet_fee", "other_mandatory_cost"];
+  const LODGING_MANDATORY = ["base_stay_price", "taxes", "mandatory_fees", "resort_destination_fees", "cleaning_fee", "parking", "pet_fee"];
   const AMENITIES = ["pool", "private_pool", "hot_tub", "cold_plunge", "fire_pit", "waterfront", "lake", "river", "mountain_view", "beach_access", "dock", "fishing", "kitchen", "washer_dryer", "parking", "breakfast", "gym", "accessible_room", "pet_friendly", "workspace", "meeting_space", "group_rooms"];
 
   const TRANSPORT_MANDATORY_BY_MODE = {
-    DRIVE: ["fuel", "tolls", "parking", "other_known_cost"],
-    FLIGHT: ["base_price", "taxes", "mandatory_fees", "baggage", "seat_fees", "airport_terminal_transport", "other_known_cost"],
-    RENTAL_CAR: ["base_price", "taxes", "mandatory_fees", "rental_fees", "young_driver_fee", "additional_driver_fee", "one_way_drop_fee", "fuel", "parking", "tolls", "other_known_cost"],
-    BUS: ["base_price", "taxes", "mandatory_fees", "baggage", "other_known_cost"],
-    RAIL: ["base_price", "taxes", "mandatory_fees", "other_known_cost"],
-    PUBLIC_TRANSIT: ["base_price", "taxes", "mandatory_fees", "other_known_cost"],
-    RIDESHARE: ["base_price", "taxes", "mandatory_fees", "gratuity", "other_known_cost"],
-    TAXI: ["base_price", "taxes", "mandatory_fees", "gratuity", "other_known_cost"],
-    AIRPORT_TRANSFER: ["base_price", "taxes", "mandatory_fees", "gratuity", "other_known_cost"],
-    SHUTTLE: ["base_price", "taxes", "mandatory_fees", "gratuity", "other_known_cost"],
-    GROUP_VAN: ["base_price", "taxes", "mandatory_fees", "tolls", "parking", "gratuity", "other_known_cost"],
-    SPRINTER: ["base_price", "taxes", "mandatory_fees", "tolls", "parking", "gratuity", "other_known_cost"],
-    MINIBUS: ["base_price", "taxes", "mandatory_fees", "tolls", "parking", "gratuity", "other_known_cost"],
-    CHARTER_BUS: ["base_price", "taxes", "mandatory_fees", "tolls", "parking", "gratuity", "other_known_cost"],
-    CRUISE_PORT_TRANSFER: ["base_price", "taxes", "mandatory_fees", "gratuity", "other_known_cost"],
-    OTHER: ["base_price", "taxes", "mandatory_fees", "other_known_cost"]
+    DRIVE: ["fuel", "tolls", "parking"],
+    FLIGHT: ["base_price", "taxes", "mandatory_fees", "baggage", "seat_fees", "airport_terminal_transport"],
+    RENTAL_CAR: ["base_price", "taxes", "mandatory_fees", "rental_fees", "young_driver_fee", "additional_driver_fee", "one_way_drop_fee", "fuel", "parking", "tolls"],
+    BUS: ["base_price", "taxes", "mandatory_fees", "baggage"],
+    RAIL: ["base_price", "taxes", "mandatory_fees"],
+    PUBLIC_TRANSIT: ["base_price", "taxes", "mandatory_fees"],
+    RIDESHARE: ["base_price", "taxes", "mandatory_fees"],
+    TAXI: ["base_price", "taxes", "mandatory_fees"],
+    AIRPORT_TRANSFER: ["base_price", "taxes", "mandatory_fees"],
+    SHUTTLE: ["base_price", "taxes", "mandatory_fees"],
+    GROUP_VAN: ["base_price", "taxes", "mandatory_fees", "tolls", "parking"],
+    SPRINTER: ["base_price", "taxes", "mandatory_fees", "tolls", "parking"],
+    MINIBUS: ["base_price", "taxes", "mandatory_fees", "tolls", "parking"],
+    CHARTER_BUS: ["base_price", "taxes", "mandatory_fees", "tolls", "parking"],
+    CRUISE_PORT_TRANSFER: ["base_price", "taxes", "mandatory_fees"],
+    OTHER: ["base_price", "taxes", "mandatory_fees"]
   };
 
   const TRUSTED_BOOKINGS = new WeakSet();
@@ -250,8 +250,9 @@
     const deposit = option.costs?.deposit_hold?.state === "UNKNOWN" ? null : option.costs?.deposit_hold?.value ?? null;
     const baseField = transport ? "base_price" : "base_stay_price";
     const knownBase = mandatory.includes(baseField) ? sum(option.costs, [baseField]) : 0;
-    const knownMandatoryAddOns = sum(option.costs, mandatory.filter(name => name !== baseField));
-    const optionalNames = transport ? ["optional_fees", "estimated_local_transport"] : ["optional_cost", "breakfast", "wifi"];
+    const conditionalRequired = transport ? ["other_known_cost"] : ["other_mandatory_cost"];
+    const knownMandatoryAddOns = sum(option.costs, [...mandatory.filter(name => name !== baseField), ...conditionalRequired]);
+    const optionalNames = transport ? ["optional_fees", "estimated_local_transport", "gratuity"] : ["optional_cost", "breakfast", "wifi"];
     const knownOptionalAddOns = sum(option.costs, optionalNames);
     const knownTotal = knownBase + knownMandatoryAddOns;
     const knownAllInTotal = knownTotal + knownOptionalAddOns;
