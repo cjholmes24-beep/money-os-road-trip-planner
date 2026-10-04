@@ -249,13 +249,25 @@ const T = require("../transport-lodging-intelligence.js");
   const verified=T.bookingOpportunity({relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"},{trusted:true});
   ok(T.bookingUrl({booking:verified}).startsWith("https://provider.example/"));
   const liveSourceOption=T.normalizeTransportOption({
-    mode:"BUS",traveler_count:1,base_price:10,
+    mode:"BUS",traveler_count:1,
+    costs:{
+      base_price:{value:10,state:"PUBLISHED"},
+      taxes:{value:0,state:"PUBLISHED"},
+      mandatory_fees:{value:0,state:"PUBLISHED"},
+      baggage:{value:0,state:"PUBLISHED"}
+    },
+    policy_status:"PUBLISHED",nonrefundable_amount:0,change_cancel_fee:0,
+    availability_status:"PUBLISHED",
     source:{fact_type:"PUBLISHED",source_name:"Official source"},
     booking:{relationship_status:"APPROVED",url_status:"VERIFIED",verified_booking_url:"https://provider.example/book"}
   },{origin:"SOURCE_BACKED",trustedBooking:true});
   ok(T.bookingUrl(liveSourceOption)?.startsWith("https://provider.example/"));
   const persisted=T.sanitizePersistedTripOptions({...B.createTrip(),transportation_options:[liveSourceOption]});
   eq(persisted.transportation_options[0].record_origin,"IMPORTED");
+  eq(persisted.transportation_options[0].costs.base_price.state,"USER_ENTERED");
+  eq(persisted.transportation_options[0].policy_status,"USER_ENTERED");
+  eq(persisted.transportation_options[0].availability_status,"UNKNOWN");
+  eq(persisted.transportation_options[0].source.fact_type,"UNKNOWN");
   eq(persisted.transportation_options[0].booking.url_status,"NOT_VERIFIED");
   eq(T.bookingUrl(persisted.transportation_options[0]),null);
 
