@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-03
 Canonical repository: `cjholmes24-beep/money-os-road-trip-planner`
-Last verified product-code baseline before handoff-document commits: `54642af42e0bb3d52166a3c3e79d13a5f77a1d75`\n\n**Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
+Last verified product-code baseline before handoff-document commits: `3e8ee86876e29ec6c0daaa0f7f620ed0f8e57380`\n\n**Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
 
 ## Purpose of this file
 
@@ -34,7 +34,16 @@ The public site is deployed on GitHub Pages and currently includes:
 - Suitcase Brain homepage positioning
 - Plan My Trip Travel Intelligence V1
 - nine-stage mobile-first trip intake
-- versioned canonical browser-local trip record
+- versioned canonical browser-local trip record, now schema V2 with V1 migration
+- provider-neutral transportation and lodging option models
+- mobile transportation/lodging quote workspaces with add/edit/remove/compare/save/export/import
+- mode-aware transportation known-cost completeness
+- lodging known-cost completeness with mandatory-vs-optional separation
+- mixed-currency comparison fail-closed behavior until FX is connected
+- cancellation exposure and policy-completeness handling for transport/lodging quotes
+- runtime-only verified booking-link trust gate
+- GTFS Schedule normalization foundation without claiming nationwide/live feed coverage
+- provider capability registry separating source authority, access, secrets, and affiliate relationship
 - traveler commitment/funding records
 - group funding-gap logic
 - one-person and two-person dropout scenarios
@@ -65,9 +74,14 @@ SOURCE-BACKED:
 - National Weather Service on-demand current-location forecast
 - Travelpayouts Drive as an approved monetization surface only
 
+SOURCE/USER-INPUT READY BUT NOT LIVE-INVENTORY CONNECTED:
+- transportation quote intelligence: user-entered + EIA-derived driving fuel reference
+- lodging quote intelligence: user-entered
+- GTFS Schedule adapter foundation: no agency feed connected as nationwide/live inventory
+- direct flight/rental/bus/rail/transfer/lodging inventory remains provider-access dependent
+- provider cancellation facts remain unconnected unless user-entered or future trusted adapter supplies them
+
 UI-READY BUT NOT LIVE-CONNECTED:
-- transportation
-- lodging
 - food
 - events
 - activities
@@ -84,26 +98,50 @@ Do not display simulated live data in these modules.
 
 ## Latest completed engineering cycle
 
-Codex PR #6 built the Travel Intelligence V1 foundation.
+Codex PR #9 built Transportation + Lodging Intelligence V1 from main `b17db06c12c1dbb3b4833a94ec001f10883ea527`.
 
-Cleanup audit found and repaired:
-- planned-vs-recorded traveler readiness logic
-- dropout exposure assumptions
-- cancellation-loss handling
-- imported-trip validation gaps
-- short state-code fuel matching
-- weekly fuel freshness classification
-- missing automatic CI protection
+Codex delivered:
+- trip schema V2 with V1 migration
+- canonical transport/lodging models and per-component truth states
+- known-cost completeness and comparison lenses
+- user-entered transportation/lodging quote workspaces
+- cancellation exposure
+- driving fuel math
+- GTFS Schedule normalization foundation
+- provider capability registry and source audit
+- provider-failure isolation
+- booking opportunity/URL architecture
+- expanded tests and CI coverage
 
-During cleanup, the new CI gate caught a JavaScript syntax regression. It was repaired and CI reran successfully before merge.
+Independent cleanup found and repaired:
+- universal transport fee assumptions that made legitimate comparisons incomplete
+- combined UI fields that left canonical cost components silently unknown
+- null/blank numeric coercion to zero
+- known policies with missing cancellation amounts appearing zero-risk
+- cross-currency comparisons without FX
+- shallow import/load validation of option bodies
+- forged/persisted VERIFIED booking-link trust
+- persisted provider/source facts retaining runtime verification after reload/import
+- user ability to self-declare provider PUBLISHED/VERIFIED policy status
+- EIA reference provenance that could be claimed without loading official data
+- EIA USD-per-gallon being usable under non-USD trip currency without FX
+- one-option “comparison winners”
+- synchronous provider failure isolation
+- GTFS browser-safety and blocked-provider $0-cost claims that were too broad
+- conditional/optional costs incorrectly blocking required-cost completeness
 
-PR #6 was squash-merged to main at:
-`54642af42e0bb3d52166a3c3e79d13a5f77a1d75`
+PR #9 merged after latest-head CI success.
+
+Verified product main:
+`3e8ee86876e29ec6c0daaa0f7f620ed0f8e57380`
 
 Post-merge verified:
 - Suitcase Brain checks: SUCCESS
 - GitHub Pages deployment: SUCCESS
 - IndexNow notification: SUCCESS
+- owner cost introduced: $0
+- no new live airfare/lodging/rental inventory was falsely claimed
+- browser automation remained unavailable; no browser smoke run is claimed
 
 ## Standard build workflow
 
@@ -128,27 +166,27 @@ Owner controls priorities and green-lights the sequence.
 ## Current next engineering brick
 
 Primary next brick:
-**LIVE TRANSPORTATION + LODGING INTELLIGENCE**
+**EVENTS + FESTIVALS + EXPERIENCES + SEASONAL CALENDAR ENGINE**
 
 Goals:
-- connect only lawful, provider-supported, $0 sources
-- normalize total-price components and source/freshness metadata
-- add transportation comparison architecture
-- add lodging total-cost/cancellation architecture
-- preserve provider neutrality
-- preserve Travelpayouts and verified-link rule
-- no fake live availability
+- build one event graph that can serve travelers and vendors/businesses
+- prioritize official organizers, tourism/public agencies, and lawful $0 sources
+- normalize event dates, recurrence, venue/location, age rules, price/fee truth, organizer/application links, freshness, and cancellation/change state
+- support concerts, festivals, conventions, seminars, holiday/seasonal events, culture, food, outdoor/adventure, nightlife/theme nights, family events, and other legitimate experiences
+- support “What can we do right now?” architecture without inventing open-now status
+- support ATTEND THIS EVENT vs SELL / VEND / EXHIBIT HERE
+- model vendor deadlines, fees, requirements, permits/insurance/electric/water/load-in when officially published
+- preserve provider neutrality and $0 owner cost
+- do not mass-generate thin SEO pages
 - no unauthorized scraping
-- no owner spend
 
 Following large bricks, in current intended order:
-1. Events / Festivals / Experiences / Seasonal Calendar
-2. Destination Discovery + Itinerary Brain
-3. Food / Culture / Vibe / Age-Fit / Local Discovery
-4. Safety / Quality / Reviews
-5. Group / Reunion / Business / Vendor logistics expansion
-6. National automation + search/AI authority
-7. Revenue/conversion optimization
+1. Destination Discovery + Itinerary Brain
+2. Food / Culture / Vibe / Age-Fit / Local Discovery
+3. Safety / Quality / Reviews
+4. Group / Reunion / Business / Vendor logistics expansion
+5. National automation + search/AI authority
+6. 24/7 Lead & Opportunity Engine + conversion/revenue optimization
 
 ## Revenue state
 
