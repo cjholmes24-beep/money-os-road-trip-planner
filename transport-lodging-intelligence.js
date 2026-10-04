@@ -302,9 +302,9 @@
   }
 
   function lens(label, eligible, metric, direction = "min", reason = "") {
-    if (!eligible.length) return { label, winner_id: null, status: "NOT ENOUGH VERIFIED DATA TO COMPARE", basis: reason };
+    if (eligible.length < 2) return { label, winner_id: null, status: "NOT ENOUGH VERIFIED DATA TO COMPARE", basis: reason };
     const values = eligible.map(x => ({ id: x.id, value: metric(x) })).filter(x => x.value != null && Number.isFinite(x.value));
-    if (values.length !== eligible.length || !values.length) return { label, winner_id: null, status: "NOT ENOUGH VERIFIED DATA TO COMPARE", basis: reason };
+    if (values.length !== eligible.length || values.length < 2) return { label, winner_id: null, status: "NOT ENOUGH VERIFIED DATA TO COMPARE", basis: reason };
     const target = Math[direction](...values.map(x => x.value));
     const winners = values.filter(x => x.value === target);
     return winners.length === 1
@@ -316,6 +316,14 @@
     const currencies = [...new Set(eligible.map(x => x.currency).filter(Boolean))];
     if (currencies.length > 1) return { label, winner_id: null, status: "CURRENCY CONVERSION REQUIRED", basis: "Options use different currencies; FX conversion is not connected." };
     return lens(label, eligible, metric, direction, reason);
+  }
+
+  function flagLens(label, population, predicate, reason = "") {
+    if (population.length < 2) return { label, winner_id: null, status: "NOT ENOUGH VERIFIED DATA TO COMPARE", basis: reason };
+    const matches = population.filter(predicate);
+    if (!matches.length) return { label, winner_id: null, status: "NO VERIFIED MATCH", basis: reason };
+    if (matches.length === 1) return { label, winner_id: matches[0].id, status: "COMPARABLE", basis: reason, value: 1 };
+    return { label, winner_id: null, status: "TIE — NO SINGLE WINNER", basis: reason, value: 1 };
   }
 
   function compareTransport(options = []) {
@@ -331,7 +339,7 @@
       lens("FEWEST UNKNOWN COSTS", valid, x => priceCompleteness(x, "transport").unknownCostComponents.length, "min", "Count of unresolved expected components for that transport mode."),
       costLens("MOST FLEXIBLE KNOWN POLICY", policyKnown, x => cancellationExposure(x).potentialExposure, "min", "Lowest complete known nonrefundable and cancellation-fee exposure."),
       costLens("LOWEST KNOWN REQUIRED TOTAL + HOLD", withDeposit, x => priceCompleteness(x, "transport").knownTotal + priceCompleteness(x, "transport").depositHold, "min", "Known required total plus explicit deposit/hold; payment timing is not inferred."),
-      lens("GROUP-FRIENDLY", groupFit, x => Number(x.vehicle_occupancy) - Number(x.traveler_count), "min", "Smallest explicitly entered vehicle capacity that still fits the whole group.")
+      flagLens("GROUP-FRIENDLY", valid, x => groupFit.some(g => g.id === x.id), "Explicitly entered vehicle occupancy can fit the whole group.")
     ];
   }
 
@@ -346,9 +354,9 @@
       lens("FEWEST UNKNOWN MANDATORY FEES", valid, x => priceCompleteness(x, "lodging").unknownMandatoryComponents.length, "min", "Count of unresolved mandatory components."),
       costLens("MOST FLEXIBLE KNOWN CANCELLATION", policyKnown, x => cancellationExposure(x).potentialExposure, "min", "Lowest complete known cancellation exposure."),
       costLens("LOWEST DEPOSIT/HOLD", withDeposit, x => priceCompleteness(x, "lodging").depositHold, "min", "Known deposit or hold only."),
-      lens("PARKING INCLUDED", valid.filter(x => x.amenities?.parking === true), () => 1, "max", "Explicitly entered or sourced parking inclusion."),
-      lens("BREAKFAST INCLUDED", valid.filter(x => x.amenities?.breakfast === true), () => 1, "max", "Explicitly entered or sourced breakfast inclusion."),
-      lens("BEST LOCATION FIT", valid.filter(x => x.location_fit === "MATCH"), () => 1, "max", "Traveler-entered location preference match only.")
+      flagLens("PARKING INCLUDED", valid, x => x.amenities?.parking === true, "Explicitly entered or sourced parking inclusion."),
+      flagLens("BREAKFAST INCLUDED", valid, x => x.amenities?.breakfast === true, "Explicitly entered or sourced breakfast inclusion."),
+      flagLens("BEST LOCATION FIT", valid, x => x.location_fit === "MATCH", "Traveler-entered location preference match only.")
     ];
   }
 
