@@ -431,14 +431,28 @@
     const clone = JSON.parse(JSON.stringify(trip));
     const sanitize = option => {
       if (!option || typeof option !== "object") return option;
-      if (option.record_origin === "SOURCE_BACKED") {
-        option.record_origin = "IMPORTED";
-        option.source = {
-          ...(option.source || {}),
-          status: "unverified_import",
-          notes: [option.source?.notes, "Imported source-backed snapshot is not runtime-verified; refresh from the source before treating it as current."].filter(Boolean).join(" ")
-        };
+      const wasSourceBacked = option.record_origin === "SOURCE_BACKED";
+      if (wasSourceBacked) option.record_origin = "IMPORTED";
+
+      if (option.costs && typeof option.costs === "object") {
+        Object.values(option.costs).forEach(item => {
+          if (item && ["VERIFIED", "PUBLISHED"].includes(item.state)) item.state = "USER_ENTERED";
+        });
       }
+      if (["VERIFIED", "PUBLISHED"].includes(option.policy_status)) option.policy_status = "USER_ENTERED";
+      if (["VERIFIED", "PUBLISHED"].includes(option.availability_status)) option.availability_status = "UNKNOWN";
+
+      const claimedFactType = option.source?.fact_type;
+      option.source = {
+        ...(option.source || {}),
+        fact_type: wasSourceBacked || ["VERIFIED", "PUBLISHED", "LIVE", "RECENT", "WEEKLY_GOVERNMENT_DATA"].includes(claimedFactType) ? "UNKNOWN" : (claimedFactType || "USER_ENTERED"),
+        status: wasSourceBacked ? "unverified_import" : (option.source?.status || "fresh"),
+        notes: [
+          option.source?.notes,
+          wasSourceBacked ? `Imported source-backed snapshot claimed ${claimedFactType || "UNKNOWN"}; runtime re-verification is required.` : ""
+        ].filter(Boolean).join(" ")
+      };
+
       if (option.booking?.url_status === "VERIFIED") {
         option.booking.url_status = "NOT_VERIFIED";
         option.booking.verified_booking_url = "";
