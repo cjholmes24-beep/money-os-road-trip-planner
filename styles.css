@@ -8,3 +8,9 @@
 /* Transportation + lodging intelligence workspace */
 .intelligence-workspace details{margin:1rem 0}.intelligence-workspace summary{display:inline-block;cursor:pointer;list-style:none}.quote-form{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)}
 .option-grid,.comparison-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:.8rem;margin:1rem 0}.option-card,.comparison-card{border:1px solid var(--line);border-radius:14px;padding:1rem;background:rgba(255,255,255,.035)}.option-head{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}.option-head h4{margin:0}.comparison-card{display:grid;gap:.4rem}.comparison-card span{font-weight:750;color:var(--accent)}.comparison-card p{margin:0;color:var(--muted);font-size:.9rem}.empty-state{border:1px dashed var(--line);border-radius:14px;padding:1rem;color:var(--muted)}
+
+.quote-advanced{margin-top:1rem;border:1px solid var(--line);border-radius:14px;padding:.75rem 1rem;background:rgba(255,255,255,.02)}
+.quote-advanced>summary{color:var(--accent);font-weight:850}
+.field-action{display:flex;flex-direction:column;gap:.45rem;justify-content:end}
+.field-action .secondary{align-self:flex-start}
+.option-card .button-row{align-items:center}
