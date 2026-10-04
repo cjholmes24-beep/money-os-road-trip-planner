@@ -25,8 +25,107 @@
 <section id="planResults" class="planner-results" hidden aria-live="polite"><header class="section-intro"><p class="eyebrow">YOUR TRIP BLUEPRINT</p><h2>One trip record. Explainable decisions.</h2></header><div id="blueprintSummary" class="blueprint-grid"></div>
 <section class="card"><h3>Group money + dropout exposure</h3><div class="table-scroll"><table><thead><tr><th>Scenario</th><th>Current share</th><th>New share</th><th>Increase / remaining traveler</th><th>Funding shortage</th></tr></thead><tbody id="dropoutResults"></tbody></table></div><p class="muted">Scenario math assumes remaining travelers absorb the planned total when shown. It does not treat acceptance as payment.</p></section>
 <section class="card"><h3>What if we cancel today?</h3><div id="cancelResults" class="result-grid"></div></section><section class="card"><h3>Hidden-fee audit</h3><p id="feeSummary"></p></section><section class="card"><h3>Trip resilience scorecard</h3><div id="resilienceCards" class="resilience-grid"></div><p class="muted">These are planning indicators—not a universal safety rating.</p></section>
+<section class="card intelligence-workspace" aria-labelledby="transportTitle">
+<p class="eyebrow">TRANSPORTATION INTELLIGENCE</p><h3 id="transportTitle">How can we get there?</h3>
+<p class="muted">Add a real quote you found. Blank cost fields remain <strong>UNKNOWN</strong>, never $0. Enter $0 only when you actually verified no charge applies. Route mileage is user-entered because route-distance data is not connected.</p>
+<details><summary class="primary button-link">Add transportation quote</summary>
+<form id="transportQuoteForm" class="quote-form"><input type="hidden" id="transportEditId">
+<div class="grid">
+<label>Mode<select id="quoteTransportMode"></select></label>
+<label>Provider<input id="quoteTransportProvider" maxlength="100" placeholder="Provider or UNKNOWN"></label>
+<label>Service / fare class<input id="quoteTransportService" maxlength="100" placeholder="Economy, train name, own vehicle"></label>
+<label>Travelers<input id="quoteTransportTravelers" type="number" min="1" step="1" value="1" required></label>
+<label>Base price<input id="quoteTransportBase" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Taxes<input id="quoteTransportTaxes" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Mandatory/provider fees<input id="quoteTransportMandatory" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Optional extras<input id="quoteTransportOptional" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Known duration (minutes)<input id="quoteTransportDuration" type="number" min="0" step="1" placeholder="UNKNOWN"></label>
+<label>Known stops / connections<input id="quoteTransportConnections" type="number" min="0" step="1" placeholder="UNKNOWN"></label>
+<label>Known vehicle occupancy<input id="quoteTransportVehicleOccupancy" type="number" min="1" step="1" placeholder="UNKNOWN"></label>
+<label>Trip direction<select id="quoteTransportDirection"><option>ONE_WAY</option><option>ROUND_TRIP</option></select></label>
+</div>
+<details class="quote-advanced"><summary>Fuel, mode-specific fees, and policy details</summary>
+<div class="grid">
+<label>Baggage<input id="quoteTransportBags" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Seat fees<input id="quoteTransportSeats" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Fuel total<input id="quoteTransportFuel" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>User-entered route miles<input id="quoteTransportDistance" type="number" min="0" step=".1" placeholder="USER INPUT REQUIRED"></label>
+<label>Vehicle MPG<input id="quoteTransportMpg" type="number" min="0.1" step=".1" placeholder="USER INPUT REQUIRED"></label>
+<label>Fuel price per gallon<input id="quoteTransportFuelPrice" type="number" min="0" step=".001" placeholder="Use your pump quote or EIA button"></label>
+<label>Fuel price basis<select id="quoteTransportFuelBasis"><option>USER ENTERED PUMP PRICE</option><option>EIA WEEKLY REFERENCE</option></select></label>
+<div class="field-action"><button id="useEiaFuelReference" class="secondary" type="button">Use current EIA weekly reference</button><span id="quoteTransportFuelSourceStatus" class="hint">Actual station price is not connected.</span></div>
+<label>Tolls<input id="quoteTransportTolls" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Parking<input id="quoteTransportParking" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Rental/provider fees<input id="quoteTransportRentalFees" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Young-driver fee<input id="quoteTransportYoungDriver" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Additional-driver fee<input id="quoteTransportAdditionalDriver" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>One-way/drop fee<input id="quoteTransportOneWayDrop" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Refueling exposure<input id="quoteTransportRefuel" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Airport/terminal transport<input id="quoteTransportTerminal" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Estimated local transport<input id="quoteTransportLocal" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Gratuity<input id="quoteTransportGratuity" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Deposit / hold<input id="quoteTransportDeposit" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Other required known cost<input id="quoteTransportOther" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Refundable amount<input id="quoteTransportRefundable" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Nonrefundable amount<input id="quoteTransportNonrefundable" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Cancellation / change fee<input id="quoteTransportCancelFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Cancellation deadline<input id="quoteTransportCancelDeadline" type="date"></label>
+<label>Policy status<select id="quoteTransportPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option></select><span class="hint">Provider-published/verified states come only from trusted source adapters.</span></label>
+</div></details>
+<div class="button-row"><button class="primary" type="submit">Save transport quote</button><button id="cancelTransportEdit" class="secondary" type="button">Cancel edit</button></div>
+<p id="transportFormError" class="error" role="alert"></p></form></details>
+<div id="transportOptions" class="option-grid"></div><h4>Comparison lenses</h4><div id="transportComparison" class="comparison-grid"></div>
+<div class="source-note"><strong>CONNECTED SOURCE-BACKED:</strong> EIA weekly gasoline reference can be loaded into a driving estimate with provenance. <strong>NOT CONNECTED:</strong> live fares, availability, route distance, airline bags, rental inventory, and nationwide schedules. PROVIDER ACCESS REQUIRED where documented.</div>
+</section>
+
+<section class="card intelligence-workspace" aria-labelledby="lodgingTitle">
+<p class="eyebrow">LODGING INTELLIGENCE</p><h3 id="lodgingTitle">Where can we stay?</h3>
+<p class="muted">Compare complete quotes after mandatory fees. Blank required-cost fields remain UNKNOWN. Enter $0 only when you verified no charge applies. A lower partial price is never called cheapest.</p>
+<details><summary class="primary button-link">Add lodging quote</summary>
+<form id="lodgingQuoteForm" class="quote-form"><input type="hidden" id="lodgingEditId">
+<div class="grid">
+<label>Category<select id="quoteLodgingCategory"></select></label>
+<label>Provider<input id="quoteLodgingProvider" maxlength="100" placeholder="Provider or UNKNOWN"></label>
+<label>Property<input id="quoteLodgingProperty" maxlength="100" required></label>
+<label>Location<input id="quoteLodgingLocation" maxlength="160" placeholder="City / area / address from your quote"></label>
+<label>Check-in<input id="quoteLodgingCheckIn" type="date"></label>
+<label>Check-out<input id="quoteLodgingCheckOut" type="date"></label>
+<label>Nights<input id="quoteLodgingNights" type="number" min="1" step="1" value="1" required></label>
+<label>Rooms<input id="quoteLodgingRooms" type="number" min="1" step="1" value="1" required></label>
+<label>Occupancy<input id="quoteLodgingOccupancy" type="number" min="1" step="1" value="1" required></label>
+<label>Base stay price<input id="quoteLodgingBase" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Taxes<input id="quoteLodgingTaxes" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Other mandatory/provider fees<input id="quoteLodgingMandatory" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+</div>
+<details class="quote-advanced"><summary>Fees, amenities, and cancellation details</summary>
+<div class="grid">
+<label>Resort/destination fees<input id="quoteLodgingResort" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Cleaning fee<input id="quoteLodgingCleaning" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Parking cost<input id="quoteLodgingParking" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Pet fee<input id="quoteLodgingPet" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Other required cost<input id="quoteLodgingOtherMandatory" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Deposit / hold<input id="quoteLodgingDeposit" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Breakfast cost<input id="quoteLodgingBreakfastCost" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Wi-Fi cost<input id="quoteLodgingWifiCost" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Other optional costs<input id="quoteLodgingOptional" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Refundable amount<input id="quoteLodgingRefundable" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Nonrefundable amount<input id="quoteLodgingNonrefundable" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Cancellation fee<input id="quoteLodgingCancelFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Change fee<input id="quoteLodgingChangeFee" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Cancellation deadline<input id="quoteLodgingCancelDeadline" type="date"></label>
+<label>Policy status<select id="quoteLodgingPolicy"><option>UNKNOWN</option><option>USER_ENTERED</option></select><span class="hint">Provider-published/verified states come only from trusted source adapters.</span></label>
+<label class="check"><input id="quoteLodgingParkingIncluded" type="checkbox"> Parking included</label>
+<label class="check"><input id="quoteLodgingBreakfastIncluded" type="checkbox"> Breakfast included</label>
+<label class="check"><input id="quoteLodgingLocationFit" type="checkbox"> Matches my entered location preference</label>
+<label>Location-fit note<input id="quoteLodgingLocationContext" maxlength="300" placeholder="Why this area fits your stated plan"></label>
+</div></details>
+<div class="button-row"><button class="primary" type="submit">Save lodging quote</button><button id="cancelLodgingEdit" class="secondary" type="button">Cancel edit</button></div>
+<p id="lodgingFormError" class="error" role="alert"></p></form></details>
+<div id="lodgingOptions" class="option-grid"></div><h4>Comparison lenses</h4><div id="lodgingComparison" class="comparison-grid"></div>
+<div class="source-note"><strong>NO SAFE LIVE LODGING INVENTORY SOURCE CONNECTED YET.</strong> User-entered quotes remain saved with this trip. Cancellation policies stay UNKNOWN unless entered from a policy the traveler verified.</div>
+</section>
 <section class="card"><h3>Connected intelligence</h3><div id="fuelReference" class="intel-card" hidden><div><span class="intel-badge" id="fuelFreshness">WEEKLY GOVERNMENT DATA</span><h3 id="fuelReferenceStatus">Weekly fuel reference</h3><strong id="fuelReferenceValue" class="intel-value">—</strong><p id="fuelReferenceMeta" class="muted"></p></div><a id="fuelReferenceSource" class="secondary" href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" rel="noopener">EIA source ↗</a></div><div class="intel-card"><div><span class="intel-badge">LIVE · OPT-IN</span><h3 id="weatherStatus">Weather where you are</h3><p id="weatherBody" class="muted">Current-location permission is requested only when you click. The static planner does not store your location.</p><p id="weatherMeta" class="muted"></p></div><button id="weatherHereButton" class="secondary" type="button">Check live weather</button></div></section>
 <section class="card"><h3>Intelligence modules</h3><div class="module-grid">Transportation|Lodging|Fuel|Weather|Food|Events|Activities|Culture|Nightlife|Safety|Discounts|Pets/accessibility|Business records|Booking exposure</div><p class="muted">Modules without a source say “Live source not connected yet.” Fuel and opt-in U.S. weather are the first source-backed exceptions.</p></section>
 <section class="card"><h3>Booking opportunities</h3><p class="muted">Recommendation logic is independent of commission. Direct partner URLs remain absent until account-verified.</p><div class="booking-grid">Flights|Accommodation|Rental cars|Transfers|Bus/rail|Cruises|eSIM|Activities|Insurance|Flight compensation</div></section></section>
 </main><footer class="site-footer"><div><strong>Suitcase Brain</strong><p>Travel intelligence powered by Money OS. Working brand pending final trademark clearance.</p></div><div><strong>Affiliate disclosure</strong><p>Travelpayouts Drive may show relevant travel offers or convert eligible travel links into affiliate links. We may earn a commission if you book through an eligible link, at no additional cost to you. Commission never overrides trip fit or safety.</p></div></footer>
-<script src="../trip-intelligence.js"></script><script src="planner-ui.js"></script><script src="../source-intelligence.js"></script><script>(function(){document.querySelectorAll('.module-grid,.booking-grid').forEach(el=>{el.innerHTML=el.textContent.split('|').map(x=>`<article><strong>${x}</strong><span>${['Fuel','Weather'].includes(x)?'Connected above':'Live source not connected yet.'}</span></article>`).join('')})})();</script></body></html>
+<script src="../trip-intelligence.js"></script><script src="../transport-lodging-intelligence.js"></script><script src="planner-ui.js"></script><script src="../source-intelligence.js"></script><script>(function(){document.querySelectorAll('.module-grid,.booking-grid').forEach(el=>{el.innerHTML=el.textContent.split('|').map(x=>`<article><strong>${x}</strong><span>${['Fuel','Weather'].includes(x)?'Connected above':['Transportation','Lodging'].includes(x)?'User-entered intelligence connected above':'Live source not connected yet.'}</span></article>`).join('')})})();</script></body></html>

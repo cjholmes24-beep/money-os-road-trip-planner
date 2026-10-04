@@ -191,3 +191,9 @@ Humans remain in control of business/legal decisions and any spend.
 14. national automated refresh/coverage expansion
 
 The product is not complete because a page exists. A module is green only when the intended data chain, UX, safety constraints, attribution, tests, and real-world behavior are verified.
+
+## Transportation + lodging V1 decision boundary
+
+Price completeness precedes price ordering. A partial price with unresolved mandatory costs cannot win a lowest-total lens. Comparisons remain separate and explainable: known cost, duration, unknown exposure, cancellation exposure, cash hold and explicit traveler fit. There is no universal best score, and commission/payout fields are forbidden inputs to traveler ordering.
+
+Booking is a separate opportunity record. A provider relationship does not make the provider authoritative for unrelated facts, a click is not revenue, and only an HTTPS URL with `VERIFIED` link status can become a direct booking CTA. The current static product takes no customer payment, service fee, cancellation fee or booking fee.

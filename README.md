@@ -79,3 +79,9 @@ Google Search Console still requires account/property verification and is not re
 ## Durable handoff
 
 Before starting a new Suitcase Brain engineering thread, read `docs/CURRENT_HANDOFF.md` and `docs/BUILD_LEDGER.md`. They preserve the verified main SHA, finished bricks, failures/repairs, operating doctrine, build workflow, and immediate next engineering target.
+
+## Transportation + lodging intelligence V1
+
+Plan My Trip now stores schema V2 transportation and lodging options. Travelers can add, edit, remove, compare, save, export, and import quotes they obtained elsewhere. Every cost component keeps an explicit truth state; blank mandatory fees remain `UNKNOWN`, and lowest-known-total labels require comparable mandatory costs. Separate lenses cover cost, time, unknown exposure, cancellation flexibility, deposit/hold, group fit, parking, breakfast, and explicit location fit. Affiliate commission is never an input.
+
+The reusable engine is `transport-lodging-intelligence.js`; provider capability decisions are in `data/provider-capability-registry.json`; research and architecture are documented in `docs/TRANSPORT_LODGING_SOURCE_AUDIT_2026-10-03.md` and `docs/TRANSPORT_LODGING_ARCHITECTURE.md`. The only factual connection newly exposed to driving comparisons is the existing EIA weekly reference. A GTFS Schedule adapter foundation is present, but no nationwide live feed or lodging/flight/rental inventory is claimed.

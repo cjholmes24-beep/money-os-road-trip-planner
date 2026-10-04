@@ -75,3 +75,9 @@ Browser geolocation is opt-in. Suitcase Brain should request it only after an ex
 - Travelpayouts Drive: approved monetization surface; not a truth source for unrelated trip facts
 
 Additional sources must conform to this contract before their facts reach the public UI.
+
+## Transportation and lodging extension
+
+A normalized option must preserve source metadata independently from booking/affiliate metadata. Monetary truth states are `VERIFIED`, `PUBLISHED`, `USER_ENTERED`, `UNKNOWN`, and `NOT_APPLICABLE`; `UNKNOWN` must carry no numeric substitute. Provider failures become `UNAVAILABLE`, while an allowed prior snapshot keeps its original retrieval date and becomes `STALE`. User-entered quotes remain usable when every provider is unavailable.
+
+Provider policy facts require a provider URL, retrieval/effective date when available, and deliberate re-check. Missing cancellation terms display `POLICY UNKNOWN — VERIFY BEFORE BOOKING`. GTFS schedule facts use agency-specific cadence and must not be called live; GTFS Realtime data is live only within the publishing agency's lifecycle.
