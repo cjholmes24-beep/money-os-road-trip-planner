@@ -96,3 +96,73 @@ Live Transportation + Lodging Intelligence, using lawful/provider-supported $0 d
 - README now points future sessions to both files.
 - Handoff policy explicitly requires resolving the live GitHub `main` HEAD before each new Codex order so documentation-only commits cannot cause a stale starting SHA.
 - Progress records must include failures and repairs, not only successful outcomes.
+
+
+## 2026-10-03 — Transportation + Lodging Intelligence V1 via Codex + cleanup
+
+Starting main:
+`b17db06c12c1dbb3b4833a94ec001f10883ea527`
+
+Codex PR #9 delivered:
+- browser-local trip schema V2 with V1 migration
+- canonical provider-neutral transportation and lodging option models
+- per-component monetary truth states
+- user-entered quote workspaces
+- known-cost completeness
+- transport/lodging comparison lenses
+- cancellation exposure
+- driving fuel math
+- GTFS Schedule normalization foundation
+- provider capability registry/source audit
+- provider-failure isolation
+- booking-link architecture
+- expanded tests and CI
+
+Independent cleanup identified:
+- transport completeness used a universal mandatory list across unrelated modes
+- combined quote fields left canonical components unresolved
+- null/blank numbers could coerce to zero
+- incomplete cancellation data could appear zero-risk
+- mixed currencies could be ranked without FX
+- option bodies were not fully validated on persistence/import
+- persisted/imported source-backed records could retain verified/published claims
+- imported JSON could forge a VERIFIED booking URL
+- EIA basis could be selected without loading the official snapshot
+- EIA USD fuel could be mislabeled under a non-USD trip
+- one eligible option could be declared a comparison winner
+- provider failure isolation did not cover rejected async loaders
+- generic GTFS browser safety and blocked-provider $0 cost claims were too broad
+- catch-all/optional costs could incorrectly block required-cost completeness
+- user-entered quotes could self-label provider policy as PUBLISHED/VERIFIED
+
+Cleanup repairs:
+- mode-aware transport expected costs
+- separate quote fields mapped to canonical components
+- strict null/blank numeric handling
+- complete cancellation-data gating
+- mixed-currency fail-closed state
+- deep option validation for save/load/import/export/blueprint
+- runtime-only booking-link trust with persisted-link downgrade
+- persisted provider/source verification downgrade until runtime refresh
+- trusted-source-only PUBLISHED/VERIFIED policy states
+- explicit official EIA load + provenance gate
+- USD-only EIA use until FX exists
+- real comparison population requirement
+- async provider-failure isolation
+- safer provider capability cost/browser claims
+- conditional vs optional fee separation
+- additional regression/static validation
+
+PR #9 merge:
+`3e8ee86876e29ec6c0daaa0f7f620ed0f8e57380`
+
+Post-merge verification:
+- Suitcase Brain checks: SUCCESS
+- GitHub Pages deployment: SUCCESS
+- IndexNow notification: SUCCESS
+- owner cost introduced: $0
+- live flight/hotel/rental inventory still not claimed
+- browser automation unavailable; no browser smoke run claimed
+
+Next large brick:
+**Events + Festivals + Experiences + Seasonal Calendar Engine**
