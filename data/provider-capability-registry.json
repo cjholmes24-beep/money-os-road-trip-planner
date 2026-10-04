@@ -3,15 +3,277 @@
   "reviewed_at": "2026-10-04",
   "owner_cost_usd": 0,
   "providers": [
-    {"id":"eia_weekly_gasoline","name":"U.S. Energy Information Administration weekly gasoline","category":"driving_fuel_reference","authority_type":"SOURCE_OF_TRUTH_OFFICIAL_GOVERNMENT","official_url":"https://www.eia.gov/petroleum/gasdiesel/","documentation_url":"https://www.eia.gov/opendata/documentation.php","cost_usd":0,"authentication_type":"none_for_bulk_file","requires_secret":false,"requires_account_approval":false,"browser_safe":true,"allowed_use":"Published U.S. regional weekly retail gasoline reference; not route or station price","data_capabilities":{"price_data":true,"availability":false,"schedule":false,"policy_data":false},"freshness":{"cadence":"weekly","failure_label":"STALE"},"affiliate_status":"NO_RELATIONSHIP","connection_status":"CONNECTED","notes":"Existing checked-in snapshot and keyless refresh preserved."},
-    {"id":"gtfs_standard","name":"General Transit Feed Specification","category":"public_transit","authority_type":"OPEN_STANDARD","official_url":"https://gtfs.org/","documentation_url":"https://gtfs.org/documentation/overview/","cost_usd":0,"authentication_type":"varies_by_publishing_agency","requires_secret":false,"requires_account_approval":false,"browser_safe":true,"allowed_use":"Normalize an agency feed only after that agency feed URL and terms are reviewed","data_capabilities":{"price_data":"optional_fares","availability":false,"schedule":true,"policy_data":false},"freshness":{"cadence":"agency_specific","failure_label":"UNAVAILABLE_OR_STALE"},"affiliate_status":"NO_RELATIONSHIP","connection_status":"SAFE_TO_CONNECT_NOW","notes":"Parser foundation connected; no nationwide feed or live agency inventory bundled."},
-    {"id":"gtfs_realtime_standard","name":"GTFS Realtime","category":"public_transit_realtime","authority_type":"OPEN_STANDARD","official_url":"https://gtfs.org/documentation/realtime/reference/","documentation_url":"https://gtfs.org/documentation/realtime/reference/","cost_usd":0,"authentication_type":"varies_by_publishing_agency","requires_secret":false,"requires_account_approval":false,"browser_safe":"agency_specific","allowed_use":"Architectural normalization after agency feed review","data_capabilities":{"price_data":false,"availability":"service_status_only","schedule":"trip_updates","policy_data":false},"freshness":{"cadence":"realtime_feed_specific","failure_label":"UNAVAILABLE"},"affiliate_status":"NO_RELATIONSHIP","connection_status":"RESEARCH_ONLY","notes":"Protocol Buffers decoding and a specific agency feed are not connected in V1."},
-    {"id":"travelpayouts_drive","name":"Travelpayouts Drive","category":"affiliate_link_routing","authority_type":"AFFILIATE_BOOKING_RELATIONSHIP","official_url":"https://www.travelpayouts.com/","documentation_url":"https://support.travelpayouts.com/hc/en-us/articles/212246627-For-developers-and-travel-startups","cost_usd":0,"authentication_type":"existing_site_loader","requires_secret":false,"requires_account_approval":true,"browser_safe":true,"allowed_use":"Existing provider-managed Drive surface only","data_capabilities":{"price_data":false,"availability":false,"schedule":false,"policy_data":false},"freshness":{"cadence":"provider_managed","failure_label":"UNAVAILABLE"},"affiliate_status":"APPROVED_EXISTING_DRIVE_ONLY","connection_status":"CONNECTED","notes":"Not a source of truth and not proof of approval for other programs."},
-    {"id":"travelpayouts_data_api","name":"Travelpayouts Data API","category":"flight_price_trends","authority_type":"AFFILIATE_DATA_PROVIDER","official_url":"https://www.travelpayouts.com/","documentation_url":"https://travelpayouts.github.io/slate/","cost_usd":0,"authentication_type":"API_token","requires_secret":true,"requires_account_approval":true,"browser_safe":false,"allowed_use":"Cached trend data subject to account/program access; not current bookable inventory","data_capabilities":{"price_data":"cached_trends","availability":false,"schedule":"limited_routes","policy_data":false},"freshness":{"cadence":"provider_expiration_and_cache","failure_label":"UNAVAILABLE"},"affiliate_status":"ACCESS_NOT_VERIFIED","connection_status":"BLOCKED_BY_SECRET","notes":"Token must not ship in this static browser application."},
-    {"id":"amadeus_self_service","name":"Amadeus Self-Service APIs","category":"flights_and_hotels","authority_type":"DISTRIBUTION_PROVIDER","official_url":"https://developers.amadeus.com/","documentation_url":"https://developers.amadeus.com/self-service","cost_usd":0,"authentication_type":"OAuth_client_credentials","requires_secret":true,"requires_account_approval":true,"browser_safe":false,"allowed_use":"Test quota and production terms require an approved server-side integration","data_capabilities":{"price_data":true,"availability":true,"schedule":true,"policy_data":"offer_specific"},"freshness":{"cadence":"request_time","failure_label":"UNAVAILABLE"},"affiliate_status":"NO_VERIFIED_RELATIONSHIP","connection_status":"BLOCKED_BY_SECRET","notes":"No owner credentials or production access assumed."},
-    {"id":"booking_connectivity","name":"Booking.com Demand API","category":"lodging","authority_type":"BOOKING_PROVIDER","official_url":"https://developers.booking.com/demand/docs/open-api/demand-api/","documentation_url":"https://developers.booking.com/demand/docs/getting-started/try-out-the-api/","cost_usd":0,"authentication_type":"affiliate_token_and_key","requires_secret":true,"requires_account_approval":true,"browser_safe":false,"allowed_use":"Approved affiliate partners under provider terms","data_capabilities":{"price_data":true,"availability":true,"schedule":false,"policy_data":true},"freshness":{"cadence":"request_time","failure_label":"UNAVAILABLE"},"affiliate_status":"ACCESS_NOT_VERIFIED","connection_status":"BLOCKED_BY_PROVIDER_ACCESS","notes":"No scraping and no inferred affiliate eligibility."},
-    {"id":"expedia_rapid","name":"Expedia Group Rapid API","category":"lodging","authority_type":"BOOKING_PROVIDER","official_url":"https://developers.expediagroup.com/","documentation_url":"https://developers.expediagroup.com/rapid/lodging","cost_usd":0,"authentication_type":"API_key_and_signature","requires_secret":true,"requires_account_approval":true,"browser_safe":false,"allowed_use":"Approved partner integration only","data_capabilities":{"price_data":true,"availability":true,"schedule":false,"policy_data":true},"freshness":{"cadence":"request_time","failure_label":"UNAVAILABLE"},"affiliate_status":"ACCESS_NOT_VERIFIED","connection_status":"BLOCKED_BY_PROVIDER_ACCESS","notes":"No client-side connection."},
-    {"id":"dot_airline_consumer","name":"U.S. DOT Aviation Consumer Protection","category":"airline_rules_and_consumer_guidance","authority_type":"SOURCE_OF_TRUTH_OFFICIAL_GOVERNMENT","official_url":"https://www.transportation.gov/airconsumer","documentation_url":"https://www.transportation.gov/airconsumer/baggage-fees","cost_usd":0,"authentication_type":"none","requires_secret":false,"requires_account_approval":false,"browser_safe":true,"allowed_use":"Consumer rules and links; not itinerary-specific bag pricing","data_capabilities":{"price_data":false,"availability":false,"schedule":false,"policy_data":"regulatory_guidance"},"freshness":{"cadence":"policy_change","failure_label":"STALE"},"affiliate_status":"NO_RELATIONSHIP","connection_status":"RESEARCH_ONLY","notes":"Airline-specific fees still require current carrier-published facts."},
-    {"id":"provider_direct_policies","name":"Provider-published fare, rental, lodging, and cancellation policies","category":"provider_policies","authority_type":"SOURCE_OF_TRUTH_PROVIDER","official_url":"","documentation_url":"","cost_usd":0,"authentication_type":"provider_specific","requires_secret":false,"requires_account_approval":false,"browser_safe":"provider_specific","allowed_use":"Store only deliberately reviewed, dated facts within provider terms","data_capabilities":{"price_data":"policy_fees_only","availability":false,"schedule":false,"policy_data":true},"freshness":{"cadence":"review_before_booking","failure_label":"POLICY_UNKNOWN"},"affiliate_status":"INDEPENDENT_OF_AUTHORITY","connection_status":"RESEARCH_ONLY","notes":"No carrier, rental firm, hotel, bus, rail, taxi, rideshare, shuttle, or transfer policy is connected generically."}
-  ]
+    {
+      "id": "eia_weekly_gasoline",
+      "name": "U.S. Energy Information Administration weekly gasoline",
+      "category": "driving_fuel_reference",
+      "authority_type": "SOURCE_OF_TRUTH_OFFICIAL_GOVERNMENT",
+      "official_url": "https://www.eia.gov/petroleum/gasdiesel/",
+      "documentation_url": "https://www.eia.gov/opendata/documentation.php",
+      "cost_usd": 0,
+      "authentication_type": "none_for_bulk_file",
+      "requires_secret": false,
+      "requires_account_approval": false,
+      "browser_safe": true,
+      "allowed_use": "Published U.S. regional weekly retail gasoline reference; not route or station price",
+      "data_capabilities": {
+        "price_data": true,
+        "availability": false,
+        "schedule": false,
+        "policy_data": false
+      },
+      "freshness": {
+        "cadence": "weekly",
+        "failure_label": "STALE"
+      },
+      "affiliate_status": "NO_RELATIONSHIP",
+      "connection_status": "CONNECTED",
+      "notes": "Existing checked-in snapshot and keyless refresh preserved."
+    },
+    {
+      "id": "gtfs_standard",
+      "name": "General Transit Feed Specification",
+      "category": "public_transit",
+      "authority_type": "OPEN_STANDARD",
+      "official_url": "https://gtfs.org/",
+      "documentation_url": "https://gtfs.org/documentation/overview/",
+      "cost_usd": 0,
+      "authentication_type": "varies_by_publishing_agency",
+      "requires_secret": false,
+      "requires_account_approval": false,
+      "browser_safe": "agency_specific",
+      "allowed_use": "Normalize an agency feed only after that agency feed URL and terms are reviewed",
+      "data_capabilities": {
+        "price_data": "optional_fares",
+        "availability": false,
+        "schedule": true,
+        "policy_data": false
+      },
+      "freshness": {
+        "cadence": "agency_specific",
+        "failure_label": "UNAVAILABLE_OR_STALE"
+      },
+      "affiliate_status": "NO_RELATIONSHIP",
+      "connection_status": "SAFE_TO_CONNECT_NOW",
+      "notes": "Parser foundation connected; agency feed URL, CORS behavior, freshness and terms must be reviewed before browser connection. No nationwide feed or live inventory is bundled."
+    },
+    {
+      "id": "gtfs_realtime_standard",
+      "name": "GTFS Realtime",
+      "category": "public_transit_realtime",
+      "authority_type": "OPEN_STANDARD",
+      "official_url": "https://gtfs.org/documentation/realtime/reference/",
+      "documentation_url": "https://gtfs.org/documentation/realtime/reference/",
+      "cost_usd": 0,
+      "authentication_type": "varies_by_publishing_agency",
+      "requires_secret": false,
+      "requires_account_approval": false,
+      "browser_safe": "agency_specific",
+      "allowed_use": "Architectural normalization after agency feed review",
+      "data_capabilities": {
+        "price_data": false,
+        "availability": "service_status_only",
+        "schedule": "trip_updates",
+        "policy_data": false
+      },
+      "freshness": {
+        "cadence": "realtime_feed_specific",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "NO_RELATIONSHIP",
+      "connection_status": "RESEARCH_ONLY",
+      "notes": "Protocol Buffers decoding and a specific agency feed are not connected in V1."
+    },
+    {
+      "id": "travelpayouts_drive",
+      "name": "Travelpayouts Drive",
+      "category": "affiliate_link_routing",
+      "authority_type": "AFFILIATE_BOOKING_RELATIONSHIP",
+      "official_url": "https://www.travelpayouts.com/",
+      "documentation_url": "https://support.travelpayouts.com/hc/en-us/articles/212246627-For-developers-and-travel-startups",
+      "cost_usd": 0,
+      "authentication_type": "existing_site_loader",
+      "requires_secret": false,
+      "requires_account_approval": true,
+      "browser_safe": true,
+      "allowed_use": "Existing provider-managed Drive surface only",
+      "data_capabilities": {
+        "price_data": false,
+        "availability": false,
+        "schedule": false,
+        "policy_data": false
+      },
+      "freshness": {
+        "cadence": "provider_managed",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "APPROVED_EXISTING_DRIVE_ONLY",
+      "connection_status": "CONNECTED",
+      "notes": "Not a source of truth and not proof of approval for other programs."
+    },
+    {
+      "id": "travelpayouts_data_api",
+      "name": "Travelpayouts Data API",
+      "category": "flight_price_trends",
+      "authority_type": "AFFILIATE_DATA_PROVIDER",
+      "official_url": "https://www.travelpayouts.com/",
+      "documentation_url": "https://travelpayouts.github.io/slate/",
+      "cost_usd": 0,
+      "authentication_type": "API_token",
+      "requires_secret": true,
+      "requires_account_approval": true,
+      "browser_safe": false,
+      "allowed_use": "Cached trend data subject to account/program access; not current bookable inventory",
+      "data_capabilities": {
+        "price_data": "cached_trends",
+        "availability": false,
+        "schedule": "limited_routes",
+        "policy_data": false
+      },
+      "freshness": {
+        "cadence": "provider_expiration_and_cache",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "ACCESS_NOT_VERIFIED",
+      "connection_status": "BLOCKED_BY_SECRET",
+      "notes": "Token must not ship in this static browser application."
+    },
+    {
+      "id": "amadeus_self_service",
+      "name": "Amadeus Self-Service APIs",
+      "category": "flights_and_hotels",
+      "authority_type": "DISTRIBUTION_PROVIDER",
+      "official_url": "https://developers.amadeus.com/",
+      "documentation_url": "https://developers.amadeus.com/self-service",
+      "cost_usd": null,
+      "authentication_type": "OAuth_client_credentials",
+      "requires_secret": true,
+      "requires_account_approval": true,
+      "browser_safe": false,
+      "allowed_use": "Test quota and production terms require an approved server-side integration",
+      "data_capabilities": {
+        "price_data": true,
+        "availability": true,
+        "schedule": true,
+        "policy_data": "offer_specific"
+      },
+      "freshness": {
+        "cadence": "request_time",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "NO_VERIFIED_RELATIONSHIP",
+      "connection_status": "BLOCKED_BY_SECRET",
+      "notes": "No owner credentials or production access assumed. Production/commercial cost is not asserted as $0; access remains blocked until provider terms, credentials and cost are explicitly verified."
+    },
+    {
+      "id": "booking_connectivity",
+      "name": "Booking.com Demand API",
+      "category": "lodging",
+      "authority_type": "BOOKING_PROVIDER",
+      "official_url": "https://developers.booking.com/demand/docs/open-api/demand-api/",
+      "documentation_url": "https://developers.booking.com/demand/docs/getting-started/try-out-the-api/",
+      "cost_usd": null,
+      "authentication_type": "affiliate_token_and_key",
+      "requires_secret": true,
+      "requires_account_approval": true,
+      "browser_safe": false,
+      "allowed_use": "Approved affiliate partners under provider terms",
+      "data_capabilities": {
+        "price_data": true,
+        "availability": true,
+        "schedule": false,
+        "policy_data": true
+      },
+      "freshness": {
+        "cadence": "request_time",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "ACCESS_NOT_VERIFIED",
+      "connection_status": "BLOCKED_BY_PROVIDER_ACCESS",
+      "notes": "No scraping and no inferred affiliate eligibility. Production/commercial cost is not asserted as $0; access remains blocked until provider terms, credentials and cost are explicitly verified."
+    },
+    {
+      "id": "expedia_rapid",
+      "name": "Expedia Group Rapid API",
+      "category": "lodging",
+      "authority_type": "BOOKING_PROVIDER",
+      "official_url": "https://developers.expediagroup.com/",
+      "documentation_url": "https://developers.expediagroup.com/rapid/lodging",
+      "cost_usd": null,
+      "authentication_type": "API_key_and_signature",
+      "requires_secret": true,
+      "requires_account_approval": true,
+      "browser_safe": false,
+      "allowed_use": "Approved partner integration only",
+      "data_capabilities": {
+        "price_data": true,
+        "availability": true,
+        "schedule": false,
+        "policy_data": true
+      },
+      "freshness": {
+        "cadence": "request_time",
+        "failure_label": "UNAVAILABLE"
+      },
+      "affiliate_status": "ACCESS_NOT_VERIFIED",
+      "connection_status": "BLOCKED_BY_PROVIDER_ACCESS",
+      "notes": "No client-side connection. Production/commercial cost is not asserted as $0; access remains blocked until provider terms, credentials and cost are explicitly verified."
+    },
+    {
+      "id": "dot_airline_consumer",
+      "name": "U.S. DOT Aviation Consumer Protection",
+      "category": "airline_rules_and_consumer_guidance",
+      "authority_type": "SOURCE_OF_TRUTH_OFFICIAL_GOVERNMENT",
+      "official_url": "https://www.transportation.gov/airconsumer",
+      "documentation_url": "https://www.transportation.gov/airconsumer/baggage-fees",
+      "cost_usd": 0,
+      "authentication_type": "none",
+      "requires_secret": false,
+      "requires_account_approval": false,
+      "browser_safe": true,
+      "allowed_use": "Consumer rules and links; not itinerary-specific bag pricing",
+      "data_capabilities": {
+        "price_data": false,
+        "availability": false,
+        "schedule": false,
+        "policy_data": "regulatory_guidance"
+      },
+      "freshness": {
+        "cadence": "policy_change",
+        "failure_label": "STALE"
+      },
+      "affiliate_status": "NO_RELATIONSHIP",
+      "connection_status": "RESEARCH_ONLY",
+      "notes": "Airline-specific fees still require current carrier-published facts."
+    },
+    {
+      "id": "provider_direct_policies",
+      "name": "Provider-published fare, rental, lodging, and cancellation policies",
+      "category": "provider_policies",
+      "authority_type": "SOURCE_OF_TRUTH_PROVIDER",
+      "official_url": "",
+      "documentation_url": "",
+      "cost_usd": 0,
+      "authentication_type": "provider_specific",
+      "requires_secret": false,
+      "requires_account_approval": false,
+      "browser_safe": "provider_specific",
+      "allowed_use": "Store only deliberately reviewed, dated facts within provider terms",
+      "data_capabilities": {
+        "price_data": "policy_fees_only",
+        "availability": false,
+        "schedule": false,
+        "policy_data": true
+      },
+      "freshness": {
+        "cadence": "review_before_booking",
+        "failure_label": "POLICY_UNKNOWN"
+      },
+      "affiliate_status": "INDEPENDENT_OF_AUTHORITY",
+      "connection_status": "RESEARCH_ONLY",
+      "notes": "No carrier, rental firm, hotel, bus, rail, taxi, rideshare, shuttle, or transfer policy is connected generically."
+    }
+  ],
+  "cleanup_reviewed_at": "2026-10-04",
+  "cleanup_note": "Blocked provider APIs with unverified commercial terms do not claim zero cost. GTFS browser viability is agency-specific."
 }
