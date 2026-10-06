@@ -137,6 +137,15 @@
       return e;
     });
   }
+  function occurrenceMirrorsEvent(e, o) {
+    return !!e && !!o &&
+      o.start_date_time === e.start_date_time &&
+      o.end_date_time === e.end_date_time &&
+      o.timezone === e.timezone &&
+      o.all_day === e.all_day &&
+      o.status === e.event_status;
+  }
+
   function occurrenceTimeState(o, now) {
     const current = typeof now === 'number' ? now : Date.parse(now);
     if (!Number.isFinite(current) || !validDate(o?.start_date_time, o?.all_day) || !validDate(o?.end_date_time, o?.all_day) || (o?.end_date_time && Date.parse(o.end_date_time) < Date.parse(o.start_date_time)) || !o?.start_date_time) return 'DATE_UNKNOWN';
@@ -218,5 +227,5 @@
       return { source_id: id, status: 'UNAVAILABLE', events: [], error: 'EVENT SOURCE UNAVAILABLE' };
     }
   }
-  return { CATEGORIES, SEASONS, STATUSES, PRICE_TYPES, COSTS, TRUTH_STATES, component, normalizeEvent, normalizeOccurrence, validateEvent, validateOccurrence, validateEvents, sanitizePersistedEvents, occurrenceTimeState, priceTruth, dateOverlap, filterEvents, matchTripEvents, sourceState, occurrenceSourceState: (e, o, now = Date.now()) => e.occurrences.includes(o) ? sourceState(e, now, o.source) : 'UNKNOWN', officialUrl, isolateSource };
+  return { CATEGORIES, SEASONS, STATUSES, PRICE_TYPES, COSTS, TRUTH_STATES, component, normalizeEvent, normalizeOccurrence, validateEvent, validateOccurrence, validateEvents, sanitizePersistedEvents, occurrenceMirrorsEvent, occurrenceTimeState, priceTruth, dateOverlap, filterEvents, matchTripEvents, sourceState, occurrenceSourceState: (e, o, now = Date.now()) => e.occurrences.includes(o) ? sourceState(e, now, o.source) : 'UNKNOWN', officialUrl, isolateSource };
 });
