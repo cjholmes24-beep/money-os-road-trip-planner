@@ -87,7 +87,7 @@ for record in monetization.get('opportunities',[]):
     if record.get('verified_direct_url_available') is not False or record.get('direct_url') or record.get('affiliate_url'):
         errors.append('No unverified direct affiliate URL may be introduced')
 dashboard=(root/'revenue-dashboard/index.html').read_text()
-for item in ['ATTENTION','INTENT','MONEY','CLEARED REVENUE: $0','LOCAL BROWSER SIGNALS','USER IMPORTED','importProviderReports','clearDemand','exportDemand','noindex,nofollow','Affiliate disclosure']:
+for item in ['ATTENTION','INTENT','MONEY','CLEARED REVENUE: $0','LOCAL BROWSER SIGNALS','USER IMPORTED','verifiedMoneySummary','importProviderReports','clearDemand','exportDemand','noindex,nofollow','Affiliate disclosure']:
     if item not in dashboard: errors.append(f'dashboard missing: {item}')
 if 'tp-em.com' in dashboard: errors.append('Diagnostic financial page must not load affiliate tracking')
 for name in ['flight-cost-planner','rental-car-trip-cost','airport-transfer-cost-planner','travel-esim-cost-planner','travel-activities-budget','travel-insurance-guide','flight-delay-compensation-guide','plan-my-trip']:
