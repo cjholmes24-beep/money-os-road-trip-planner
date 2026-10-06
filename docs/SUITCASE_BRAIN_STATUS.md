@@ -87,3 +87,7 @@ Independent review hardened the revenue proof boundary:
 - monetization registry ids and routing metadata receive stricter validation
 
 No new provider reporting connection or verified direct affiliate URL was introduced. Verified cleared revenue remains $0 unless trusted provider evidence is supplied at runtime.
+
+## First-dollar sprint V1 — pending independent review
+
+Eight existing priority surfaces have clearer result-first decisions/contextual tools. Local first-dollar milestones, Money Blockers and exportable category gaps are available. Drive installation is preserved; eight categories are DRIVE_ONLY with account eligibility UNKNOWN, and BUS_RAIL/CRUISES have generic intake only (NOT_READY). No category is newly certified READY_TO_EARN; no verified direct provider link or reporting adapter is configured. Cleared revenue remains unproven/$0 without legitimate runtime evidence. No paid infrastructure or trip-schema change.

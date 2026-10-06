@@ -25,6 +25,7 @@ jobs:
         run: |
           node --check revenue-intelligence.js
           node --check revenue-ui.js
+          node --check tests/first-dollar-tests.js
           node --check event-intelligence.js
           node --check trip-intelligence.js
           node --check source-intelligence.js

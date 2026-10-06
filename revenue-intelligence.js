@@ -178,5 +178,41 @@
     for(const [theme,n] of Object.entries(seasons))observations.push(`${theme} appeared in ${n} local planning signal(s); repeated activity is counted, not national demand.`);
     return{label:'LOCAL BROWSER SIGNALS',attention,intent,categories,pages,seasons,observations,notes:'Activity counts are not unique visitors, national trends, bookings, or revenue. No destination text is retained.'};
   }
-  return{CATEGORIES,LOCAL_STATES,MONEY_STATES,FUNNEL_STATES,SIGNAL_TYPES,DIMENSIONS,VALUES,SEASONS,PAGES,DEMAND_KEY,REPORT_KEY,CONSENT_KEY,MAX_EVENTS,pagePath,contextDimensions,classifyIntent,validateRegistry,createProviderAction,actionUrl,selectTripCategories,makeDemandEvent,validateDemandEvent,demandStore,validateReport,importReports,verifyProviderReport,isTrustedReport,reportStore,latestReports,moneySummary,milestones,demandInsights};
+  // Repository coverage is a useful planning surface, not a provider approval claim.
+  const MONEY_PAGES={FLIGHTS:'/flight-cost-planner/',ACCOMMODATION:'/plan-my-trip/',RENTAL_CARS:'/rental-car-trip-cost/',TRANSFERS:'/airport-transfer-cost-planner/',BUS_RAIL:'/plan-my-trip/',CRUISES:'/plan-my-trip/',ESIM:'/travel-esim-cost-planner/',ACTIVITIES:'/travel-activities-budget/',TRAVEL_INSURANCE:'/travel-insurance-guide/',FLIGHT_COMPENSATION:'/flight-delay-compensation-guide/'};
+  function firstDollarReport(events=[],records=[],registry=null,runtimeActions=[]){
+    const valid=events.filter(validateDemandEvent),proof=milestones(valid,records);
+    const achieved=name=>proof.find(m=>m.name===name)?.achieved===true;
+    const routes=new Set(runtimeActions.filter(a=>actionUrl(a)).map(a=>a.category));
+    const insight=demandInsights(valid);
+    const hasShown=valid.some(e=>e.type==='PROVIDER_ACTION_SHOWN');
+    const stages=[
+      ['NO TRAFFIC PROOF',!valid.some(e=>e.type==='PAGE_VIEWED'),'No opted-in local page activity recorded; organic/unique traffic remains UNKNOWN even when activity exists.'],
+      ['NO QUALIFIED INTENT YET',!achieved('FIRST QUALIFIED INTENT'),'No local valid trip blueprint with destination, dates, and positive budget.'],
+      ['NO ELIGIBLE PROVIDER ACTION',routes.size===0&&!hasShown,'No runtime-verified action currently registered and no eligible action visibility recorded. Independent Drive routing is not locally verified.'],
+      ['NO PROVIDER CLICKS',!achieved('FIRST ELIGIBLE PROVIDER CLICK'),'No eligible provider click recorded locally; Drive reporting must be checked separately.'],
+      ['BOOKING REPORT NOT CONNECTED',!records.some(isTrustedReport),'No runtime-verified provider report available. User imports are not a verified report connection.'],
+      ['NO ATTRIBUTED BOOKING',!achieved('FIRST ATTRIBUTED BOOKING'),'No verified latest provider attribution evidence.'],
+      ['NO APPROVED COMMISSION',!achieved('FIRST APPROVED COMMISSION'),'No verified positive approved commission.'],
+      ['NO CLEARED REVENUE',!achieved('FIRST CLEARED DOLLAR'),'First cleared dollar requires at least USD 1 in verified payout receipts; other currencies are shown separately.']
+    ];
+    const blockers=stages.filter(([,blocked])=>blocked).map(([state,,reason])=>({state,reason}));
+    const registryValid=validateRegistry(registry).valid;
+    const gaps=CATEGORIES.map(category=>{
+      const opportunity=registryValid?registry.opportunities.find(r=>r.category===category):null;
+      const signals=valid.filter(e=>e.dimensions.category===category&&e.intent_level!=='BROWSING');
+      const useful=!['BUS_RAIL','CRUISES'].includes(category);
+      const providerPathVerified=routes.has(category);
+      const path=providerPathVerified?'RUNTIME_VERIFIED':opportunity?.monetization_surface==='TRAVELPAYOUTS_DRIVE'?'DRIVE_ONLY_PROGRAM_UNKNOWN':'NOT_VERIFIED';
+      const categoryProof=records.filter(r=>r.category===category&&isTrustedReport(r));
+      const categoryMilestones=milestones(signals,categoryProof);
+      const proven=name=>categoryMilestones.find(m=>m.name===name)?.achieved;
+      const blocker=!useful?'PAGE_NEEDS_CONVERSION_WORK':!providerPathVerified?'PROVIDER_ACCESS_REQUIRED':!signals.some(e=>e.type==='PROVIDER_ACTION_CLICKED')?'NO_PROVIDER_CLICKS':!categoryProof.length?'BOOKING_REPORT_NOT_CONNECTED':!proven('FIRST ATTRIBUTED BOOKING')?'NO_ATTRIBUTED_BOOKING':!proven('FIRST APPROVED COMMISSION')?'NO_APPROVED_COMMISSION':!proven('FIRST CLEARED DOLLAR')?'NO_CLEARED_REVENUE':null;
+      return {category,planning_page:MONEY_PAGES[category],existing_useful_page:useful,coverage:useful?'USEFUL_TOOL_OR_GUIDE':'GENERIC_TRIP_INTAKE_ONLY',monetization_path:path,provider_path_verified:providerPathVerified,local_intent_signals:signals.length,high_intent_actions:insight.categories[category]?.highIntentActions||0,provider_clicks:insight.categories[category]?.providerClicks||0,blocker,recommended_next_action:!useful?'Improve existing trip comparison content before adding provider routing.':!providerPathVerified?'Verify account program approval and exact permitted route; inspect Drive page reporting.':blocker==='NO_PROVIDER_CLICKS'?'Check action visibility after useful output with real opted-in usage.':blocker?'Reconcile legitimate provider booking and payout evidence.':'No missing stage in this current local proof chain; continue checking legitimate reports.'};
+    });
+    // Demand first, then missing route/coverage, then stable category order. No payout input.
+    gaps.sort((a,b)=>b.local_intent_signals-a.local_intent_signals||Number(a.provider_path_verified)-Number(b.provider_path_verified)||Number(a.existing_useful_page)-Number(b.existing_useful_page)||CATEGORIES.indexOf(a.category)-CATEGORIES.indexOf(b.category));
+    return {version:1,label:'LOCAL BROWSER SIGNALS + REPOSITORY COVERAGE — not national demand or accounting',first_blocker:blockers[0]?.state||null,blockers,gaps,clicks_by_page:insight.pages,milestones:proof.filter(m=>['FIRST QUALIFIED INTENT','FIRST ELIGIBLE PROVIDER CLICK','FIRST ATTRIBUTED BOOKING','FIRST APPROVED COMMISSION','FIRST CLEARED DOLLAR'].includes(m.name)),notes:'Runtime route availability is current-page/session evidence, not all account programs. Drive-only clicks are not observable here. Local data can be edited; report imports are unverified.'};
+  }
+  return{MONEY_PAGES,firstDollarReport,CATEGORIES,LOCAL_STATES,MONEY_STATES,FUNNEL_STATES,SIGNAL_TYPES,DIMENSIONS,VALUES,SEASONS,PAGES,DEMAND_KEY,REPORT_KEY,CONSENT_KEY,MAX_EVENTS,pagePath,contextDimensions,classifyIntent,validateRegistry,createProviderAction,actionUrl,selectTripCategories,makeDemandEvent,validateDemandEvent,demandStore,validateReport,importReports,verifyProviderReport,isTrustedReport,reportStore,latestReports,moneySummary,milestones,demandInsights};
 });
