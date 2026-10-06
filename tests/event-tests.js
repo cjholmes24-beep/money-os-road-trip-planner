@@ -63,6 +63,9 @@ module.exports = async function eventTests() {
   const canceled={...o,status:'CANCELED'};eq(E.occurrenceTimeState(canceled,'2026-10-06T00:00:00Z'),'PAST');eq(canceled.status,'CANCELED');
   const recurrence=E.normalizeEvent({...event,recurrence:'Weekly; dates must be confirmed',occurrences:[{...o,id:'a'},{...o,id:'b',start_date_time:'2026-10-12T14:00:00-04:00',end_date_time:'2026-10-12T16:00:00-04:00'}]});
   eq(recurrence.occurrences.length,2);eq(E.filterEvents([recurrence],{start:'2026-10-12',end:'2026-10-12'}).length,1);
+  eq(E.occurrenceMirrorsEvent(event,event.occurrences[0]),true);
+  const customSingle=E.normalizeEvent({...event,occurrences:[{...o,id:'custom',status:'ANNOUNCED'}]});
+  eq(E.occurrenceMirrorsEvent(customSingle,customSingle.occurrences[0]),false,'Single custom occurrence must not be collapsed into concept fields during edit.');
   const bads=[null,{}, {...event,title:''},{...event,category:'INVALID'},{...event,events:[],occurrences:{}},{...event,minimum_age:-1},{...event,minimum_age:'18'},{...event,seasonal_theme:['FAKE']},{...event,mandatory_fees:{value:0,state:'UNKNOWN'}},{...event,base_price:{value:false,state:'USER_ENTERED'}},{...event,official_ticket_url:'javascript:alert(1)'},{...event,official_event_url:'https://user:password@example.com'}, {...event,source:null}, {...event,occurrences:[{...o,event_id:'wrong'}]}, {...event,occurrences:[{...o,start_date_time:'2026-02-30T14:00:00Z'}]}, {...event,occurrences:[{...o,start_date_time:'2026-10-05T14:00:00'}]}, {...event,occurrences:[{...o,end_date_time:'2026-10-05T13:00:00-04:00'}]}];
   bads.forEach(e=>ok(!E.validateEvent(e).valid,'Malformed event rejected'));
   ok(!E.validateEvents([event,event]).valid);ok(!E.validateEvent({...event,occurrences:[o,o]}).valid);
@@ -81,6 +84,10 @@ module.exports = async function eventTests() {
   ok(persisted.events[0].source.notes.includes('runtime re-verification'));
   eq(E.sourceState(persisted.events[0]),'UNVERIFIED SNAPSHOT');
   eq(E.officialUrl(persisted.events[0]),null);
+  const persistedAgain=B.migrateTrip(persisted);
+  eq(persistedAgain.events[0].record_origin,'IMPORTED');
+  eq(persistedAgain.events[0].source.fact_type,'UNKNOWN');
+  eq(E.sourceState(persistedAgain.events[0]),'UNVERIFIED SNAPSHOT');
   const transport=T.normalizeTransportOption({mode:'DRIVE',provider:'Fixture vehicle',traveler_count:1}),lodging=T.normalizeLodgingOption({property:'Fixture stay',nights:1,rooms:1,occupancy:1});
   const v2=B.createTrip({schema_version:2,transportation_options:[transport],lodging_options:[lodging]});delete v2.events;
   const v3=B.migrateTrip(v2);eq(v3.schema_version,3);eq(v3.events,[]);eq(v3.transportation_options,[transport]);eq(v3.lodging_options,[lodging]);
