@@ -224,3 +224,60 @@ Next large brick:
 
 Reason for priority change:
 The product now has enough planning/intelligence foundation to begin deliberate monetization measurement. Revenue activation moves ahead of additional broad feature expansion so the system can start proving traffic → intent → provider clicks → attributed/approved/cleared revenue while later product modules continue to mature.
+
+
+## 2026-10-06 — Revenue Activation + Demand Capture V1 via Codex + cleanup
+
+Starting main:
+`a579e686a8617a09b98a2dc4a57896f08bdffae3`
+
+Codex PR #13 delivered:
+- reusable revenue/demand intelligence module
+- explicit local funnel and provider money state models
+- ten-category monetization-opportunity registry
+- high-intent action checklists on existing calculators/guides
+- Plan My Trip next-useful-actions routing
+- opt-in browser-local telemetry
+- local funnel view/clear/export
+- redacted provider-report import/clear/export
+- revenue dashboard separating ATTENTION / INTENT / MONEY
+- deterministic proof milestones
+- official Travelpayouts Drive/report/API audit
+- expanded regression/static validation
+
+Codex candidate verification reported:
+- 424 dependency-free assertions passed
+- 27 Chromium mobile checks passed
+- owner cost $0
+- no live provider-report API or direct account-verified affiliate URL connected
+
+Independent cleanup identified:
+- unknown provider-action surface values could silently become VERIFIED_DIRECT
+- money state counts mixed imported/unverified claims with future runtime-verified provider evidence
+- no runtime dashboard hook existed for a future trusted provider-report adapter
+- cleared timestamps could predate booking without explicit rejection
+- monetization registry duplicate ids and routing metadata needed stronger validation
+
+Cleanup repairs:
+- recognized provider-action surfaces required explicitly
+- verified vs imported money counts separated
+- runtime provider-report registration accepts only WeakSet-trusted reports
+- cleared-before-booking chronology rejected
+- registry id, planning-path, and documentation URL validation hardened
+- cleanup regression coverage added
+
+PR #13 merge:
+`0d97c38ec08aa079ab1dd8e305d4b54e92c6c062`
+
+Post-merge:
+- Suitcase Brain checks: SUCCESS
+- IndexNow notification: SUCCESS
+- GitHub Pages deployment: SUCCESS
+- owner cost introduced: $0
+- verified cleared revenue remains unproven / $0 until trusted provider evidence exists
+
+Next large brick:
+**24/7 Lead + Opportunity Engine V1**
+
+Reason:
+Revenue Activation now gives Money OS a clean vocabulary for attention, intent, provider clicks, provider-reported states, and cleared-money proof. The next job is to make opportunity discovery/distribution/refresh run continuously on $0 infrastructure without manufacturing traffic or earnings.
