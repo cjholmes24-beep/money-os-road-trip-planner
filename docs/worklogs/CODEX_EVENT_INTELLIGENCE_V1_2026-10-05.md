@@ -11,7 +11,7 @@ Requested filename retained; implementation/research performed 2026-10-06. **Tas
 
 ## Delivered
 
-Added dependency-free Event/Occurrence domain, 28 categories, 20 seasonal themes, separate temporal/organizer statuses, explicit-offset time handling, all-day IANA-zone classification, four truthful monetary components, local filters, explainable date/destination/interest/category/age trip matches, source isolation, and runtime-only official URL trust. No affiliate field enters matching.
+Added dependency-free Event/Occurrence domain, 28 categories, 19 seasonal themes, separate temporal/organizer statuses, explicit-offset time handling, all-day IANA-zone classification, four truthful monetary components, local filters, explainable date/destination/interest/category/age trip matches, source isolation, and runtime-only official URL trust. No affiliate field enters matching.
 
 Schema V3 persists events and safely chains V1→V2→V3 while retaining V2 transportation/lodging data. V3 storage falls back to V2/V1 keys. Corrupt/future imports fail without replacing the working trip. Source-backed snapshots lose runtime verification and clickable URL trust on reload/import.
 
