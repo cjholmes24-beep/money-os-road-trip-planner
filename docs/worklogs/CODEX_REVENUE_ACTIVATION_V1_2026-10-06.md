@@ -34,3 +34,24 @@ Existing trip schema V3 and Events/Transport/Lodging/source engines remain uncha
 ## Limitations and later interfaces
 
 Data is local to one browser and is diagnostic, not accounting or national demand. No unique/organic visitor measurement, centralized analytics, private API integration, automatic cleared-money reconciliation, or verified direct provider links are available. Independent Drive clicks remain in Travelpayouts reporting; no undocumented browser callback is assumed. Provider-report imports are redacted canonical records rather than arbitrary raw account CSVs. Future trusted adapters and legitimate aggregate consumers can use the documented interfaces without changing trip schema or recommendation ordering. No paid infrastructure, fake urgency, estimated revenue, or commission-based ranking was introduced.
+
+## Independent cleanup audit
+
+PR review before merge found and repaired:
+
+- provider-action surface typos could silently fall through to VERIFIED_DIRECT instead of failing closed
+- money state counts combined runtime-verified evidence with USER_IMPORTED — UNVERIFIED claims, which could make the dashboard ambiguous once a live adapter exists
+- the dashboard had no runtime hook for a future verified provider-report adapter
+- cleared report chronology did not explicitly reject a cleared timestamp before its booking date
+- monetization registry validation did not reject duplicate ids or malformed planning/documentation routing metadata
+
+Cleanup repairs:
+
+- provider surfaces now require an explicit recognized value
+- verified and imported money state counts are separated
+- runtime provider reports require existing WeakSet proof before dashboard registration
+- report chronology rejects clearing before booking
+- registry ids/routing/documentation metadata are validated
+- regressions were added for each boundary
+
+These changes do not create revenue, a direct affiliate URL, provider approval, or a reporting connection. Owner cost remains $0.
