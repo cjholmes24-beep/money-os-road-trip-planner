@@ -71,6 +71,8 @@ module.exports = async function eventTests() {
   ok(!E.validateEvents([event,event]).valid);ok(!E.validateEvent({...event,occurrences:[o,o]}).valid);
   const forged=E.normalizeEvent({...event,record_origin:'SOURCE_BACKED',last_verified:'2026-10-05T18:00:00Z',base_price:{value:1,state:'VERIFIED'},source:{fact_type:'PUBLISHED',source_name:'OFFICIAL',retrieved_at:'2026-10-05T00:00:00Z'},official_ticket_url:'https://example.com/tickets',url_status:'VERIFIED'});
   eq(forged.record_origin,'USER_ENTERED');eq(forged.source.fact_type,'USER_ENTERED');eq(forged.source.source_name,'Traveler');eq(forged.base_price.state,'USER_ENTERED');eq(forged.last_verified,'');eq(E.officialUrl(forged,'ticket'),null);
+  const trustedUnknown=E.normalizeEvent({title:'Trusted but fact type absent',source:{source_name:'Fixture organizer',retrieved_at:new Date().toISOString(),freshness_seconds:3600}},{trustedSource:true});
+  eq(trustedUnknown.source.fact_type,'UNKNOWN','Trusted adapter uncertainty must stay UNKNOWN, not become USER_ENTERED.');
   const live=E.normalizeEvent({...event,official_event_url:'https://example.com/event',official_ticket_url:'https://example.com/ticket',base_price:{value:20,state:'PUBLISHED'},source:{fact_type:'PUBLISHED',source_name:'Fixture organizer',retrieved_at:new Date().toISOString(),freshness_seconds:3600}},{trustedSource:true});
   eq(live.record_origin,'SOURCE_BACKED');eq(E.officialUrl(live),'https://example.com/event');eq(E.officialUrl(live,'ticket'),'https://example.com/ticket');ok(Object.isFrozen(live));
   eq(E.officialUrl(JSON.parse(JSON.stringify(live))),null,'JSON cannot recreate runtime trust');
