@@ -34,3 +34,17 @@ Six source paths researched: NPS API, NYC Parks, Chicago city calendars, Visit O
 No live event feed, nationwide discovery, geospatial radius, generated recurrence, ticket inventory, event monetization, vendor logic, or paid infrastructure. Unknown traveler ages never establish age compatibility. Timed dates require explicit offsets; all-day current-state classification needs an IANA timezone. Optional occurrence JSON is intended for advanced multi-date entry. API/feed reuse, source licensing, CORS, credential configuration, and any future no-charge safeguards require a separate adapter work order.
 
 The final commit/PR and GitHub Actions result are reported in the completion report. This worklog does not claim main was merged or production deployed.
+
+
+## Independent cleanup audit
+
+PR review after Codex completion found and repaired additional trust/persistence defects before merge:
+
+- Persisted SOURCE_BACKED event records kept the SOURCE_BACKED origin label after reload/import even though runtime trust had been lost. They now downgrade to IMPORTED and display as unverified snapshots.
+- Re-loading an already imported snapshot could previously collapse its UNKNOWN source provenance into USER_ENTERED. Imported provenance now remains IMPORTED + UNKNOWN across repeated save/load cycles.
+- A source adapter wrapper could report AVAILABLE for a valid USER_ENTERED event collection. Source adapters now succeed only with runtime-trusted SOURCE_BACKED records.
+- A trusted adapter with a missing/unsupported fact_type could fall back to USER_ENTERED. It now fails closed to UNKNOWN.
+- Editing a single custom occurrence could silently collapse it into the event concept fields. A tested occurrence-mirror helper now preserves any custom single occurrence JSON during editing.
+- The event count display now separates live runtime SOURCE_BACKED records from IMPORTED UNVERIFIED SNAPSHOTS.
+
+Regression coverage was added for each cleanup item. GitHub Actions passed on the cleaned PR head before merge review.
