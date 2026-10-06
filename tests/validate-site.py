@@ -98,6 +98,26 @@ for name in ['flight-cost-planner','rental-car-trip-cost','airport-transfer-cost
 if 'NEXT USEFUL ACTIONS' not in html or 'tripRevenueActions' not in html:
     errors.append('Planner revenue action section missing')
 
+# First-dollar priority pages must remain crawlable with truthful metadata and routing.
+import xml.etree.ElementTree as ET
+try:
+    document=ET.fromstring(sitemap)
+    urls=[node.text for node in document.findall('{http://www.sitemaps.org/schemas/sitemap/0.9}url/{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
+    if len(urls)!=len(set(urls)): errors.append('Duplicate sitemap URLs')
+    if any(text.strip() for text in document.itertext() if text and text.strip() and not text.startswith('https://')): errors.append('Unexpected sitemap text')
+except ET.ParseError:
+    errors.append('Invalid sitemap XML')
+    urls=[]
+priority=['flight-cost-planner','plan-my-trip','rental-car-trip-cost','airport-transfer-cost-planner','travel-esim-cost-planner','travel-activities-budget','travel-insurance-guide','flight-delay-compensation-guide']
+for name in priority:
+    page=(root/name/'index.html').read_text()
+    canonical=f'https://cjholmes24-beep.github.io/money-os-road-trip-planner/{name}/'
+    if canonical not in urls or f'rel="canonical" href="{canonical}"' not in page: errors.append(f'{name} missing discoverable canonical')
+    if 'noindex' in page or '<title>' not in page or '<meta name="description" content="' not in page: errors.append(f'{name} missing crawlable metadata')
+    if page.count('tp-em.com/NTgxMDU0.js?t=581054')!=1: errors.append(f'{name} Drive public configuration changed/duplicated')
+for item in ['firstDollarMilestones','moneyBlockers','opportunityGaps','exportOpportunityGaps']:
+    if item not in (root/'revenue-dashboard/index.html').read_text(): errors.append(f'First-dollar dashboard missing {item}')
+
 if errors:
     print('\n'.join(errors))
     sys.exit(1)
