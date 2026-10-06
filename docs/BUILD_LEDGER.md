@@ -166,3 +166,61 @@ Post-merge verification:
 
 Next large brick:
 **Events + Festivals + Experiences + Seasonal Calendar Engine**
+
+
+## 2026-10-06 — Events Intelligence Core V1 via Codex + cleanup
+
+Starting main:
+`12b8cc3f2edb3e1e969425ab37a97f4c46999015`
+
+Codex PR #11 delivered:
+- canonical Event and Occurrence domain
+- schema V3 and V1/V2 migration chain
+- event time state separate from organizer status
+- truthful event price components
+- source/freshness and URL trust boundaries
+- user-entered event CRUD
+- local event filtering
+- trip-date event matching
+- seasonal tags
+- focused event-source audit/registry
+- Plan My Trip event workspace
+- expanded tests/static validation
+
+Codex candidate verification reported:
+- 262 assertions passed
+- 19 Chromium mobile smoke checks passed
+- no live event feed connected
+- owner cost $0
+
+Independent cleanup identified:
+- persisted SOURCE_BACKED events could retain a source-backed origin label after runtime verification was lost
+- repeated reload of an imported snapshot could convert UNKNOWN source provenance to USER_ENTERED
+- a source adapter could report AVAILABLE for untrusted USER_ENTERED events
+- trusted adapter uncertainty could fall back to USER_ENTERED
+- a custom single occurrence could be lost/collapsed on edit
+- UI did not distinguish live source-backed records from imported unverified snapshots clearly enough
+
+Cleanup repairs:
+- persisted runtime source records downgrade to IMPORTED
+- imported snapshots remain UNKNOWN/unverified across repeated reloads
+- source adapters require runtime-trusted SOURCE_BACKED records
+- trusted missing/unsupported fact type fails closed to UNKNOWN
+- custom single occurrences are preserved using tested occurrence-mirror logic
+- UI explicitly separates live source-backed records from imported snapshots
+- regression tests added
+
+PR #11 merge:
+`57f17669d5335a2561eb289c85983ceac9a1ecdc`
+
+Post-merge:
+- Suitcase Brain checks: SUCCESS
+- IndexNow notification: SUCCESS
+- GitHub Pages deployment: pending final confirmation at ledger-write time
+- owner cost introduced: $0
+
+Next large brick:
+**Revenue Activation + 24/7 Demand Capture V1**
+
+Reason for priority change:
+The product now has enough planning/intelligence foundation to begin deliberate monetization measurement. Revenue activation moves ahead of additional broad feature expansion so the system can start proving traffic → intent → provider clicks → attributed/approved/cleared revenue while later product modules continue to mature.
