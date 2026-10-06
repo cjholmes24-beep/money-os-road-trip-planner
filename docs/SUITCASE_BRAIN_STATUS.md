@@ -74,3 +74,16 @@ No live event feed, ticket inventory, vendor engine, paid integration, or event 
 Existing high-intent tools and Plan My Trip now offer relevant comparison checklists with a reusable runtime-verified provider action gate. Drive and disclosures remain unchanged; no new direct affiliate URL or account approval is assumed. Optional local history is off by default and captures broad enumerated planning signals only, with view/clear/export at `/revenue-dashboard/`. It does not save destination text, exact budget/dates, identities, precise location, health, or payment data.
 
 The dashboard separates ATTENTION, INTENT and MONEY. Clicks do not become bookings or revenue. Redacted provider-report JSON imports are labeled USER IMPORTED — UNVERIFIED and cannot unlock verified money milestones. With no live payout/report adapter, verified CLEARED REVENUE remains $0. The trip schema stays V3. No paid service, backend, customer payment, autonomous traffic, or national-trend claim was introduced. See `docs/REVENUE_ACTIVATION_ARCHITECTURE.md` and `docs/TRAVELPAYOUTS_REVENUE_ACTIVATION_AUDIT_2026-10-06.md`.
+
+
+## Revenue activation cleanup audit before merge
+
+Independent review hardened the revenue proof boundary:
+
+- provider-action surfaces fail closed on unknown values
+- USER_IMPORTED state counts are separated from runtime-verified provider state counts
+- a future provider adapter can register only runtime-trusted report objects
+- cleared report timestamps cannot precede booking dates
+- monetization registry ids and routing metadata receive stricter validation
+
+No new provider reporting connection or verified direct affiliate URL was introduced. Verified cleared revenue remains $0 unless trusted provider evidence is supplied at runtime.
