@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-06
 Canonical repository: `cjholmes24-beep/money-os-road-trip-planner`
-Last verified product-code baseline before handoff-document commits: `0d97c38ec08aa079ab1dd8e305d4b54e92c6c062`
+Last verified product-code baseline before handoff-document commits: `7170e1b8a23c9b424777a2784f7d7bdd7899b932`
 
 **Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
 
@@ -79,6 +79,10 @@ The public site is deployed on GitHub Pages and currently includes:
 - redacted provider-report import path that remains USER_IMPORTED — UNVERIFIED
 - runtime-only provider-action and provider-report trust gates for future verified adapters
 - proof milestones from qualified intent through cleared revenue without inferring money from clicks
+- First-Dollar Revenue Sprint V1 with eight priority money pages strengthened for result → next-decision flow
+- first-dollar control panel, MONEY BLOCKERS, and opportunity-gap report
+- improved crawl/search metadata on priority money pages and corrected sitemap XML
+- first-dollar monetization audit and owner operations checklist
 - visible affiliate disclosure
 - sitemap/canonical metadata/robots
 - IndexNow automated distribution
@@ -119,57 +123,44 @@ Do not display simulated live data in these modules.
 
 ## Latest completed engineering cycle
 
-Codex PR #13 built Revenue Activation + Demand Capture V1 from main `a579e686a8617a09b98a2dc4a57896f08bdffae3`.
+Codex PR #15 built First-Dollar Revenue Sprint V1 from main `7f580647c5de38669fd7f321297b2e6310e8b68a`.
 
 Codex delivered:
-- reusable revenue/demand intelligence module
-- explicit local funnel states from visitor activity through provider click
-- provider-report money states kept separate from local click events
-- ten-category monetization opportunity registry
-- high-intent next-action checklists on existing travel tools
-- Plan My Trip NEXT USEFUL ACTIONS
-- opt-in browser-local telemetry with privacy allowlists
-- local funnel history view/clear/export
-- provider-report import/clear/export
-- revenue dashboard separating ATTENTION, INTENT, and MONEY
-- proof milestones through cleared revenue
-- Travelpayouts revenue-activation audit
-- expanded tests, static validation, and CI
+- money-path audit across ten monetization categories
+- eight priority high-intent pages strengthened around useful result → next decision → optional monetization
+- search titles/descriptions and contextual internal money paths improved
+- first-dollar control panel with deterministic MONEY BLOCKERS
+- local opportunity-gap report and export
+- stricter crawl/sitemap validation
+- first-dollar operations checklist
+- current Travelpayouts Drive installation/reporting audit
+- first-dollar regression coverage and CI
 
-Codex candidate reported:
-- 424 dependency-free assertions passed
-- 27 Chromium mobile browser checks passed
-- no direct affiliate URL or provider-report API connected
+Codex candidate verification reported:
+- 507 dependency-free assertions passed
+- 54 Chromium mobile checks passed with external network blocked
+- no new verified direct provider URL, paid infrastructure, or fake traffic/revenue
 - owner cost $0
 
-Independent cleanup found and repaired:
-- unknown provider-action surface values could silently fall through to VERIFIED_DIRECT
-- money state counts combined USER_IMPORTED claims with future runtime-verified provider records
-- the dashboard lacked a safe runtime registration hook for future verified provider reports
-- cleared report chronology did not explicitly reject clearing before booking
-- monetization registry validation did not reject duplicate ids or malformed routing/documentation metadata
+Independent review:
+- inspected the actual PR, revenue logic, dashboard, priority-page ordering, sitemap/static checks, and official Travelpayouts Drive documentation
+- no merge-blocking code defect found
+- confirmed Drive documentation still describes automatic monetization after installation and Content Analytics reporting for clicks/bookings/page performance
+- confirmed the repository still cannot prove account-specific Drive Active status, enabled programs, or real provider earnings without authenticated account evidence
 
-Cleanup repairs:
-- provider-action surface values now fail closed
-- verified and imported money state counts are separated
-- future provider adapters may register only runtime-trusted report objects
-- cleared timestamps cannot precede booking dates
-- registry ids/planning paths/documentation URLs receive stricter validation
-- cleanup regressions added
-
-PR #13 merged after latest-head CI success.
+PR #15 merged after latest-head CI success.
 
 Verified product main:
-`0d97c38ec08aa079ab1dd8e305d4b54e92c6c062`
+`7170e1b8a23c9b424777a2784f7d7bdd7899b932`
 
 Post-merge verification:
 - Suitcase Brain checks: SUCCESS
 - IndexNow notification: SUCCESS
 - GitHub Pages deployment: SUCCESS
 - owner cost introduced: $0
-- no paid infrastructure, direct affiliate URL, provider reporting connection, or customer-payment custody introduced
-- verified CLEARED REVENUE remains $0 until trusted provider evidence exists
-- Travelpayouts official docs confirm Drive/content analytics can report visits, clicks, bookings and earnings, while private statistics/payment APIs require an API token; those private APIs remain unconnected
+- no revenue is claimed
+- no direct affiliate route was fabricated
+- current first-dollar blockers are operational/account/traffic evidence, not another missing general product engine
 
 ## Standard build workflow
 
@@ -193,40 +184,37 @@ Owner controls priorities and green-lights the sequence.
 
 ## Current next engineering brick
 
-Primary next brick:
-**24/7 LEAD + OPPORTUNITY ENGINE V1**
+Primary next gate:
+**FIRST-DOLLAR OPERATIONS — VERIFY MONETIZATION + GET REAL TRAFFIC**
 
-This brick should convert the newly built local demand vocabulary and existing search/distribution foundation into an always-on, zero-cost opportunity loop without fake traffic or paid acquisition.
+Do not start another broad engineering brick before this gate is checked.
 
-Goals:
-- build a deterministic demand/opportunity queue using real site/search/provider signals that are actually available
-- automate scheduled inspection of search/distribution health, content freshness, seasonal/event windows, monetizable-category coverage, and pages with intent but weak/no provider-routing capability
-- produce prioritized opportunity records for human/Codex follow-up instead of blindly auto-publishing
-- distinguish content opportunity, provider-routing opportunity, source-freshness opportunity, and revenue-proof opportunity
-- use only lawful $0 data paths and GitHub Actions/static artifacts where appropriate
-- preserve privacy and avoid fingerprinting, cold outreach, spam, fake traffic, or bot clicks
-- preserve recommendation neutrality; expected commission must not override traveler fit
-- keep public Pages static and secrets out of browser code
-- prepare authenticated Travelpayouts reporting integration architecture without exposing tokens or claiming data not actually retrieved
-- owner cost remains $0
+Immediate actions:
+1. In the authenticated Travelpayouts account, verify the exact Suitcase Brain project shows Drive ACTIVE.
+2. Verify which programs/brands are actually enabled/approved for this project.
+3. Confirm Content Analytics begins showing real page/click activity when genuine users arrive.
+4. If an account-approved exact provider route/tool is available and permitted, wire that specific route in a separate tightly scoped integration PR; do not guess URLs.
+5. Get real organic visitors onto the eight deployed high-intent pages and watch the actual funnel.
+6. Check Bookings / commission states / payouts from provider evidence.
+7. Record FIRST ELIGIBLE PROVIDER CLICK → FIRST ATTRIBUTED BOOKING → FIRST APPROVED COMMISSION → FIRST CLEARED DOLLAR.
 
-Hard operating loop:
-OBSERVE → QUALIFY → PRIORITIZE → BUILD/REFRESH → DISTRIBUTE → MEASURE → REPEAT
+Only after this operational gate exposes the real bottleneck should the next engineering work be selected.
 
-Do not call this 24/7 earning until real recurring provider-reported cleared revenue is proven.
+Likely follow-up if traffic is the blocker:
+**24/7 Lead + Opportunity Engine V1**
 
-Following large bricks:
-1. Destination Discovery + Itinerary Brain
-2. Food / Culture / Vibe / Age-Fit / Local Discovery
-3. Vendor / Exhibitor Opportunity Intelligence
-4. Safety / Quality / Reviews
-5. Group / Reunion / Business logistics expansion
-6. National search/AI authority expansion
-7. continued conversion/revenue optimization
+Likely follow-up if provider routing is the blocker:
+**Travelpayouts Verified Provider Routing V1**
+
+Likely follow-up if clicks occur but bookings do not:
+**Conversion Optimization V1**
+
+Hard rule:
+No unrelated product expansion jumps ahead of the first-dollar proof chain.
 
 ## Revenue state
 
-The product is revenue-capable through approved affiliate infrastructure and now has Revenue Activation + Demand Capture V1, but no verified cleared revenue has been proven. Browser-local clicks or imported claims do not count as earned money.
+The product is deployed with Revenue Activation + Demand Capture V1 and First-Dollar Revenue Sprint V1. The public Drive script is installed on the priority money pages, but authenticated account status/program approval and real traffic/booking evidence still must be verified. No verified cleared revenue has been proven. Browser-local clicks or imported claims do not count as earned money.
 
 Canonical revenue proof sequence:
 FIRST ORGANIC VISITOR → FIRST AFFILIATE CLICK → FIRST BOOKING → FIRST CONFIRMED COMMISSION → FIRST CLEARED DOLLAR
