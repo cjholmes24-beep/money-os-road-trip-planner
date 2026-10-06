@@ -216,7 +216,7 @@ PR #11 merge:
 Post-merge:
 - Suitcase Brain checks: SUCCESS
 - IndexNow notification: SUCCESS
-- GitHub Pages deployment: pending final confirmation at ledger-write time
+- GitHub Pages deployment: SUCCESS
 - owner cost introduced: $0
 
 Next large brick:
