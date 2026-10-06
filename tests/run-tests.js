@@ -295,6 +295,7 @@ const T = require("../transport-lodging-intelligence.js");
   eq(healthy.data,[1]);
 
   assertions += await require("./event-tests.js")();
+  assertions += await require("./revenue-tests.js")();
   console.log(`Suitcase Brain: ${assertions} assertions passed`);
 })().catch(err => {
   console.error(err);
