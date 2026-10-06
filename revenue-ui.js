@@ -9,7 +9,7 @@
   const isDashboard=sourcePage==='/revenue-dashboard/';
   const actions=new Map();
   let registry=null,currentTrip=null,consent=false,engaged=false;
-  let observed=new WeakSet();
+  let observed=new WeakSet(),runtimeVerifiedReports=[];
   let storage,ledger,reports;
   try{storage=window.localStorage;ledger=R.demandStore(storage);reports=R.reportStore(storage);consent=storage.getItem(R.CONSENT_KEY)==='yes';}catch(_){storage=null;}
   const labels={FLIGHTS:'Check flight options',ACCOMMODATION:'Compare places to stay',RENTAL_CARS:'Check rental options',TRANSFERS:'Check transfer options',BUS_RAIL:'Compare bus / rail options',CRUISES:'Prepare cruise comparison',ESIM:'Check eSIM options',ACTIVITIES:'Check activities',TRAVEL_INSURANCE:'Compare travel insurance needs',FLIGHT_COMPENSATION:'Check flight compensation eligibility'};
@@ -80,13 +80,28 @@ record('BLUEPRINT_GENERATED');renderTripActions();for(const [id,type] of [['tran
   window.addEventListener('storage',e=>{if(e.key===R.CONSENT_KEY){consent=e.newValue==='yes';if($('telemetryConsent'))$('telemetryConsent').checked=consent;}if(isDashboard&&[R.DEMAND_KEY,R.REPORT_KEY].includes(e.key))renderDashboard();});
   // Future verified provider adapters can register a runtime capability. Plain JSON,
   // href mutations, and generic third-party DOM observations never grant eligibility.
-  window.RevenueActivation=Object.freeze({registerAction(action){if(!R.actionUrl(action))throw Error('Unverified provider action.');actions.set(action.category,action);renderPageAction();renderTripActions();}});
+  window.RevenueActivation=Object.freeze({
+    registerAction(action){
+      if(!R.actionUrl(action))throw Error('Unverified provider action.');
+      actions.set(action.category,action);renderPageAction();renderTripActions();
+    },
+    registerProviderReports(records){
+      if(!Array.isArray(records)||records.some(r=>!R.isTrustedReport(r)))throw Error('Only runtime-verified provider reports may be registered.');
+      runtimeVerifiedReports=records.slice();
+      renderDashboard();
+    },
+    clearProviderReports(){
+      runtimeVerifiedReports=[];
+      renderDashboard();
+    }
+  });
   function download(name,body){const url=URL.createObjectURL(new Blob([body],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   function summaryCards(map){return Object.entries(map).map(([k,v])=>`<div><span>${escape(k.replaceAll('_',' '))}</span><strong>${v}</strong></div>`).join('')||'<p>No local activity.</p>';}
   function renderDashboard(){
     if(!isDashboard)return;
-    let signals=[],money=[];
-    const failures=[];try{signals=ledger?.read()||[];}catch(e){failures.push(e.message);}try{money=reports?.read()||[];}catch(e){failures.push(e.message);}$('dashboardError').textContent=failures.join(' ');
+    let signals=[],importedMoney=[];
+    const failures=[];try{signals=ledger?.read()||[];}catch(e){failures.push(e.message);}try{importedMoney=reports?.read()||[];}catch(e){failures.push(e.message);}$('dashboardError').textContent=failures.join(' ');
+    const money=[...runtimeVerifiedReports,...importedMoney];
     const insight=R.demandInsights(signals),summary=R.moneySummary(money);
     $('attentionSummary').innerHTML=summaryCards(insight.attention);$('intentSummary').innerHTML=summaryCards(insight.intent);
     $('demandInsights').innerHTML=Object.entries(insight.categories).map(([c,v])=>`<p>${escape(c)}: ${v.selections} need selection(s), ${v.providerClicks} eligible provider click(s).</p>`).join('')||'<p>No category selections recorded in this browser.</p>';
@@ -94,9 +109,10 @@ record('BLUEPRINT_GENERATED');renderTripActions();for(const [id,type] of [['tran
     $('demandInsights').innerHTML+=Object.entries(insight.pages).map(([path,n])=>`<p>${escape(path)}: ${n} recorded eligible provider click(s) in this browser.</p>`).join('');
     const cleared=Object.entries(summary.verifiedClearedByCurrency).map(([c,n])=>`${n.toFixed(2)} ${c}`).join(' · ');
     $('clearedRevenue').textContent=`CLEARED REVENUE: ${cleared||'$0'}`;
-    $('moneySummary').innerHTML=summaryCards(summary.counts);
+    $('verifiedMoneySummary').innerHTML=summaryCards(summary.verifiedCounts);
+    $('moneySummary').innerHTML=summaryCards(summary.importedCounts);
     $('importedMoney').textContent=`USER IMPORTED — UNVERIFIED claimed cleared totals: ${Object.entries(summary.importedClearedByCurrency).map(([c,n])=>`${n.toFixed(2)} ${c}`).join(' · ')||'None'}. These do not count as verified cleared revenue.`;
-    $('providerReports').innerHTML=money.map(r=>`<article class="option-card"><strong>PROVIDER REPORTED / USER IMPORTED — UNVERIFIED</strong><p>${escape(r.provider)} · ${escape(r.category)} · ${escape(r.state)} · ${r.commission_amount===null?'AMOUNT UNKNOWN':`${r.commission_amount.toFixed(2)} ${escape(r.commission_currency)}`}</p><p>Reported ${escape(r.reported_at)} · Evidence identifier ${escape(r.evidence_source)}. No independent verification.</p></article>`).join('')||'<p>No provider reports imported.</p>';
+    $('providerReports').innerHTML=money.map(r=>{const trusted=R.isTrustedReport(r);return `<article class="option-card"><strong>${trusted?'PROVIDER REPORTED — RUNTIME VERIFIED':'USER IMPORTED — UNVERIFIED'}</strong><p>${escape(r.provider)} · ${escape(r.category)} · ${escape(r.state)} · ${r.commission_amount===null?'AMOUNT UNKNOWN':`${r.commission_amount.toFixed(2)} ${escape(r.commission_currency)}`}</p><p>Reported ${escape(r.reported_at)} · Evidence identifier ${escape(r.evidence_source)}. ${trusted?'Verified by the active provider adapter for this runtime.':'No independent verification.'}</p></article>`;}).join('')||'<p>No provider reports available.</p>';
     $('revenueMilestones').innerHTML=R.milestones(signals,money).map(m=>`<article><strong>${m.achieved?'LOCAL EVIDENCE RECORDED':'NOT PROVEN'} · ${escape(m.name)}</strong><p>${escape(m.reason)}</p></article>`).join('');
     $('funnelHistory').innerHTML=signals.slice().reverse().map(e=>`<li>${escape(e.timestamp)} · ${escape(e.type)} · ${escape(e.state||'LOCAL SIGNAL')} · ${escape(e.intent_level)} · ${escape(e.dimensions.category||'GENERAL')}<p>${escape(e.reasons.join(' '))}</p></li>`).join('')||'<li>No local funnel events.</li>';
   }
