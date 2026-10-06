@@ -197,3 +197,9 @@ The product is not complete because a page exists. A module is green only when t
 Price completeness precedes price ordering. A partial price with unresolved mandatory costs cannot win a lowest-total lens. Comparisons remain separate and explainable: known cost, duration, unknown exposure, cancellation exposure, cash hold and explicit traveler fit. There is no universal best score, and commission/payout fields are forbidden inputs to traveler ordering.
 
 Booking is a separate opportunity record. A provider relationship does not make the provider authoritative for unrelated facts, a click is not revenue, and only an HTTPS URL with `VERIFIED` link status can become a direct booking CTA. The current static product takes no customer payment, service fee, cancellation fee or booking fee.
+
+## Events Intelligence Core V1 (pending PR review)
+
+Schema V3 persists browser-local canonical events and explicit occurrences. The Plan My Trip event workspace supports add/edit/remove, local date/category/location/season/price/age/family/status filters, and explainable trip-date matches. Category does not imply age, cost, or family fit. Organizer status is independent of UPCOMING/IN_PROGRESS/PAST/DATE_UNKNOWN. Unknown prices stay null; complete required admission cost needs base and mandatory fees.
+
+User-entered events cannot claim official runtime verification. Reload/import downgrades source-backed snapshots and candidate URLs require runtime trust to become official links. No live event feed, nationwide inventory, paid integration, affiliate event ranking, or vendor engine was connected. Source failures become UNAVAILABLE without replacing user records or breaking transport/lodging. See `docs/EVENT_INTELLIGENCE_ARCHITECTURE.md`, `docs/EVENT_SOURCE_AUDIT_2026-10-05.md`, and `data/event-source-registry.json`.

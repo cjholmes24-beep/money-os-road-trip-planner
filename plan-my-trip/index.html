@@ -124,8 +124,51 @@
 <div id="lodgingOptions" class="option-grid"></div><h4>Comparison lenses</h4><div id="lodgingComparison" class="comparison-grid"></div>
 <div class="source-note"><strong>NO SAFE LIVE LODGING INVENTORY SOURCE CONNECTED YET.</strong> User-entered quotes remain saved with this trip. Cancellation policies stay UNKNOWN unless entered from a policy the traveler verified.</div>
 </section>
+<section class="card intelligence-workspace" aria-labelledby="eventsTitle">
+<p class="eyebrow">EVENTS &amp; EXPERIENCES</p><h3 id="eventsTitle">Event Intelligence</h3>
+<p class="source-note">LIVE EVENT SOURCE NOT CONNECTED. These are local records, not live ticket inventory. USER ENTERED does not mean officially verified. Category never implies age, price, or family fit.</p>
+<details id="eventEditor"><summary class="primary button-link">ADD EVENT</summary>
+<form id="eventForm" class="quote-form"><input id="eventEditId" type="hidden"><div class="grid"><label>Title<input id="event_title" type="text" required maxlength="2000"></label>
+<label>Location<input id="event_location" type="text"  maxlength="2000"></label>
+<label>City<input id="event_city" type="text"  maxlength="2000"></label>
+<label>Start (ISO date/time)<input id="event_start_date_time" type="text" placeholder="2026-10-31T19:00:00-04:00" maxlength="2000"></label>
+<label>End (ISO date/time)<input id="event_end_date_time" type="text" placeholder="UNKNOWN" maxlength="2000"></label>
+<label>IANA timezone<input id="event_timezone" type="text" placeholder="America/New_York" maxlength="2000"></label>
+<label>Minimum age if known<input id="event_minimum_age" type="number" min="0" step="1" maxlength="2000"></label>
+<label>Currency<input id="event_currency" type="text" value="USD" pattern="[A-Z]{3}" maxlength="2000"></label>
+<label>Source URL (HTTPS, unverified)<input id="event_official_event_url" type="url"  maxlength="2000"></label>
+<label>Notes<input id="event_notes" type="text"  maxlength="2000"></label>
+<label>Source note<input id="event_source_note" type="text"  maxlength="2000"></label>
+<label>Tags (comma separated)<input id="event_tags" type="text"  maxlength="2000"></label>
+<label>Recurrence description (no generated dates)<input id="event_recurrence" type="text"  maxlength="2000"></label>
+<label>Category<select id="event_category"></select></label>
+<label>Price type<select id="event_price_type"></select></label>
+<label>Indoor/outdoor<select id="event_indoor_outdoor"></select></label>
+<label>Organizer status<select id="event_event_status"></select></label>
+<label>Seasonal theme<select id="event_seasonal_theme" multiple size="4"></select></label>
+<label>Explicitly family-friendly<select id="event_family_friendly"></select></label>
+<label>Base Price (blank = UNKNOWN)<input id="event_base_price" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Mandatory Fees (blank = UNKNOWN)<input id="event_mandatory_fees" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Parking Cost (blank = UNKNOWN)<input id="event_parking_cost" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label>Optional Cost (blank = UNKNOWN)<input id="event_optional_cost" type="number" min="0" step=".01" placeholder="UNKNOWN"></label>
+<label class="check"><input id="event_all_day" type="checkbox"> All day (enter YYYY-MM-DD; end day inclusive)</label></div>
+<label>Explicit occurrences (optional JSON array)<textarea id="event_occurrences" rows="4" placeholder="Leave blank to use start/end above"></textarea><span class="hint">For multiple dates, supply objects with start_date_time, end_date_time, timezone, all_day, and status. Explicit occurrences are authoritative; recurrence descriptions do not expand them.</span></label>
+<p class="hint">Timed values require Z or an explicit UTC offset. Use the event's local offset for its date. All-day time state requires an IANA timezone. Blank end time stays unknown. Parking is an optional travel cost in V1; include any mandatory admission charge in mandatory fees.</p>
+<div class="button-row"><button type="submit" class="primary">Save event</button><button id="cancelEventEdit" type="button" class="secondary">Cancel edit</button></div><p id="eventFormError" role="alert" class="error"></p></form></details>
+<fieldset class="planner-fieldset"><legend>Filter local events</legend><div id="eventFilters" class="grid">
+<label>From<input id="eventFilter_start" type="date"></label><label>Through<input id="eventFilter_end" type="date"></label>
+<label>Location text<input id="eventFilter_location"></label><label>Known age eligibility<input id="eventFilter_age" type="number" min="0" step="1"></label><label>Category<select id="eventFilter_category"></select></label>
+<label>Price type<select id="eventFilter_price_type"></select></label>
+<label>Indoor/outdoor<select id="eventFilter_indoor_outdoor"></select></label>
+<label>Organizer status<select id="eventFilter_event_status"></select></label>
+<label>Seasonal theme<select id="eventFilter_seasonal_theme"></select></label>
+<label>Explicitly family-friendly<select id="eventFilter_family_friendly"></select></label>
+</div><p class="hint">Age and family filters require explicitly known facts. Location uses text only; no radius or distance is inferred.</p></fieldset>
+<p id="eventCounts" aria-live="polite"></p><div id="eventRecords" class="option-grid"></div>
+<h4>MATCHING EVENTS</h4><p class="hint">Dates overlap the trip's civil-date window. Destination text must match when supplied. Reasons explain fit; no score or payout ranking is used. Canceled/postponed records remain in the workspace and are excluded from matches.</p><div id="eventMatches" class="option-grid"></div>
+</section>
 <section class="card"><h3>Connected intelligence</h3><div id="fuelReference" class="intel-card" hidden><div><span class="intel-badge" id="fuelFreshness">WEEKLY GOVERNMENT DATA</span><h3 id="fuelReferenceStatus">Weekly fuel reference</h3><strong id="fuelReferenceValue" class="intel-value">—</strong><p id="fuelReferenceMeta" class="muted"></p></div><a id="fuelReferenceSource" class="secondary" href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" rel="noopener">EIA source ↗</a></div><div class="intel-card"><div><span class="intel-badge">LIVE · OPT-IN</span><h3 id="weatherStatus">Weather where you are</h3><p id="weatherBody" class="muted">Current-location permission is requested only when you click. The static planner does not store your location.</p><p id="weatherMeta" class="muted"></p></div><button id="weatherHereButton" class="secondary" type="button">Check live weather</button></div></section>
 <section class="card"><h3>Intelligence modules</h3><div class="module-grid">Transportation|Lodging|Fuel|Weather|Food|Events|Activities|Culture|Nightlife|Safety|Discounts|Pets/accessibility|Business records|Booking exposure</div><p class="muted">Modules without a source say “Live source not connected yet.” Fuel and opt-in U.S. weather are the first source-backed exceptions.</p></section>
 <section class="card"><h3>Booking opportunities</h3><p class="muted">Recommendation logic is independent of commission. Direct partner URLs remain absent until account-verified.</p><div class="booking-grid">Flights|Accommodation|Rental cars|Transfers|Bus/rail|Cruises|eSIM|Activities|Insurance|Flight compensation</div></section></section>
 </main><footer class="site-footer"><div><strong>Suitcase Brain</strong><p>Travel intelligence powered by Money OS. Working brand pending final trademark clearance.</p></div><div><strong>Affiliate disclosure</strong><p>Travelpayouts Drive may show relevant travel offers or convert eligible travel links into affiliate links. We may earn a commission if you book through an eligible link, at no additional cost to you. Commission never overrides trip fit or safety.</p></div></footer>
-<script src="../trip-intelligence.js"></script><script src="../transport-lodging-intelligence.js"></script><script src="planner-ui.js"></script><script src="../source-intelligence.js"></script><script>(function(){document.querySelectorAll('.module-grid,.booking-grid').forEach(el=>{el.innerHTML=el.textContent.split('|').map(x=>`<article><strong>${x}</strong><span>${['Fuel','Weather'].includes(x)?'Connected above':['Transportation','Lodging'].includes(x)?'User-entered intelligence connected above':'Live source not connected yet.'}</span></article>`).join('')})})();</script></body></html>
+<script src="../event-intelligence.js"></script><script src="../trip-intelligence.js"></script><script src="../transport-lodging-intelligence.js"></script><script src="planner-ui.js"></script><script src="../source-intelligence.js"></script><script>(function(){document.querySelectorAll('.module-grid,.booking-grid').forEach(el=>{el.innerHTML=el.textContent.split('|').map(x=>`<article><strong>${x}</strong><span>${['Fuel','Weather'].includes(x)?'Connected above':['Transportation','Lodging','Events'].includes(x)?'User-entered intelligence connected above':'Live source not connected yet.'}</span></article>`).join('')})})();</script></body></html>

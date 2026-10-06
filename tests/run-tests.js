@@ -12,7 +12,7 @@ const T = require("../transport-lodging-intelligence.js");
 
   // Core V2 + V1 migration.
   let t = B.createTrip();
-  eq(t.schema_version, 2);
+  eq(t.schema_version, 3);
   ok(B.validateTrip(t).valid);
   ok(B.validateTrip(JSON.parse(JSON.stringify(t))).valid, "canonical serialization");
 
@@ -21,7 +21,7 @@ const T = require("../transport-lodging-intelligence.js");
   delete v1.transportation_options;
   delete v1.lodging_options;
   const migrated = B.migrateTrip(v1);
-  eq(migrated.schema_version, 2);
+  eq(migrated.schema_version, 3);
   eq(migrated.transportation_options, []);
   eq(migrated.lodging_options, []);
   ok(B.validateTrip(migrated).valid);
@@ -294,6 +294,7 @@ const T = require("../transport-lodging-intelligence.js");
   eq(failed.error,"PROVIDER UNAVAILABLE");
   eq(healthy.data,[1]);
 
+  assertions += await require("./event-tests.js")();
   console.log(`Suitcase Brain: ${assertions} assertions passed`);
 })().catch(err => {
   console.error(err);

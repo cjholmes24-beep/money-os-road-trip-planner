@@ -2,7 +2,7 @@
 
 Date: 2026-10-04
 Architecture cost: **$0 owner cost**
-Current browser-local schema: **V2** (V1 import/save migration supported)
+Current task-branch browser-local schema: **V3** (V1→V2→V3 and V2→V3 import/save migration supported; this brick is pending PR review)
 
 ## Implemented
 
@@ -47,3 +47,9 @@ Independent PR cleanup strengthened the V1 transport/lodging layer before merge:
 - transport/lodging option bodies are validated on save, load, import, export, and blueprint generation
 
 Browser automation was unavailable for this engineering environment, so no browser smoke run is claimed. GitHub Actions supplies syntax, unit, static-site, JSON, provider-boundary, and secret-pattern validation.
+
+## Events Intelligence Core V1 (pending PR review)
+
+Schema V3 persists browser-local canonical events and explicit occurrences. The Plan My Trip event workspace supports add/edit/remove, local date/category/location/season/price/age/family/status filters, and explainable trip-date matches. Category does not imply age, cost, or family fit. Organizer status is independent of UPCOMING/IN_PROGRESS/PAST/DATE_UNKNOWN. Unknown prices stay null; complete required admission cost needs base and mandatory fees.
+
+User-entered events cannot claim official runtime verification. Reload/import downgrades source-backed snapshots and candidate URLs require runtime trust to become official links. No live event feed, nationwide inventory, paid integration, affiliate event ranking, or vendor engine was connected. Source failures become UNAVAILABLE without replacing user records or breaking transport/lodging. See `docs/EVENT_INTELLIGENCE_ARCHITECTURE.md`, `docs/EVENT_SOURCE_AUDIT_2026-10-05.md`, and `data/event-source-registry.json`.
