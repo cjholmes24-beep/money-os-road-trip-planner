@@ -18,7 +18,7 @@ Timed dates require ISO 8601 with Z or an explicit offset, avoiding host-timezon
 
 ## Trust and failure isolation
 
-Only runtime adapter code using `normalizeEvent(input, {trustedSource:true})` can create SOURCE_BACKED runtime records. This is a code capability, never a persisted data property. Trusted normalized records are deeply frozen and held in a private WeakSet. Ordinary normalization forces USER_ENTERED monetary/source facts regardless of incoming VERIFIED/PUBLISHED/OFFICIAL claims. There is no OFFICIAL truth state.
+Only runtime adapter code using `normalizeEvent(input, {trustedSource:true})` can create SOURCE_BACKED runtime records. A trusted adapter with an absent or unsupported fact type fails closed to `UNKNOWN`; it never becomes `USER_ENTERED` by accident. This is a code capability, never a persisted data property. Trusted normalized records are deeply frozen and held in a private WeakSet. Ordinary normalization forces USER_ENTERED monetary/source facts regardless of incoming VERIFIED/PUBLISHED/OFFICIAL claims. There is no OFFICIAL truth state.
 
 Both candidate URLs require HTTPS without URL credentials. `officialUrl` additionally requires the original runtime object and fresh metadata. JSON copies cannot recreate this capability. The UI shows user URLs as unverified text, not booking links.
 
