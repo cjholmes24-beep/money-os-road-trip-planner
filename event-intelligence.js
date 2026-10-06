@@ -121,11 +121,14 @@
     if (!v.valid) throw Error(v.errors.join(' '));
     return clone(events).map(e => {
       const wasSourceBacked = e.record_origin === 'SOURCE_BACKED';
+      const unverifiedSnapshot = wasSourceBacked || e.record_origin === 'IMPORTED';
       COSTS.forEach(k => { if (['VERIFIED', 'PUBLISHED'].includes(e[k].state)) e[k].state = 'USER_ENTERED'; });
-      const downgrade = s => wasSourceBacked ? {
+      const downgrade = s => unverifiedSnapshot ? {
         ...s,
         fact_type: 'UNKNOWN',
-        notes: [text(s?.notes), 'Imported source-backed snapshot requires runtime re-verification.'].filter(Boolean).join(' ')
+        notes: text(s?.notes).includes('runtime re-verification')
+          ? text(s?.notes)
+          : [text(s?.notes), 'Imported source-backed snapshot requires runtime re-verification.'].filter(Boolean).join(' ')
       } : sourceMetadata(s);
       e.source = downgrade(e.source);
       e.last_verified = '';
