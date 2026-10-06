@@ -51,12 +51,12 @@
   function validateRegistry(registry){
     const errors=[];
     if(!object(registry)||registry.version!==1||!Array.isArray(registry.opportunities))return{valid:false,errors:['Invalid monetization registry.']};
-    const seen=new Set();
+    const seen=new Set(),seenIds=new Set();
     registry.opportunities.forEach(r=>{
-      if(!object(r)||!safeToken(r.id)||!CATEGORIES.includes(r.category)||seen.has(r.category))errors.push('Invalid or duplicate opportunity.');
-      seen.add(r?.category);
+      if(!object(r)||!safeToken(r.id)||seenIds.has(r.id)||!CATEGORIES.includes(r.category)||seen.has(r.category))errors.push('Invalid or duplicate opportunity.');
+      seen.add(r?.category);seenIds.add(r?.id);
       if(!['TRAVELPAYOUTS_DRIVE','VERIFIED_DIRECT','NOT_CONFIGURED'].includes(r?.monetization_surface)||!['DRIVE_INSTALLED_PROGRAM_UNKNOWN','APPROVED','UNKNOWN','NOT_APPROVED'].includes(r?.provider_relationship_status))errors.push('Invalid relationship/surface.');
-      if(typeof r?.verified_direct_url_available!=='boolean'||![true,false,null].includes(r?.Travelpayouts_Drive_eligible)||typeof r?.source_of_truth!=='string'||!date(r?.last_verified)||typeof r?.notes!=='string')errors.push('Missing opportunity evidence.');
+      if(typeof r?.verified_direct_url_available!=='boolean'||![true,false,null].includes(r?.Travelpayouts_Drive_eligible)||typeof r?.source_of_truth!=='string'||!date(r?.last_verified)||typeof r?.notes!=='string'||typeof r?.action_label!=='string'||!PAGES.includes(r?.planning_path)||!httpsUrl(r?.documentation_url))errors.push('Missing opportunity evidence or safe routing metadata.');
       // Declarative JSON never supplies a clickable affiliate URL. Runtime adapters
       // must verify account approval and the exact URL independently.
       if(r?.direct_url||r?.affiliate_url||r?.verified_direct_url_available&&r?.provider_relationship_status!=='APPROVED')errors.push('Unverified direct URL claim.');
@@ -65,8 +65,9 @@
     return{valid:!errors.length,errors};
   }
   function createProviderAction(input,context={}){
-    if(context.trusted!==true||!object(input)||!CATEGORIES.includes(input.category)||!httpsUrl(input.url)||input.relationship_status!=='APPROVED'||!safeToken(input.provider)||!stamp(input.verified_at))throw Error('Provider action requires runtime verification, an approved relationship, and HTTPS.');
-    const action=Object.freeze({id:uid(),category:input.category,url:httpsUrl(input.url),provider:input.provider,surface:input.surface==='TRAVELPAYOUTS_DRIVE'?'TRAVELPAYOUTS_DRIVE':'VERIFIED_DIRECT',verified_at:input.verified_at});
+    const surface=input?.surface||'VERIFIED_DIRECT';
+    if(context.trusted!==true||!object(input)||!CATEGORIES.includes(input.category)||!httpsUrl(input.url)||input.relationship_status!=='APPROVED'||!safeToken(input.provider)||!stamp(input.verified_at)||!['TRAVELPAYOUTS_DRIVE','VERIFIED_DIRECT'].includes(surface))throw Error('Provider action requires runtime verification, an approved relationship, a recognized surface, and HTTPS.');
+    const action=Object.freeze({id:uid(),category:input.category,url:httpsUrl(input.url),provider:input.provider,surface,verified_at:input.verified_at});
     trustedActions.add(action);return action;
   }
   function actionUrl(action){return trustedActions.has(action)?action.url:null;}
@@ -118,6 +119,7 @@
     if(r.cleared_at&&r.state!=='CLEARED_REVENUE')errors.push('Only cleared reports may have cleared_at.');
     if(stamp(r.reported_at)&&date(r.booking_date)&&r.booking_date>r.reported_at.slice(0,10))errors.push('Booking date cannot follow report date.');
     if(r.cleared_at&&Date.parse(r.cleared_at)>Date.parse(r.reported_at))errors.push('Cleared date cannot follow report date.');
+    if(r.cleared_at&&r.cleared_at.slice(0,10)<r.booking_date)errors.push('Cleared date cannot precede booking date.');
     return{valid:!errors.length,errors};
   }
   function importReports(input){
@@ -137,11 +139,13 @@
     return [...map.values()];
   }
   function moneySummary(records){
-    const result={verifiedClearedByCurrency:{},importedClearedByCurrency:{},counts:Object.fromEntries(MONEY_STATES.map(s=>[s,0])),verifiedCount:0,importedCount:0};
-    latestReports(records).forEach(r=>{const trusted=trustedReports.has(r);result.counts[r.state]++;result[trusted?'verifiedCount':'importedCount']++;
+    const emptyCounts=()=>Object.fromEntries(MONEY_STATES.map(s=>[s,0]));
+    const result={verifiedClearedByCurrency:{},importedClearedByCurrency:{},counts:emptyCounts(),verifiedCounts:emptyCounts(),importedCounts:emptyCounts(),verifiedCount:0,importedCount:0};
+    latestReports(records).forEach(r=>{const trusted=trustedReports.has(r);result.counts[r.state]++;result[trusted?'verifiedCounts':'importedCounts'][r.state]++;result[trusted?'verifiedCount':'importedCount']++;
       if(r.state==='CLEARED_REVENUE'){const target=trusted?result.verifiedClearedByCurrency:result.importedClearedByCurrency;target[r.commission_currency]=(target[r.commission_currency]||0)+r.commission_amount;}});
     return result;
   }
+  function isTrustedReport(report){return trustedReports.has(report);}
   function milestones(events=[],records=[]){
     const local=events.filter(validateDemandEvent),proof=latestReports(records).filter(r=>trustedReports.has(r));
     const cleared=proof.filter(r=>r.state==='CLEARED_REVENUE'&&r.commission_amount>0);
@@ -174,5 +178,5 @@
     for(const [theme,n] of Object.entries(seasons))observations.push(`${theme} appeared in ${n} local planning signal(s); repeated activity is counted, not national demand.`);
     return{label:'LOCAL BROWSER SIGNALS',attention,intent,categories,pages,seasons,observations,notes:'Activity counts are not unique visitors, national trends, bookings, or revenue. No destination text is retained.'};
   }
-  return{CATEGORIES,LOCAL_STATES,MONEY_STATES,FUNNEL_STATES,SIGNAL_TYPES,DIMENSIONS,VALUES,SEASONS,PAGES,DEMAND_KEY,REPORT_KEY,CONSENT_KEY,MAX_EVENTS,pagePath,contextDimensions,classifyIntent,validateRegistry,createProviderAction,actionUrl,selectTripCategories,makeDemandEvent,validateDemandEvent,demandStore,validateReport,importReports,verifyProviderReport,reportStore,latestReports,moneySummary,milestones,demandInsights};
+  return{CATEGORIES,LOCAL_STATES,MONEY_STATES,FUNNEL_STATES,SIGNAL_TYPES,DIMENSIONS,VALUES,SEASONS,PAGES,DEMAND_KEY,REPORT_KEY,CONSENT_KEY,MAX_EVENTS,pagePath,contextDimensions,classifyIntent,validateRegistry,createProviderAction,actionUrl,selectTripCategories,makeDemandEvent,validateDemandEvent,demandStore,validateReport,importReports,verifyProviderReport,isTrustedReport,reportStore,latestReports,moneySummary,milestones,demandInsights};
 });
