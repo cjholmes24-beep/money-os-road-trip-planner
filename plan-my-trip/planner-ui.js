@@ -207,6 +207,7 @@
     $("reservationRows").innerHTML=t.reservations.map(reservationRow).join("");
     feeRows();
     renderIntelligence();
+    window.dispatchEvent(new CustomEvent('suitcasebrain:trip-replaced'));
     showStep(0);
   }
 

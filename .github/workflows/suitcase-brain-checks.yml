@@ -23,6 +23,8 @@ jobs:
           python-version: "3.12"
       - name: JavaScript syntax
         run: |
+          node --check revenue-intelligence.js
+          node --check revenue-ui.js
           node --check event-intelligence.js
           node --check trip-intelligence.js
           node --check source-intelligence.js
@@ -35,6 +37,7 @@ jobs:
         run: python3 tests/validate-site.py
       - name: Validate checked-in JSON
         run: |
+          python3 -m json.tool data/monetization-opportunity-registry.json >/dev/null
           python3 -m json.tool data/event-source-registry.json >/dev/null
           python3 -m json.tool data/source-registry.json >/dev/null
           python3 -m json.tool data/eia-gas-latest.json >/dev/null

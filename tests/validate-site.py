@@ -79,6 +79,25 @@ if event_registry.get('live_event_source_connected') is not False or any(s.get('
 if 'const SCHEMA_VERSION = 3;' not in (root/'trip-intelligence.js').read_text():
     errors.append('Expected intentional trip schema V3')
 
+monetization=json.loads((root/'data/monetization-opportunity-registry.json').read_text())
+expected_categories={'FLIGHTS','ACCOMMODATION','RENTAL_CARS','TRANSFERS','BUS_RAIL','CRUISES','ESIM','ACTIVITIES','TRAVEL_INSURANCE','FLIGHT_COMPENSATION'}
+if {r.get('category') for r in monetization.get('opportunities',[])} != expected_categories:
+    errors.append('Monetization registry categories incomplete')
+for record in monetization.get('opportunities',[]):
+    if record.get('verified_direct_url_available') is not False or record.get('direct_url') or record.get('affiliate_url'):
+        errors.append('No unverified direct affiliate URL may be introduced')
+dashboard=(root/'revenue-dashboard/index.html').read_text()
+for item in ['ATTENTION','INTENT','MONEY','CLEARED REVENUE: $0','LOCAL BROWSER SIGNALS','USER IMPORTED','importProviderReports','clearDemand','exportDemand','noindex,nofollow','Affiliate disclosure']:
+    if item not in dashboard: errors.append(f'dashboard missing: {item}')
+if 'tp-em.com' in dashboard: errors.append('Diagnostic financial page must not load affiliate tracking')
+for name in ['flight-cost-planner','rental-car-trip-cost','airport-transfer-cost-planner','travel-esim-cost-planner','travel-activities-budget','travel-insurance-guide','flight-delay-compensation-guide','plan-my-trip']:
+    page=(root/name/'index.html').read_text()
+    for item in ['tp-em.com/NTgxMDU0.js','Affiliate disclosure','revenue-intelligence.js','revenue-ui.js']:
+        if item not in page: errors.append(f'{name} missing {item}')
+    if page.count('revenue-ui.js') != 1: errors.append(f'{name} duplicated revenue capture script')
+if 'NEXT USEFUL ACTIONS' not in html or 'tripRevenueActions' not in html:
+    errors.append('Planner revenue action section missing')
+
 if errors:
     print('\n'.join(errors))
     sys.exit(1)

@@ -68,3 +68,9 @@ Independent PR review hardened Events Intelligence Core V1 before merge:
 - cleanup regressions pass in GitHub Actions
 
 No live event feed, ticket inventory, vendor engine, paid integration, or event affiliate ranking was introduced.
+
+## Revenue Activation + Demand Capture V1 (task branch; pending review)
+
+Existing high-intent tools and Plan My Trip now offer relevant comparison checklists with a reusable runtime-verified provider action gate. Drive and disclosures remain unchanged; no new direct affiliate URL or account approval is assumed. Optional local history is off by default and captures broad enumerated planning signals only, with view/clear/export at `/revenue-dashboard/`. It does not save destination text, exact budget/dates, identities, precise location, health, or payment data.
+
+The dashboard separates ATTENTION, INTENT and MONEY. Clicks do not become bookings or revenue. Redacted provider-report JSON imports are labeled USER IMPORTED — UNVERIFIED and cannot unlock verified money milestones. With no live payout/report adapter, verified CLEARED REVENUE remains $0. The trip schema stays V3. No paid service, backend, customer payment, autonomous traffic, or national-trend claim was introduced. See `docs/REVENUE_ACTIVATION_ARCHITECTURE.md` and `docs/TRAVELPAYOUTS_REVENUE_ACTIVATION_AUDIT_2026-10-06.md`.
