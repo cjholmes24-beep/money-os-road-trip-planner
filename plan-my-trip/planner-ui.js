@@ -507,12 +507,7 @@
       for(const k of ['category','price_type','indoor_outdoor','event_status'])$('event_'+k).value=event[k];
       [...$('event_seasonal_theme').options].forEach(o=>o.selected=event.seasonal_theme.includes(o.value));
       const occurrence=event.occurrences[0];
-      const defaultOccurrence=event.occurrences.length===1 && occurrence &&
-        occurrence.start_date_time===event.start_date_time &&
-        occurrence.end_date_time===event.end_date_time &&
-        occurrence.timezone===event.timezone &&
-        occurrence.all_day===event.all_day &&
-        occurrence.status===event.event_status;
+      const defaultOccurrence=event.occurrences.length===1 && E.occurrenceMirrorsEvent(event,occurrence);
       $('event_occurrences').value=defaultOccurrence?'':JSON.stringify(event.occurrences,null,2);
       $('event_family_friendly').value=event.family_friendly===null?'':String(event.family_friendly);
       $('event_all_day').checked=event.all_day;$('event_source_note').value=event.source.notes;
