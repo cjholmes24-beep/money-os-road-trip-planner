@@ -75,7 +75,12 @@ module.exports = async function eventTests() {
   eq(E.occurrenceSourceState(live,live.occurrences[0]),'UNKNOWN','Occurrence freshness uses its own retrieval metadata');
   eq(E.occurrenceSourceState(live,{...live.occurrences[0]}),'UNKNOWN');
   const persisted=B.migrateTrip(B.createTrip({events:[live]}));
-  eq(persisted.events[0].base_price.state,'USER_ENTERED');eq(persisted.events[0].source.fact_type,'UNKNOWN');eq(E.sourceState(persisted.events[0]),'UNVERIFIED SNAPSHOT');eq(E.officialUrl(persisted.events[0]),null);
+  eq(persisted.events[0].record_origin,'IMPORTED');
+  eq(persisted.events[0].base_price.state,'USER_ENTERED');
+  eq(persisted.events[0].source.fact_type,'UNKNOWN');
+  ok(persisted.events[0].source.notes.includes('runtime re-verification'));
+  eq(E.sourceState(persisted.events[0]),'UNVERIFIED SNAPSHOT');
+  eq(E.officialUrl(persisted.events[0]),null);
   const transport=T.normalizeTransportOption({mode:'DRIVE',provider:'Fixture vehicle',traveler_count:1}),lodging=T.normalizeLodgingOption({property:'Fixture stay',nights:1,rooms:1,occupancy:1});
   const v2=B.createTrip({schema_version:2,transportation_options:[transport],lodging_options:[lodging]});delete v2.events;
   const v3=B.migrateTrip(v2);eq(v3.schema_version,3);eq(v3.events,[]);eq(v3.transportation_options,[transport]);eq(v3.lodging_options,[lodging]);
@@ -87,7 +92,9 @@ module.exports = async function eventTests() {
   ok(!B.validateTrip({...saved,events:[{}]}).valid);
   eq(E.matchTripEvents(trip).map(x=>x.event.id),E.matchTripEvents({...trip,events:[{...event,affiliate_commission:999999}]}).map(x=>x.event.id));
   const failed=await E.isolateSource('fixture',()=>{throw Error('private details')});eq(failed.status,'UNAVAILABLE');eq(failed.events,[]);eq(failed.error,'EVENT SOURCE UNAVAILABLE');
-  eq((await E.isolateSource('bad',async()=>[{}])).status,'UNAVAILABLE');eq((await E.isolateSource('ok',async()=>[event])).events,[event]);
+  eq((await E.isolateSource('bad',async()=>[{}])).status,'UNAVAILABLE');
+  eq((await E.isolateSource('untrusted',async()=>[event])).status,'UNAVAILABLE','A source adapter cannot promote a user-entered record.');
+  eq((await E.isolateSource('ok',async()=>[live])).events,[live]);
   eq(saved.events,[event]);eq(saved.transportation_options,[transport]);eq(saved.lodging_options,[lodging]);
   return assertions;
 };
