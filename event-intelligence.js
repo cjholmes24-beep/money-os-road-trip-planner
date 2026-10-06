@@ -22,7 +22,7 @@
   }
   function sourceMetadata(input = {}, trusted = false) {
     return {
-      fact_type: trusted && ['PUBLISHED', 'VERIFIED'].includes(input.fact_type) ? input.fact_type : 'USER_ENTERED',
+      fact_type: trusted ? (['PUBLISHED', 'VERIFIED'].includes(input.fact_type) ? input.fact_type : 'UNKNOWN') : 'USER_ENTERED',
       source_id: text(input.source_id), source_name: trusted ? text(input.source_name) || 'UNKNOWN' : 'Traveler',
       source_url: httpsUrl(input.source_url), retrieved_at: trusted ? text(input.retrieved_at) : '',
       published_at: trusted ? text(input.published_at) : '', geography: text(input.geography),
