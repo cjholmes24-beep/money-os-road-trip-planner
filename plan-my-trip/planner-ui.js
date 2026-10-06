@@ -455,7 +455,7 @@
     if (value('eventFilter_age')!=='') filters.age=Number(value('eventFilter_age'));
     if (value('eventFilter_family_friendly')!=='') filters.family_friendly=value('eventFilter_family_friendly')==='true';
     const events=E.filterEvents(trip.events,filters);
-    $('eventCounts').textContent=`USER-ENTERED EVENTS: ${trip.events.filter(e=>e.record_origin==='USER_ENTERED').length} · SOURCE-BACKED EVENTS: ${trip.events.filter(e=>e.record_origin==='SOURCE_BACKED').length} (snapshots need runtime verification) · ${events.length} local filter result(s)`;
+    $('eventCounts').textContent=`USER-ENTERED EVENTS: ${trip.events.filter(e=>e.record_origin==='USER_ENTERED').length} · LIVE SOURCE-BACKED EVENTS: ${trip.events.filter(e=>e.record_origin==='SOURCE_BACKED').length} · IMPORTED UNVERIFIED SNAPSHOTS: ${trip.events.filter(e=>e.record_origin==='IMPORTED').length} · ${events.length} local filter result(s)`;
     $('eventRecords').innerHTML=events.map(e=>eventCard(e)).join('') || '<p class="empty-state">NO MATCHING EVENT DATA for these local filters.</p>';
     const matchingTrip={...trip,destination:value('destination'),dates:{start:value('startDate'),end:value('endDate')},identity:{purpose:value('purpose'),vibe:value('vibe')},preferences:{interests:[...document.querySelectorAll('[name="interest"]:checked')].map(x=>x.value)}};
     const matches=E.matchTripEvents(matchingTrip);
@@ -506,7 +506,14 @@
       eventTextFields.forEach(k=>{$('event_'+k).value=event[k]??''});$('event_tags').value=event.tags.join(', ');
       for(const k of ['category','price_type','indoor_outdoor','event_status'])$('event_'+k).value=event[k];
       [...$('event_seasonal_theme').options].forEach(o=>o.selected=event.seasonal_theme.includes(o.value));
-      $('event_occurrences').value=event.occurrences.length>1?JSON.stringify(event.occurrences,null,2):'';
+      const occurrence=event.occurrences[0];
+      const defaultOccurrence=event.occurrences.length===1 && occurrence &&
+        occurrence.start_date_time===event.start_date_time &&
+        occurrence.end_date_time===event.end_date_time &&
+        occurrence.timezone===event.timezone &&
+        occurrence.all_day===event.all_day &&
+        occurrence.status===event.event_status;
+      $('event_occurrences').value=defaultOccurrence?'':JSON.stringify(event.occurrences,null,2);
       $('event_family_friendly').value=event.family_friendly===null?'':String(event.family_friendly);
       $('event_all_day').checked=event.all_day;$('event_source_note').value=event.source.notes;
       E.COSTS.forEach(k=>{$('event_'+k).value=event[k].value??''});
