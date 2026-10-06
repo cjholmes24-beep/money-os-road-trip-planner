@@ -3,8 +3,9 @@
 
   const B = window.SuitcaseBrain;
   const T = window.TransportLodgingIntelligence;
+  const E = window.EventIntelligence;
   const form = document.getElementById("trip-intake");
-  if (!B || !T || !form) return;
+  if (!B || !T || !E || !form) return;
 
   const $ = id => document.getElementById(id);
   const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -186,6 +187,7 @@
 
   function populate(t) {
     trip = t;
+    resetEventEditor();
     trip.transportation_options ||= [];
     trip.lodging_options ||= [];
     const set=(id,v)=>{if($(id))$(id).value=v??""};
@@ -246,6 +248,7 @@
   }
 
   function renderIntelligence(){
+    renderEvents();
     trip.transportation_options ||= [];
     trip.lodging_options ||= [];
     $("transportOptions").innerHTML=trip.transportation_options.length?trip.transportation_options.map(x=>optionCard(x,"transport")).join(""):'<p class="empty-state">No user-entered or source-backed transportation quotes yet.</p>';
@@ -430,6 +433,89 @@
     }
   }
 
+
+  const eventTextFields = ['title','location','city','start_date_time','end_date_time','timezone','minimum_age','currency','official_event_url','notes','tags','recurrence'];
+  function resetEventEditor() {
+    $('eventForm').reset(); $('event_category').value='OTHER'; $('event_price_type').value='UNKNOWN'; $('event_event_status').value='UNKNOWN'; $('eventEditId').value=''; $('eventFormError').textContent='';
+  }
+  function eventCard(event, reasons = []) {
+    const p=E.priceTruth(event);
+    const times=event.occurrences.map(o=>`${o.start_date_time || 'UNKNOWN'} → ${o.end_date_time || 'UNKNOWN'} · ${o.timezone || 'TIMEZONE UNKNOWN'} · ${E.occurrenceTimeState(o,Date.now())} · organizer: ${o.status} · source: ${o.source.source_name} · ${E.occurrenceSourceState(event,o)} · retrieved ${o.source.retrieved_at || 'UNKNOWN'}`).join('; ');
+    return `<article class="option-card"><span class="intel-badge">${escape(event.record_origin.replaceAll('_',' '))}</span><h4>${escape(event.title)}</h4>
+      <p>${escape(event.category)} · ${escape(event.location || event.city || 'LOCATION UNKNOWN')} · organizer: ${escape(event.event_status)}</p>
+      <p>${escape(times || 'DATE_UNKNOWN')}</p><p>${escape(event.price_type)} · ${escape(money(p.knownRequiredCost,event.currency))} known required · ${escape(p.label)} · ${escape(p.coverage)}</p>
+      <p>Unknown required: ${escape(p.unknownRequiredComponents.join(', ') || 'None')}. Known optional travel costs: ${escape(money(p.knownOptionalCost,event.currency))}. Minimum age: ${event.minimum_age ?? 'UNKNOWN'} (verify eligibility; unknown traveler ages do not establish fit). Family-friendly: ${event.family_friendly === null ? 'UNKNOWN' : event.family_friendly ? 'YES' : 'NO'}.</p>
+      <p>Source/freshness: ${escape(E.sourceState(event))} · ${escape(event.source.source_name)} · retrieved ${escape(event.source.retrieved_at || 'UNKNOWN')} · ${escape(event.source.notes)}. Source URL (unverified text): ${escape(event.official_event_url || 'UNKNOWN')}</p>
+      <p>${escape(event.notes)}</p>${reasons.length?`<p>Match reasons: ${escape(reasons.join(' · '))}</p>`:''}
+      <div class="button-row">${event.record_origin==='USER_ENTERED'?`<button type="button" class="secondary edit-event" data-id="${escape(event.id)}">EDIT EVENT</button>`:''}<button type="button" class="secondary remove-event" data-id="${escape(event.id)}">REMOVE EVENT</button></div></article>`;
+  }
+  function renderEvents() {
+    const filters={};
+    for (const key of ['start','end','location','category','seasonal_theme','price_type','indoor_outdoor','event_status']) filters[key]=value('eventFilter_'+key);
+    if (value('eventFilter_age')!=='') filters.age=Number(value('eventFilter_age'));
+    if (value('eventFilter_family_friendly')!=='') filters.family_friendly=value('eventFilter_family_friendly')==='true';
+    const events=E.filterEvents(trip.events,filters);
+    $('eventCounts').textContent=`USER-ENTERED EVENTS: ${trip.events.filter(e=>e.record_origin==='USER_ENTERED').length} · LIVE SOURCE-BACKED EVENTS: ${trip.events.filter(e=>e.record_origin==='SOURCE_BACKED').length} · IMPORTED UNVERIFIED SNAPSHOTS: ${trip.events.filter(e=>e.record_origin==='IMPORTED').length} · ${events.length} local filter result(s)`;
+    $('eventRecords').innerHTML=events.map(e=>eventCard(e)).join('') || '<p class="empty-state">NO MATCHING EVENT DATA for these local filters.</p>';
+    const matchingTrip={...trip,destination:value('destination'),dates:{start:value('startDate'),end:value('endDate')},identity:{purpose:value('purpose'),vibe:value('vibe')},preferences:{interests:[...document.querySelectorAll('[name="interest"]:checked')].map(x=>x.value)}};
+    const matches=E.matchTripEvents(matchingTrip);
+    $('eventMatches').innerHTML=matches.map(m=>eventCard(m.event,m.reasons)).join('') || '<p class="empty-state">NO MATCHING EVENT DATA. Enter trip dates, destination, and real events. LIVE EVENT SOURCE NOT CONNECTED.</p>';
+  }
+  const eventSelectOptions={category:E.CATEGORIES,price_type:E.PRICE_TYPES,event_status:E.STATUSES,seasonal_theme:E.SEASONS,indoor_outdoor:['UNKNOWN','INDOOR','OUTDOOR','BOTH'],family_friendly:['','true','false']};
+  for (const [key,options] of Object.entries(eventSelectOptions)) {
+    const labels=x=>x===''?'UNKNOWN':x==='true'?'YES':x==='false'?'NO':x;
+    $('event_'+key).innerHTML=(key==='seasonal_theme'?['',...options]:options).map(x=>`<option value="${x}">${labels(x)}</option>`).join('');
+    $('eventFilter_'+key).innerHTML='<option value="">Any</option>'+options.filter(Boolean).map(x=>`<option value="${x}">${labels(x)}</option>`).join('');
+  }
+  $('eventForm').onsubmit=e=>{
+    e.preventDefault();
+    try {
+      const id=value('eventEditId');
+      const previous=trip.events.find(x=>x.id===id);
+      const input={...(previous||{}),id:id||undefined};
+      eventTextFields.forEach(k=>{input[k]=value('event_'+k)});
+      input.minimum_age=optionalNumber('event_minimum_age'); input.tags=value('event_tags').split(',').map(x=>x.trim()).filter(Boolean);
+      for(const k of ['category','price_type','indoor_outdoor','event_status']) input[k]=value('event_'+k);
+      input.seasonal_theme=[...$('event_seasonal_theme').selectedOptions].map(o=>o.value).filter(Boolean);
+      input.family_friendly=value('event_family_friendly')===''?null:value('event_family_friendly')==='true';
+      input.all_day=checked('event_all_day');
+      E.COSTS.forEach(k=>{input[k]=E.component(optionalNumber('event_'+k))});
+      input.source={source_url:input.official_event_url,notes:value('event_source_note')};
+      if(value('event_occurrences')) {
+        input.occurrences=JSON.parse(value('event_occurrences'));
+        if(!Array.isArray(input.occurrences) || input.occurrences.some(o=>!o || typeof o!=='object' || Array.isArray(o))) throw Error('Explicit occurrences must be an array of objects.');
+      } else delete input.occurrences;
+      const event=E.normalizeEvent(input);
+      const index=trip.events.findIndex(x=>x.id===event.id);
+      if(index<0)trip.events.push(event);else trip.events[index]=event;
+      resetEventEditor();renderEvents();
+    } catch(err){$('eventFormError').textContent=err.message;}
+  };
+  $('cancelEventEdit').onclick=resetEventEditor;
+  $('eventFilters').addEventListener('input',renderEvents);
+  document.addEventListener('click',e=>{
+    if(e.target.matches('.remove-event')){
+      trip.events=trip.events.filter(x=>x.id!==e.target.dataset.id);
+      if(value('eventEditId')===e.target.dataset.id) resetEventEditor();
+      renderEvents();
+    }
+    if(e.target.matches('.edit-event')){
+      const event=trip.events.find(x=>x.id===e.target.dataset.id);
+      if(!event || event.record_origin!=='USER_ENTERED')return;
+      resetEventEditor();$('eventEditId').value=event.id;
+      eventTextFields.forEach(k=>{$('event_'+k).value=event[k]??''});$('event_tags').value=event.tags.join(', ');
+      for(const k of ['category','price_type','indoor_outdoor','event_status'])$('event_'+k).value=event[k];
+      [...$('event_seasonal_theme').options].forEach(o=>o.selected=event.seasonal_theme.includes(o.value));
+      const occurrence=event.occurrences[0];
+      const defaultOccurrence=event.occurrences.length===1 && E.occurrenceMirrorsEvent(event,occurrence);
+      $('event_occurrences').value=defaultOccurrence?'':JSON.stringify(event.occurrences,null,2);
+      $('event_family_friendly').value=event.family_friendly===null?'':String(event.family_friendly);
+      $('event_all_day').checked=event.all_day;$('event_source_note').value=event.source.notes;
+      E.COSTS.forEach(k=>{$('event_'+k).value=event[k].value??''});
+      $('eventEditor').open=true;$('event_title').focus();
+    }
+  });
+
   $("nextStep").onclick=()=>showStep(step+1);
   $("prevStep").onclick=()=>showStep(step-1);
   form.onsubmit=e=>{e.preventDefault();renderBlueprint();};
@@ -456,12 +542,12 @@
 
   $("loadTrip").onclick=()=>{
     try{
-      const raw=localStorage.getItem(B.STORAGE_KEY)||localStorage.getItem(B.LEGACY_STORAGE_KEY);
+      const raw=localStorage.getItem(B.STORAGE_KEY)||localStorage.getItem(B.V2_STORAGE_KEY)||localStorage.getItem(B.LEGACY_STORAGE_KEY);
       if(!raw)throw Error("No saved trip found in this browser.");
       const original=JSON.parse(raw),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
-      $("persistenceStatus").textContent=original.schema_version===1?"Saved V1 trip migrated to V2 in memory. Save to retain the migration.":"Saved trip loaded.";
+      $("persistenceStatus").textContent=original.schema_version<3?`Saved V${original.schema_version} trip migrated to V3 in memory. Save to retain the migration.`:"Saved trip loaded.";
     }catch(e){$("persistenceStatus").textContent=e.message;}
   };
 
@@ -484,7 +570,7 @@
       const original=JSON.parse(await e.target.files[0].text()),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
-      $("persistenceStatus").textContent=`Validated trip imported${original.schema_version===1?" and migrated from V1":""}. Save it to retain it in this browser.`;
+      $("persistenceStatus").textContent=`Validated trip imported${original.schema_version<3?` and migrated from V${original.schema_version} to V3`:""}. Save it to retain it in this browser.`;
     }catch(err){$("persistenceStatus").textContent=`Import rejected: ${err.message}`;}
     e.target.value="";
   };

@@ -14,3 +14,7 @@
 .field-action{display:flex;flex-direction:column;gap:.45rem;justify-content:end}
 .field-action .secondary{align-self:flex-start}
 .option-card .button-row{align-items:center}
+
+#eventRecords .option-card,#eventMatches .option-card{overflow-wrap:anywhere}#eventFilters{margin-top:1rem}.intelligence-workspace input:focus-visible,.intelligence-workspace select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+#eventForm textarea{width:100%;max-width:100%;background:#091523;color:var(--text);border:1px solid var(--line);border-radius:13px;padding:13px;font:inherit;resize:vertical}

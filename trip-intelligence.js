@@ -1,12 +1,13 @@
 (function (root, factory) {
-  const api = factory();
+  const api = factory(typeof module === "object" && module.exports ? require("./event-intelligence.js") : root.EventIntelligence);
   if (typeof module === "object" && module.exports) module.exports = api;
   else root.SuitcaseBrain = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (E) {
   "use strict";
 
-  const SCHEMA_VERSION = 2;
-  const STORAGE_KEY = "suitcase-brain.trip.v2";
+  const SCHEMA_VERSION = 3;
+  const STORAGE_KEY = "suitcase-brain.trip.v3";
+  const V2_STORAGE_KEY = "suitcase-brain.trip.v2";
   const LEGACY_STORAGE_KEY = "suitcase-brain.trip.v1";
   const COMMITMENT_STATES = ["INVITED", "ACCEPTED", "DEPOSIT_PAID", "FULL_SHARE_FUNDED", "BOOKED", "TRAVELING", "COMPLETE", "DROPPED_OUT", "CANCELED"];
   const FUNDED_STATES = new Set(["FULL_SHARE_FUNDED", "BOOKED", "TRAVELING", "COMPLETE"]);
@@ -28,20 +29,25 @@
       needs: { pet_service_animal: "", accessibility: "" }, modes: { business: false, group: false, safe_night_no_driving: false, vendor_business_opportunity: false },
       reservations: [], hidden_fees: FEE_CATEGORIES.map(category => ({ id: uid(), category, status: "UNKNOWN", amount: null, source: "", notes: "" })),
       emergency: { scenario: "", personal_safety: false, contacts: "", documents_notes: "", booking_owners: "" },
-      transportation_options: [], lodging_options: []
+      transportation_options: [], lodging_options: [], events: []
     }, overrides);
   }
 
   function migrateTrip(value) {
     if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Trip JSON must be an object.");
-    if (value.schema_version === SCHEMA_VERSION) return JSON.parse(JSON.stringify(value));
-    if (value.schema_version !== 1) throw new Error(`Unsupported schema_version ${String(value.schema_version)}.`);
-    return Object.assign({}, JSON.parse(JSON.stringify(value)), {
-      schema_version: SCHEMA_VERSION,
-      transportation_options: [],
-      lodging_options: [],
-      updated_at: new Date().toISOString()
-    });
+    if (![1, 2, 3].includes(value.schema_version)) throw new Error(`Unsupported schema_version ${String(value.schema_version)}.`);
+    const result = JSON.parse(JSON.stringify(value));
+    if (result.schema_version === 1) {
+      result.transportation_options = [];
+      result.lodging_options = [];
+      result.schema_version = 2;
+    }
+    if (result.schema_version === 2) {
+      result.events = [];
+      result.schema_version = 3;
+    }
+    result.events = E.sanitizePersistedEvents(result.events);
+    return result;
   }
 
   function validateTrip(value) {
@@ -75,6 +81,7 @@
       if (reservation?.policy_status && !POLICY_STATUSES.includes(reservation.policy_status)) errors.push(`Reservation ${i + 1} has an invalid policy status.`);
       reservationMoneyFields.forEach(field => { if (!nonnegative(reservation?.[field], true)) errors.push(`Reservation ${i + 1} has an invalid ${field}.`); });
     });
+    errors.push(...E.validateEvents(value.events).errors);
     return { valid: errors.length === 0, errors };
   }
 
@@ -154,5 +161,5 @@
   }
   function moneyRaw(n) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(num(n)); }
 
-  return { SCHEMA_VERSION, STORAGE_KEY, LEGACY_STORAGE_KEY, COMMITMENT_STATES, FEE_CATEGORIES, FEE_STATUSES, RESERVATION_CATEGORIES, POLICY_STATUSES, createTrip, migrateTrip, validateTrip, budgetMetrics, dropoutScenario, cancellationExposure, hiddenFeeMetrics, resilience };
+  return { SCHEMA_VERSION, STORAGE_KEY, V2_STORAGE_KEY, LEGACY_STORAGE_KEY, COMMITMENT_STATES, FEE_CATEGORIES, FEE_STATUSES, RESERVATION_CATEGORIES, POLICY_STATUSES, createTrip, migrateTrip, validateTrip, budgetMetrics, dropoutScenario, cancellationExposure, hiddenFeeMetrics, resilience };
 });

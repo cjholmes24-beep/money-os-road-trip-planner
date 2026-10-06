@@ -81,3 +81,9 @@ Additional sources must conform to this contract before their facts reach the pu
 A normalized option must preserve source metadata independently from booking/affiliate metadata. Monetary truth states are `VERIFIED`, `PUBLISHED`, `USER_ENTERED`, `UNKNOWN`, and `NOT_APPLICABLE`; `UNKNOWN` must carry no numeric substitute. Provider failures become `UNAVAILABLE`, while an allowed prior snapshot keeps its original retrieval date and becomes `STALE`. User-entered quotes remain usable when every provider is unavailable.
 
 Provider policy facts require a provider URL, retrieval/effective date when available, and deliberate re-check. Missing cancellation terms display `POLICY UNKNOWN — VERIFY BEFORE BOOKING`. GTFS schedule facts use agency-specific cadence and must not be called live; GTFS Realtime data is live only within the publishing agency's lifecycle.
+
+## Events Intelligence Core V1 (pending PR review)
+
+Schema V3 persists browser-local canonical events and explicit occurrences. The Plan My Trip event workspace supports add/edit/remove, local date/category/location/season/price/age/family/status filters, and explainable trip-date matches. Category does not imply age, cost, or family fit. Organizer status is independent of UPCOMING/IN_PROGRESS/PAST/DATE_UNKNOWN. Unknown prices stay null; complete required admission cost needs base and mandatory fees.
+
+User-entered events cannot claim official runtime verification. Reload/import downgrades source-backed snapshots and candidate URLs require runtime trust to become official links. No live event feed, nationwide inventory, paid integration, affiliate event ranking, or vendor engine was connected. Source failures become UNAVAILABLE without replacing user records or breaking transport/lodging. See `docs/EVENT_INTELLIGENCE_ARCHITECTURE.md`, `docs/EVENT_SOURCE_AUDIT_2026-10-05.md`, and `data/event-source-registry.json`.
