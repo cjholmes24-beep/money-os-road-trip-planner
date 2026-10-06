@@ -93,7 +93,7 @@
     const errors = [];
     if (!object(e)) return { valid: false, errors: ['Event must be an object.'] };
     if (!TEXT_FIELDS.every(k => typeof e[k] === 'string') || !e.id || !e.title?.trim()) errors.push('Event identity/title/text fields are required.');
-    if (!CATEGORIES.includes(e.category) || !PRICE_TYPES.includes(e.price_type) || !STATUSES.includes(e.event_status) || !['USER_ENTERED', 'SOURCE_BACKED'].includes(e.record_origin)) errors.push('Invalid event category, price, status, or origin.');
+    if (!CATEGORIES.includes(e.category) || !PRICE_TYPES.includes(e.price_type) || !STATUSES.includes(e.event_status) || !['USER_ENTERED', 'SOURCE_BACKED', 'IMPORTED'].includes(e.record_origin)) errors.push('Invalid event category, price, status, or origin.');
     if (!/^[A-Z]{3}$/.test(e.currency || '') || !['INDOOR', 'OUTDOOR', 'BOTH', 'UNKNOWN'].includes(e.indoor_outdoor)) errors.push('Invalid currency or indoor/outdoor state.');
     for (const k of ['family_friendly', 'registration_required', 'reservation_required']) if (e[k] !== null && typeof e[k] !== 'boolean') errors.push(`Invalid ${k}.`);
     if (e.minimum_age !== null && (!numeric(e.minimum_age) || !Number.isInteger(e.minimum_age))) errors.push('Invalid minimum age.');
@@ -120,10 +120,17 @@
     const v = validateEvents(events);
     if (!v.valid) throw Error(v.errors.join(' '));
     return clone(events).map(e => {
+      const wasSourceBacked = e.record_origin === 'SOURCE_BACKED';
       COSTS.forEach(k => { if (['VERIFIED', 'PUBLISHED'].includes(e[k].state)) e[k].state = 'USER_ENTERED'; });
-      const downgrade = s => e.record_origin === 'SOURCE_BACKED' ? { ...s, fact_type: 'UNKNOWN' } : sourceMetadata(s);
-      e.source = downgrade(e.source); e.last_verified = '';
+      const downgrade = s => wasSourceBacked ? {
+        ...s,
+        fact_type: 'UNKNOWN',
+        notes: [text(s?.notes), 'Imported source-backed snapshot requires runtime re-verification.'].filter(Boolean).join(' ')
+      } : sourceMetadata(s);
+      e.source = downgrade(e.source);
+      e.last_verified = '';
       e.occurrences.forEach(o => { o.source = downgrade(o.source); });
+      if (wasSourceBacked) e.record_origin = 'IMPORTED';
       return e;
     });
   }
@@ -192,14 +199,21 @@
   }
   function sourceState(e, now = Date.now(), source = e.source) {
     if (e.record_origin === 'USER_ENTERED') return 'USER ENTERED';
+    if (e.record_origin === 'IMPORTED') return 'UNVERIFIED SNAPSHOT';
     if (!trustedRecords.has(e)) return 'UNVERIFIED SNAPSHOT';
     const age = now - Date.parse(source.retrieved_at), ttl = source.freshness_seconds;
     return !Number.isFinite(age) || age < 0 || !ttl ? 'UNKNOWN' : age > ttl * 1000 ? 'STALE' : 'FRESH';
   }
   function officialUrl(e, kind = 'event') { return trustedRecords.has(e) && sourceState(e) === 'FRESH' ? httpsUrl(kind === 'ticket' ? e.official_ticket_url : e.official_event_url) || null : null; }
   async function isolateSource(id, loader) {
-    try { const events = await loader(); const v = validateEvents(events); if (!v.valid) throw Error(); return { source_id: id, status: 'AVAILABLE', events }; }
-    catch (_) { return { source_id: id, status: 'UNAVAILABLE', events: [], error: 'EVENT SOURCE UNAVAILABLE' }; }
+    try {
+      const events = await loader();
+      const v = validateEvents(events);
+      if (!v.valid || events.some(e => e.record_origin !== 'SOURCE_BACKED' || !trustedRecords.has(e))) throw Error();
+      return { source_id: id, status: 'AVAILABLE', events };
+    } catch (_) {
+      return { source_id: id, status: 'UNAVAILABLE', events: [], error: 'EVENT SOURCE UNAVAILABLE' };
+    }
   }
   return { CATEGORIES, SEASONS, STATUSES, PRICE_TYPES, COSTS, TRUTH_STATES, component, normalizeEvent, normalizeOccurrence, validateEvent, validateOccurrence, validateEvents, sanitizePersistedEvents, occurrenceTimeState, priceTruth, dateOverlap, filterEvents, matchTripEvents, sourceState, occurrenceSourceState: (e, o, now = Date.now()) => e.occurrences.includes(o) ? sourceState(e, now, o.source) : 'UNKNOWN', officialUrl, isolateSource };
 });
