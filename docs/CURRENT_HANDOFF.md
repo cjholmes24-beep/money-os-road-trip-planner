@@ -1,8 +1,8 @@
 # Suitcase Brain — Current Handoff
 
-Last updated: 2026-10-06
+Last updated: 2026-10-07
 Canonical repository: `cjholmes24-beep/money-os-road-trip-planner`
-Last verified product-code baseline before handoff-document commits: `7170e1b8a23c9b424777a2784f7d7bdd7899b932`
+Last verified product-code baseline before handoff-document commits: `156b56393a9cf9e70b52884bd695063b9195d780`
 
 **Before every new work order, read GitHub `main` directly and use the current HEAD SHA. Do not assume the SHA written in this handoff is still the repository HEAD, because documentation/maintenance commits may legitimately advance `main`.**
 
@@ -83,6 +83,12 @@ The public site is deployed on GitHub Pages and currently includes:
 - first-dollar control panel, MONEY BLOCKERS, and opportunity-gap report
 - improved crawl/search metadata on priority money pages and corrected sitemap XML
 - first-dollar monetization audit and owner operations checklist
+- Organic Demand Engine V1 with daily read-only repository opportunity analysis
+- seasonal planning windows and site-health/internal-link/metadata audits
+- eight money pages expanded with visible planning answers/FAQs
+- one distinct flight-vs-driving cost comparison page
+- safe in-memory aggregate search-performance import interface
+- owner-observed Travelpayouts baseline documented separately from live dashboard truth
 - visible affiliate disclosure
 - sitemap/canonical metadata/robots
 - IndexNow automated distribution
@@ -123,44 +129,52 @@ Do not display simulated live data in these modules.
 
 ## Latest completed engineering cycle
 
-Codex PR #15 built First-Dollar Revenue Sprint V1 from main `7f580647c5de38669fd7f321297b2e6310e8b68a`.
+Codex PR #17 built Organic Demand Engine V1 on updated main `8555df876bd2677a0af7264c4463b0f8d400d135` after the scheduled EIA-only refresh.
 
 Codex delivered:
-- money-path audit across ten monetization categories
-- eight priority high-intent pages strengthened around useful result → next decision → optional monetization
-- search titles/descriptions and contextual internal money paths improved
-- first-dollar control panel with deterministic MONEY BLOCKERS
-- local opportunity-gap report and export
-- stricter crawl/sitemap validation
-- first-dollar operations checklist
-- current Travelpayouts Drive installation/reporting audit
-- first-dollar regression coverage and CI
+- deterministic organic opportunity types/statuses and money-first intent families
+- daily read-only GitHub Actions analysis with artifacts/summary and no auto-push
+- seasonal planning windows
+- internal-link, metadata, canonical, sitemap, structured-data, source-age and Drive/disclosure audits
+- eight money pages expanded with original visible planning answers/FAQs
+- one new `/flight-vs-driving-cost/` page using the existing driving fuel formula and entered flight total
+- strict in-memory aggregate search-performance import
+- local Events-to-travel opportunity bridge
+- checked-in opportunity snapshot and documentation
 
-Codex candidate verification reported:
-- 507 dependency-free assertions passed
-- 54 Chromium mobile checks passed with external network blocked
-- no new verified direct provider URL, paid infrastructure, or fake traffic/revenue
+Candidate verification:
+- 684 dependency-free assertions passed
+- 67 Chromium mobile checks passed with external requests blocked
+- 16 reviewed repository/calendar opportunities and zero health blockers
 - owner cost $0
+- no fake traffic, search volume, booking, or revenue
 
 Independent review:
-- inspected the actual PR, revenue logic, dashboard, priority-page ordering, sitemap/static checks, and official Travelpayouts Drive documentation
-- no merge-blocking code defect found
-- confirmed Drive documentation still describes automatic monetization after installation and Content Analytics reporting for clicks/bookings/page performance
-- confirmed the repository still cannot prove account-specific Drive Active status, enabled programs, or real provider earnings without authenticated account evidence
+- inspected the actual engine, workflow, site audit, search-import boundary, dashboard wiring, comparison page, generated opportunity snapshot, and tests
+- found no merge-blocking implementation defect
+- corrected stale README/status labels that still described already-merged Events, Revenue Activation, and First-Dollar work as pending review
+- latest-head PR CI passed
 
-PR #15 merged after latest-head CI success.
-
-Verified product main:
-`7170e1b8a23c9b424777a2784f7d7bdd7899b932`
+PR #17 merge:
+`156b56393a9cf9e70b52884bd695063b9195d780`
 
 Post-merge verification:
 - Suitcase Brain checks: SUCCESS
 - IndexNow notification: SUCCESS
 - GitHub Pages deployment: SUCCESS
 - owner cost introduced: $0
-- no revenue is claimed
-- no direct affiliate route was fabricated
-- current first-dollar blockers are operational/account/traffic evidence, not another missing general product engine
+
+Operational evidence supplied by the owner on 2026-10-06:
+- Travelpayouts Drive ACTIVE
+- Monetization boost MAXIMUM
+- 12 unique visits
+- 3 provider-side clicks
+- Kiwi.com received 3 clicks
+- 0 bookings
+- $0 earnings
+- acquisition source of those visits remains unproven
+
+The engine can prioritize and prepare acquisition work, but it does not itself manufacture visitors. Real qualified traffic and booking conversion remain the first-dollar bottlenecks.
 
 ## Standard build workflow
 
@@ -185,36 +199,28 @@ Owner controls priorities and green-lights the sequence.
 ## Current next engineering brick
 
 Primary next gate:
-**FIRST-DOLLAR OPERATIONS — VERIFY MONETIZATION + GET REAL TRAFFIC**
+**REAL SEARCH DISCOVERY + TRAFFIC PROOF**
 
-Do not start another broad engineering brick before this gate is checked.
+Do not start another broad travel feature brick.
 
 Immediate actions:
-1. In the authenticated Travelpayouts account, verify the exact Suitcase Brain project shows Drive ACTIVE.
-2. Verify which programs/brands are actually enabled/approved for this project.
-3. Confirm Content Analytics begins showing real page/click activity when genuine users arrive.
-4. If an account-approved exact provider route/tool is available and permitted, wire that specific route in a separate tightly scoped integration PR; do not guess URLs.
-5. Get real organic visitors onto the eight deployed high-intent pages and watch the actual funnel.
-6. Check Bookings / commission states / payouts from provider evidence.
-7. Record FIRST ELIGIBLE PROVIDER CLICK → FIRST ATTRIBUTED BOOKING → FIRST APPROVED COMMISSION → FIRST CLEARED DOLLAR.
-
-Only after this operational gate exposes the real bottleneck should the next engineering work be selected.
-
-Likely follow-up if traffic is the blocker:
-**24/7 Lead + Opportunity Engine V1**
-
-Likely follow-up if provider routing is the blocker:
-**Travelpayouts Verified Provider Routing V1**
-
-Likely follow-up if clicks occur but bookings do not:
-**Conversion Optimization V1**
+1. Verify Google Search Console property access for the GitHub Pages site and submit/confirm the sitemap if not already done.
+2. Verify Bing Webmaster access/submission if available.
+3. Observe a real aligned search/report window and import only aggregate search-performance data through the new safe interface when available.
+4. Continue watching Travelpayouts Content Analytics for genuine visits, provider clicks, bookings, approved commission, and payout evidence.
+5. Use the earliest weak stage to choose the next engineering job:
+   - no impressions/indexing → indexing/search-discovery repair
+   - impressions but weak clicks → title/snippet/content optimization
+   - site clicks but weak provider clicks → conversion/routing optimization
+   - provider clicks but no bookings → provider/action-fit optimization
+   - bookings but no cleared money → provider reconciliation/payout tracking
 
 Hard rule:
 No unrelated product expansion jumps ahead of the first-dollar proof chain.
 
 ## Revenue state
 
-The product is deployed with Revenue Activation + Demand Capture V1 and First-Dollar Revenue Sprint V1. The public Drive script is installed on the priority money pages, but authenticated account status/program approval and real traffic/booking evidence still must be verified. No verified cleared revenue has been proven. Browser-local clicks or imported claims do not count as earned money.
+The product is deployed with Revenue Activation + Demand Capture V1, First-Dollar Revenue Sprint V1, and Organic Demand Engine V1. Authenticated Travelpayouts screenshots confirm Drive is active at maximum monetization and provider-side visits/clicks are occurring. The observed baseline is 12 unique visits, 3 Kiwi.com clicks, 0 bookings, and $0 earnings; acquisition source remains unproven. No verified cleared revenue has been proven. Browser-local clicks or imported claims do not count as earned money.
 
 Canonical revenue proof sequence:
 FIRST ORGANIC VISITOR → FIRST AFFILIATE CLICK → FIRST BOOKING → FIRST CONFIRMED COMMISSION → FIRST CLEARED DOLLAR
