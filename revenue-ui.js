@@ -45,7 +45,7 @@
     const node=entry.target;
     if(node.dataset.comparisonType){
       const type=node.dataset.comparisonType;
-      const ready=type==='TRANSPORT_COMPARISON_VIEWED'?(currentTrip?.transportation_options?.length||0)>=2:type==='LODGING_COMPARISON_VIEWED'?(currentTrip?.lodging_options?.length||0)>=2:node.querySelectorAll('article').length>0;
+      const ready=type==='TRANSPORT_COMPARISON_VIEWED'?(currentTrip?.transportation_options?.length||0)>=2&&node.querySelectorAll('.comparison-card').length>0:type==='LODGING_COMPARISON_VIEWED'?(currentTrip?.lodging_options?.length||0)>=2&&node.querySelectorAll('.comparison-card').length>0:node.querySelectorAll('article').length>0;
       if(!ready)return;observed.add(node);record(type);
     }else if(node.dataset.providerCategory){const action=actions.get(node.dataset.providerCategory);if(action&&node.href===R.actionUrl(action)){observed.add(node);record('PROVIDER_ACTION_SHOWN',action.category,currentTrip,action);}}
   }),{threshold:0.1}):null;
@@ -56,11 +56,26 @@
     const action=actions.get(category),url=R.actionUrl(action);
     return `<article class="option-card"><h4>${escape(labels[category])}</h4><p>Use your result to compare the complete cost and terms before booking.</p>${opportunity.planning_path!==sourcePage?`<p><a href="${escape(new URL(opportunity.planning_path.slice(1),scriptUrl).href)}">${category==='ACCOMMODATION'?'Compare lodging quotes in Plan My Trip':'Open the relevant planning tool / guide'} →</a></p>`:''}<button class="secondary demand-category" data-category="${category}" type="button">Prepare comparison</button>${url?`<a class="primary button-link eligible-provider" href="${escape(url)}" data-provider-category="${category}" target="_blank" rel="sponsored noopener noreferrer">${escape(labels[category])} at ${escape(action.provider)} ↗</a>`:'<p class="source-note">No account-verified provider link is configured for this action. Existing Travelpayouts Drive may independently show eligible offers; appearance and attribution are not guaranteed. This checklist selection is not recorded as a provider click.</p>'}<p class="hint">Affiliate disclosure: an eligible provider booking may generate a commission at no extra cost. Verify final terms yourself.</p><div class="action-checklist" hidden><ul>${checklists[category].map(s=>`<li>${escape(s)}</li>`).join('')}</ul></div></article>`;
   }
+  function plannerActionMarkup(category){
+    const opportunity=registry?.opportunities.find(r=>r.category===category);
+    if(!opportunity)return '';
+    const samePage=opportunity.planning_path===sourcePage;
+    const destination=new URL(opportunity.planning_path.slice(1),scriptUrl).href;
+    const tool=samePage?'<button class="secondary reveal-planning" data-workspace="lodging" type="button">Add a place to stay</button>':`<a class="planner-tool-action" href="${escape(destination)}">Open planning tool / guide →</a>`;
+    return `<article class="option-card"><h4>${escape(labels[category])}</h4>${tool}<button class="secondary demand-category" data-category="${category}" type="button">What to check before booking</button><div class="action-checklist" hidden><ul>${checklists[category].map(s=>`<li>${escape(s)}</li>`).join('')}</ul></div></article>`;
+  }
   function renderTripActions(){
     if(!$('tripRevenueActions')||!currentTrip||!registry)return;
     const explicit=[...document.querySelectorAll('#explicitTravelNeeds input:checked')].map(x=>x.value);
     const categories=R.selectTripCategories(currentTrip,explicit);
-    $('tripRevenueActions').innerHTML=categories.map(actionMarkup).join('')||'<p class="empty-state">No specific travel need selected. Choose a need if you want a comparison checklist.</p>';observeProviderActions();
+    $('tripRevenueActions').innerHTML=categories.map(plannerActionMarkup).join('')||'<p class="empty-state">Choose a travel need below to find a useful next step.</p>';
+    const bookingHost=$('tripBookingActions');
+    if(bookingHost){
+      const eligible=categories.filter(c=>R.actionUrl(actions.get(c)));
+      bookingHost.hidden=!eligible.length;
+      bookingHost.innerHTML=eligible.length?'<h3>Travel options for your trip</h3>'+eligible.map(c=>{const action=actions.get(c);return `<article class="option-card"><h4>${escape(labels[c])}</h4><a class="primary button-link eligible-provider" href="${escape(R.actionUrl(action))}" data-provider-category="${c}" target="_blank" rel="sponsored noopener noreferrer">Continue to ${escape(action.provider)} ↗</a></article>`;}).join(''):'';
+    }
+    observeProviderActions();
   }
   function renderPageAction(){document.querySelectorAll('[data-revenue-category]').forEach(el=>{el.innerHTML=actionMarkup(el.dataset.revenueCategory);});observeProviderActions();}
   document.addEventListener('click',e=>{
@@ -73,7 +88,7 @@
   $('explicitTravelNeeds')?.addEventListener('change',renderTripActions);
   const intake=$('trip-intake');
   intake?.addEventListener('input',()=>{if(!engaged){engaged=true;record('PLANNER_STARTED');}});
-  window.addEventListener('suitcasebrain:trip-replaced',()=>{currentTrip=null;actions.clear();if($('tripRevenueActions'))$('tripRevenueActions').innerHTML='<p>Build the current trip blueprint to refresh useful actions.</p>';if($('explicitTravelNeeds'))$('explicitTravelNeeds').querySelectorAll('input').forEach(x=>x.checked=false);});
+  window.addEventListener('suitcasebrain:trip-replaced',()=>{currentTrip=null;actions.clear();if($('tripRevenueActions'))$('tripRevenueActions').innerHTML='<p>Finish your trip plan to find your next useful step.</p>';if($('tripBookingActions')){$('tripBookingActions').innerHTML='';$('tripBookingActions').hidden=true;}if($('explicitTravelNeeds'))$('explicitTravelNeeds').querySelectorAll('input').forEach(x=>x.checked=false);});
   document.querySelector('.reset')?.addEventListener('click',()=>document.querySelectorAll('[data-revenue-category]').forEach(node=>{node.hidden=true;const section=node.closest('.next-decision');if(section)section.hidden=true;}));
   window.addEventListener('suitcasebrain:blueprint',e=>{actions.clear();currentTrip=e.detail;const T=window.TransportLodgingIntelligence;
     for(const option of [...(currentTrip.transportation_options||[]),...(currentTrip.lodging_options||[])]){

@@ -80,11 +80,12 @@
     async function renderFuel(event){
       const box=$("fuelReference");
       if(!box)return;
+      if(document.body.classList.contains("consumer-planner")&&box.hidden)return;
       box.hidden=false;
       $("fuelReferenceStatus").textContent="Checking official weekly fuel reference…";
       try{
         const ref=await loadFuelReference(event?.detail?.destination||$("destination").value);
-        $("fuelReferenceStatus").textContent=`${ref.label} weekly gasoline reference`;
+        $("fuelReferenceStatus").textContent=`${ref.label} gasoline reference${ref.freshness.status!=="fresh"?" — check update date":""}`;
         $("fuelReferenceValue").textContent=`${money.format(ref.value)} / gal`;
         $("fuelReferenceMeta").textContent=`${ref.freshness.label} · Freshness: ${ref.freshness.status.toUpperCase()} · Source: ${ref.source.source_name} · Period ending: ${ref.period_end} · Retrieved: ${ref.retrieved_at} · Confidence: ${ref.source.confidence} · Weekly reference, not a guaranteed station price.`;
         $("fuelReferenceSource").href=ref.source.source_url;
@@ -128,6 +129,7 @@
     }
 
     window.addEventListener("suitcasebrain:blueprint",renderFuel);
+    window.addEventListener("suitcasebrain:fuel-request",renderFuel);
     $("weatherHereButton")?.addEventListener("click",weatherHere);
   }
 

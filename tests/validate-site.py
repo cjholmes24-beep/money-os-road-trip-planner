@@ -42,11 +42,11 @@ for url in re.findall(r'<loc>(.*?)</loc>',sitemap):
 
 html=(root/'plan-my-trip/index.html').read_text()
 required=[
-    'tp-em.com/NTgxMDU0.js','Affiliate disclosure','I NEED TO LEAVE THIS TRIP',
-    'Live source not connected yet.','TRANSPORTATION INTELLIGENCE','LODGING INTELLIGENCE',
+    'tp-em.com/NTgxMDU0.js','Affiliate disclosure','Open emergency trip plan',
+    'Compare ways to get there','Compare places to stay','More trip planning options',
     'transport-lodging-intelligence.js','quoteTransportTaxes','quoteLodgingTaxes',
-    'Use current EIA weekly reference', 'event-intelligence.js', 'EVENTS &amp; EXPERIENCES',
-    'eventForm', 'eventRecords', 'eventMatches', 'LIVE EVENT SOURCE NOT CONNECTED',
+    'Use weekly gasoline estimate', 'event-intelligence.js', 'EVENTS &amp; EXPERIENCES',
+    'eventForm', 'eventRecords', 'eventMatches', 'Event information notes',
     'eventFilter_category', 'eventFilter_seasonal_theme', 'event_occurrences'
 ]
 for item in required:
