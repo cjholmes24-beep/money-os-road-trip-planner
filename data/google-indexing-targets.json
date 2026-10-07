@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "property_url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/",
+  "purpose": "Internal operational targets; not Google priority or indexing proof.",
+  "targets": [
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/",
+      "priority_role": "ENTRY",
+      "intent_family": "travel planning tools",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/gas-trip-calculator/",
+      "priority_role": "SUPPORT_TOOL",
+      "intent_family": "trip fuel cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/road-trip-cost-calculator/",
+      "priority_role": "SUPPORT_TOOL",
+      "intent_family": "road trip total cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/rental-car-trip-cost/",
+      "priority_role": "MONEY_TOOL",
+      "intent_family": "rental car total cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/flight-cost-planner/",
+      "priority_role": "MONEY_TOOL",
+      "intent_family": "true flight trip cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/airport-transfer-cost-planner/",
+      "priority_role": "MONEY_TOOL",
+      "intent_family": "airport transfer cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/travel-esim-cost-planner/",
+      "priority_role": "MONEY_TOOL",
+      "intent_family": "travel esim cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/flight-delay-compensation-guide/",
+      "priority_role": "GUIDE",
+      "intent_family": "flight delay compensation",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/travel-activities-budget/",
+      "priority_role": "MONEY_TOOL",
+      "intent_family": "vacation activities budget",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/luggage-storage-cost-planner/",
+      "priority_role": "SUPPORT_TOOL",
+      "intent_family": "luggage storage cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/travel-insurance-guide/",
+      "priority_role": "GUIDE",
+      "intent_family": "travel insurance planning",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/plan-my-trip/",
+      "priority_role": "TRIP_WORKSPACE",
+      "intent_family": "vacation budget planner",
+      "monetization_surface": true,
+      "indexing_required": true
+    },
+    {
+      "url": "https://cjholmes24-beep.github.io/money-os-road-trip-planner/flight-vs-driving-cost/",
+      "priority_role": "COMPARISON",
+      "intent_family": "flight vs driving cost",
+      "monetization_surface": true,
+      "indexing_required": true
+    }
+  ]
+}

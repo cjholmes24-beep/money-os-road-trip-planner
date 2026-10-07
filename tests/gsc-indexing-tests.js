@@ -1,0 +1,43 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path'),os=require('os');
+const C=require('../scripts/check-google-indexing-readiness');
+module.exports=()=>{
+ let n=0;const ok=(v,m)=>{assert(v,m);n++;};
+ const root=path.resolve(__dirname,'..');
+ ok(C.checkLocal(root).status==='PASS','real repository readiness');
+ const fixture=fs.mkdtempSync(path.join(os.tmpdir(),'gsc-readiness-'));
+ try{
+  fs.cpSync(root,fixture,{recursive:true,filter:p=>!['.git','node_modules','__pycache__'].includes(path.basename(p))});
+  const mutate=(file,change,reason)=>{const p=path.join(fixture,file),original=fs.readFileSync(p,'utf8');fs.writeFileSync(p,change(original));const result=C.checkLocal(fixture);ok(result.status==='BLOCKED'&&result.blockers.some(b=>b.reason.includes(reason)),reason);fs.writeFileSync(p,original);};
+  mutate('sitemap.xml',s=>s.replace(C.BASE+'/flight-cost-planner/',C.BASE+'/missing/'),'Sitemap');
+  mutate('index.html',s=>s.replace('rel="canonical" href="'+C.PROPERTY+'"','rel="canonical" href="'+C.BASE+'/wrong/"'),'Canonical');
+  mutate('index.html',s=>s.replace('</head>','<meta name="robots" content="noindex"></head>'),'noindex');
+  mutate('index.html',s=>s.replace('</head>','<meta name="googlebot" content="none"></head>'),'noindex');
+  mutate('revenue-dashboard/index.html',s=>s.replace('noindex','index'),'Private dashboard');
+  mutate('robots.txt',s=>s+'\nUser-agent: Googlebot\nDisallow: /\n','blocks Googlebot');
+  mutate('index.html',s=>s.replace('https://tp-em.com/NTgxMDU0.js?t=581054','https://invalid.example/loader.js'),'Drive');
+  mutate('index.html',s=>s.replaceAll('Affiliate disclosure','Removed disclosure'),'disclosure');
+  mutate('index.html',s=>s.replace('</head>','<script type="application/ld+json">{bad}</script></head>'),'malformed');
+  mutate('flight-cost-planner/index.html',s=>s.replace(/<title>[\s\S]*?<\/title>/,'<title>'+fs.readFileSync(path.join(root,'index.html'),'utf8').match(/<title>(.*?)<\/title>/)[1]+'</title>'),'Duplicate title');
+  const file='google9c2e7a40d6b18f35.html';fs.writeFileSync(path.join(fixture,file),'google-site-verification: '+file);
+  ok(C.checkLocal(fixture).status==='PASS','verification file is deployable but excluded from indexing');
+  mutate('index.html',s=>s.replace('</body>','<a href="'+file+'">verification</a></body>'),'navigation');
+  mutate('sitemap.xml',s=>s.replace('</urlset>','<url><loc>'+C.BASE+'/'+file+'</loc></url></urlset>'),'Sitemap');
+  const records=C.EXPECTED.map(p=>({url:C.BASE+p,final_url:C.BASE+p,status:200,body:fs.readFileSync(path.join(root,p==='/'?'index.html':p.slice(1)+'index.html'),'utf8'),x_robots_tag:''}));
+  records.push({url:C.BASE+'/sitemap.xml',final_url:C.BASE+'/sitemap.xml',status:200,body:fs.readFileSync(path.join(root,'sitemap.xml'),'utf8')},{url:C.BASE+'/robots.txt',final_url:C.BASE+'/robots.txt',status:200,body:fs.readFileSync(path.join(root,'robots.txt'),'utf8')},{url:C.BASE+'/revenue-dashboard/',status:200,body:fs.readFileSync(path.join(root,'revenue-dashboard/index.html'),'utf8')},{url:'https://cjholmes24-beep.github.io/robots.txt',status:404,body:''});
+  ok(C.checkLive(records).status==='PASS','live HTTP fixtures');
+  records[0].x_robots_tag='noindex';ok(C.checkLive(records).status==='BLOCKED','live header gate');records[0].x_robots_tag='';
+  records[0].final_url=C.BASE+'/wrong/';ok(C.checkLive(records).status==='BLOCKED','redirect gate');records[0].final_url=records[0].url;
+  records[0].body=records[0].body.replace('</body>','<a href="missing/">Broken link</a></body>');ok(C.checkLive(records).status==='BLOCKED','live internal link gate');
+  mutate('data/google-indexing-targets.json',()=>'{bad}','malformed');
+  mutate('data/google-indexing-targets.json',s=>s.replace('"targets": [','"targets": [null,'),'Malformed');
+  mutate('sitemap.xml',s=>s.replace('</urlset>','<url><loc>'+C.BASE+'/revenue-dashboard/</loc></url></urlset>'),'Private dashboard');
+  mutate('index.html',s=>s.replace('</head>','<script src="https://tp-em.com/NTgxMDU0.js?t=581054"></script></head>'),'Drive');
+  mutate('robots.txt',s=>s.replace('Sitemap:', 'Removed:'),'declaration');
+ }finally{fs.rmSync(fixture,{recursive:true,force:true});}
+ ok(!C.robotsAllows('User-agent: *\nDisallow: /money-os-road-trip-planner/',C.PROPERTY));
+ ok(C.robotsAllows('User-agent: *\nDisallow: /\nAllow: /money-os-road-trip-planner/',C.PROPERTY));
+ ok(!C.robotsAllows('User-agent: Googlebot\nDisallow: /\nUser-agent: *\nAllow: /',C.PROPERTY));
+ assert.throws(()=>C.sitemapUrls('<urlset>broken'));n++;
+ return n;
+};
