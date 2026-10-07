@@ -102,3 +102,13 @@ The owner-observed October 6 Travelpayouts Active/maximum and small provider-act
 ## Organic Demand Engine independent review
 
 Independent PR review inspected the engine, scheduled workflow, site-audit logic, search-import boundary, revenue-dashboard integration, new comparison page, generated opportunity snapshot, and regression coverage. No merge-blocking code defect was found. Cleanup corrected stale documentation that still described already-merged Events, Revenue Activation, and First-Dollar work as pending review. The engine remains a read-only opportunity/distribution analyzer: it can improve and prioritize organic acquisition work, but it does not itself generate visitors, bookings, or revenue.
+
+## Google Search Console activation readiness — task branch, 2026-10-07
+
+GitHub Pages is live. Repository and public HTTP audits pass for all 13 public pages: exact HTTPS canonical URLs, unique titles/descriptions, sitemap/robots foundation, disclosures and one existing Travelpayouts Drive loader per public page. The revenue dashboard remains noindex and outside the sitemap. Origin robots returned HTTP 404 (no blocking rules); project robots declares the exact sitemap. These are readiness observations, not Google indexing results.
+
+At task start, **GSC Wizard is connected, but the Google Search Console property is NOT YET CREATED/VERIFIED**, according to the owner's verified account check: zero properties; registration rejected the project URL as absent from the account. GSC data is therefore unavailable. No token or file has been supplied or installed, and no Google ownership/OAuth step has been bypassed. The strict local installer and runbooks prepare that remaining step; this work is unmerged pending independent PR review.
+
+Travelpayouts Drive was previously owner-observed **ACTIVE/MAXIMUM**. The owner-observed provider baseline is **12 unique visits, 3 provider clicks, 0 bookings, $0 earnings**. Acquisition source remains unproven. The first-dollar bottleneck is real search discovery/traffic proof; local activity and indexing readiness are not money or search performance evidence. Owner cost introduced remains **$0**.
+
+Operations: [activation](GOOGLE_SEARCH_CONSOLE_ACTIVATION.md), [post-verification actions](GSC_POST_VERIFICATION_ACTIONS.md). Public indexing targets are an internal operational manifest, with no invented Google priority or metric values.

@@ -298,6 +298,7 @@ const T = require("../transport-lodging-intelligence.js");
   assertions += await require("./revenue-tests.js")();
   assertions += await require("./first-dollar-tests.js")();
   assertions += await require("./organic-tests.js")();
+  assertions += require("./gsc-indexing-tests.js")();
   console.log(`Suitcase Brain: ${assertions} assertions passed`);
 })().catch(err => {
   console.error(err);

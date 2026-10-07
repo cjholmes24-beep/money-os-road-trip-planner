@@ -15,6 +15,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -23,6 +25,8 @@ jobs:
           python-version: "3.12"
       - name: JavaScript syntax
         run: |
+          node --check scripts/check-google-indexing-readiness.js
+          node --check tests/gsc-indexing-tests.js
           node --check tests/browser-organic-smoke.js
           node --check organic-demand-engine.js
           node --check organic-acquisition-ui.js
@@ -40,12 +44,19 @@ jobs:
           node --check script.js
       - name: Suitcase Brain unit checks
         run: node tests/run-tests.js
+      - name: Google verification installer regression tests
+        run: python3 -m unittest discover -s tests -p test_google_verification.py
+      - name: Google indexing readiness
+        run: node scripts/check-google-indexing-readiness.js
+      - name: Whitespace validation
+        run: git diff --check HEAD^ HEAD
       - name: Static site validation
         run: python3 tests/validate-site.py
       - name: Organic opportunity and distribution validation
         run: node scripts/run-organic-demand.js --check
       - name: Validate checked-in JSON
         run: |
+          python3 -m json.tool data/google-indexing-targets.json >/dev/null
           python3 -m json.tool data/organic-opportunities-latest.json >/dev/null
           python3 -m json.tool data/private-import-example/search-performance.example.json >/dev/null
           python3 -m json.tool data/monetization-opportunity-registry.json >/dev/null
