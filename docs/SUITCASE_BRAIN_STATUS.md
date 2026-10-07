@@ -91,3 +91,9 @@ No new provider reporting connection or verified direct affiliate URL was introd
 ## First-dollar sprint V1 — pending independent review
 
 Eight existing priority surfaces have clearer result-first decisions/contextual tools. Local first-dollar milestones, Money Blockers and exportable category gaps are available. Drive installation is preserved; eight categories are DRIVE_ONLY with account eligibility UNKNOWN, and BUS_RAIL/CRUISES have generic intake only (NOT_READY). No category is newly certified READY_TO_EARN; no verified direct provider link or reporting adapter is configured. Cleared revenue remains unproven/$0 without legitimate runtime evidence. No paid infrastructure or trip-schema change.
+
+## Organic Demand Engine V1 — pending independent review
+
+Daily read-only repository opportunity analysis, seasonal calendar windows, internal-link/metadata/structured-data/source-age auditing, and an exportable reviewed snapshot are implemented. All eight money pages have original planning answers/FAQs. One distinct flight-versus-driving page reuses the existing fuel formula and entered group flight total; no broad travel engine rebuilt. Aggregate search imports are explicit, strictly allowlisted and unverified; the dashboard keeps them in memory only. No Google/Bing API, live provider report, private credential, fake acquisition, automated article publication or paid infrastructure is introduced.
+
+The owner-observed October 6 Travelpayouts Active/maximum and small provider-activity baseline is documented only in TRAFFIC_BASELINE_2026-10-06.md. Its acquisition source is unproven and its counts are not live dashboard truth or revenue proof. Real qualified traffic remains the first weak stage; booking and cleared payout remain separate provider evidence requirements. Scheduled analysis uses workflow artifacts/summary, never automatic commits or unchanged-URL submissions. See ORGANIC_DEMAND_ENGINE.md.

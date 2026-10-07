@@ -1,0 +1,31 @@
+name: Organic demand analysis
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: organic-demand-analysis
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Analyze repository opportunities (no traffic or publication)
+        run: node scripts/run-organic-demand.js --out-dir "$RUNNER_TEMP/organic-observations"
+      - name: Enforce site health and opportunity schema
+        run: node scripts/run-organic-demand.js --check
+      - name: Preserve daily observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: organic-observations
+          path: ${{ runner.temp }}/organic-observations/
+          retention-days: 7
+          if-no-files-found: error

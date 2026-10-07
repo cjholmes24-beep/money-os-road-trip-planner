@@ -1,0 +1,4 @@
+# Local private account/report inputs must never be published with Pages.
+/data/private-imports/
+/private-imports/
+/organic-observations/

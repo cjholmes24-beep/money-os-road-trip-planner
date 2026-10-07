@@ -23,6 +23,12 @@ jobs:
           python-version: "3.12"
       - name: JavaScript syntax
         run: |
+          node --check tests/browser-organic-smoke.js
+          node --check organic-demand-engine.js
+          node --check organic-acquisition-ui.js
+          node --check flight-driving-comparison-ui.js
+          node --check scripts/organic-site-audit.js
+          node --check scripts/run-organic-demand.js
           node --check revenue-intelligence.js
           node --check revenue-ui.js
           node --check tests/first-dollar-tests.js
@@ -36,8 +42,12 @@ jobs:
         run: node tests/run-tests.js
       - name: Static site validation
         run: python3 tests/validate-site.py
+      - name: Organic opportunity and distribution validation
+        run: node scripts/run-organic-demand.js --check
       - name: Validate checked-in JSON
         run: |
+          python3 -m json.tool data/organic-opportunities-latest.json >/dev/null
+          python3 -m json.tool data/private-import-example/search-performance.example.json >/dev/null
           python3 -m json.tool data/monetization-opportunity-registry.json >/dev/null
           python3 -m json.tool data/event-source-registry.json >/dev/null
           python3 -m json.tool data/source-registry.json >/dev/null

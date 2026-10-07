@@ -1,0 +1,1347 @@
+{
+  "version": 1,
+  "label": "DETERMINISTIC REPOSITORY OPPORTUNITIES — not traffic/search-volume data",
+  "analysis_date": "2026-10-07",
+  "earliest_weak_stage": {
+    "stage": "TRAFFIC",
+    "focus": "DISCOVERY_CONTENT_DISTRIBUTION",
+    "reason": "Qualified traffic sufficiency is not established for a real aligned report window."
+  },
+  "acquisition": {
+    "states": [
+      "SEARCH DATA NOT CONNECTED",
+      "ORGANIC SOURCE UNVERIFIED"
+    ],
+    "note": "Imports are user-supplied aggregates, not a live API or independently verified acquisition. Provider activity does not establish Google/Bing traffic."
+  },
+  "seasonal_windows": [
+    {
+      "theme": "FALL_TRAVEL",
+      "label": "SEASONAL PLANNING WINDOWS",
+      "phase": "ACTIVE",
+      "geography": "US calendar planning heuristic; spring break/local holidays vary",
+      "lead_start": "2026-08-02",
+      "active_start": "2026-09-01",
+      "active_end": "2026-11-30",
+      "categories": [
+        "RENTAL_CARS",
+        "ACTIVITIES"
+      ],
+      "pages": [
+        "/rental-car-trip-cost/",
+        "/travel-activities-budget/"
+      ],
+      "intent_families": [
+        "rental car total cost",
+        "vacation activities budget"
+      ]
+    },
+    {
+      "theme": "HALLOWEEN",
+      "label": "SEASONAL PLANNING WINDOWS",
+      "phase": "LEAD",
+      "geography": "US calendar planning heuristic; spring break/local holidays vary",
+      "lead_start": "2026-08-31",
+      "active_start": "2026-10-15",
+      "active_end": "2026-10-31",
+      "categories": [
+        "ACTIVITIES",
+        "ACCOMMODATION"
+      ],
+      "pages": [
+        "/travel-activities-budget/",
+        "/plan-my-trip/"
+      ],
+      "intent_families": [
+        "vacation activities budget",
+        "vacation budget planner"
+      ]
+    },
+    {
+      "theme": "THANKSGIVING",
+      "label": "SEASONAL PLANNING WINDOWS",
+      "phase": "LEAD",
+      "geography": "US calendar planning heuristic; spring break/local holidays vary",
+      "lead_start": "2026-09-27",
+      "active_start": "2026-11-26",
+      "active_end": "2026-11-29",
+      "categories": [
+        "FLIGHTS",
+        "TRANSFERS",
+        "RENTAL_CARS",
+        "TRAVEL_INSURANCE"
+      ],
+      "pages": [
+        "/flight-cost-planner/",
+        "/airport-transfer-cost-planner/",
+        "/rental-car-trip-cost/",
+        "/travel-insurance-guide/"
+      ],
+      "intent_families": [
+        "true flight trip cost",
+        "airport transfer cost",
+        "rental car total cost",
+        "travel insurance planning"
+      ]
+    }
+  ],
+  "health": {
+    "as_of": "2026-10-07",
+    "public_page_count": 13,
+    "new_page_count": 1,
+    "issues": [],
+    "internal_link_graph": [
+      {
+        "from": "/",
+        "to": "/"
+      },
+      {
+        "from": "/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/",
+        "to": "/flight-vs-driving-cost/"
+      },
+      {
+        "from": "/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/airport-transfer-cost-planner/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/flight-vs-driving-cost/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/flight-cost-planner/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/flight-delay-compensation-guide/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/flight-vs-driving-cost/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/gas-trip-calculator/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/luggage-storage-cost-planner/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/plan-my-trip/",
+        "to": "/"
+      },
+      {
+        "from": "/plan-my-trip/",
+        "to": "/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/rental-car-trip-cost/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/flight-vs-driving-cost/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/road-trip-cost-calculator/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/travel-activities-budget/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/travel-esim-cost-planner/",
+        "to": "/travel-insurance-guide/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/airport-transfer-cost-planner/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/flight-cost-planner/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/flight-delay-compensation-guide/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/gas-trip-calculator/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/luggage-storage-cost-planner/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/plan-my-trip/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/rental-car-trip-cost/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/road-trip-cost-calculator/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/travel-activities-budget/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/travel-esim-cost-planner/"
+      },
+      {
+        "from": "/travel-insurance-guide/",
+        "to": "/travel-insurance-guide/"
+      }
+    ],
+    "pages_configuration": "Legacy Pages main / root observed through GitHub API on 2026-10-06; scheduled run checks repository configuration only, not deployment/indexing.",
+    "source_checks": {
+      "eia_retrieval_status": "fresh",
+      "eia_period_end": "2026-10-05"
+    },
+    "indexing_proven": false
+  },
+  "opportunities": [
+    {
+      "id": "seasonal-demand-airport-transfer-cost-planner-airport-transfer-cost-thanksgiving-2026-11-26-to-2026-11-29",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/airport-transfer-cost-planner/",
+      "category": "TRANSFERS",
+      "intent_family": "airport transfer cost",
+      "reason": "SEASONAL PLANNING WINDOWS: THANKSGIVING LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "THANKSGIVING 2026-11-26 to 2026-11-29"
+        }
+      ],
+      "priority": 1,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-flight-cost-planner-true-flight-trip-cost-thanksgiving-2026-11-26-to-2026-11-29",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/flight-cost-planner/",
+      "category": "FLIGHTS",
+      "intent_family": "true flight trip cost",
+      "reason": "SEASONAL PLANNING WINDOWS: THANKSGIVING LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "THANKSGIVING 2026-11-26 to 2026-11-29"
+        }
+      ],
+      "priority": 2,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-plan-my-trip-vacation-budget-planner-halloween-2026-10-15-to-2026-10-31",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/plan-my-trip/",
+      "category": "ACCOMMODATION",
+      "intent_family": "vacation budget planner",
+      "reason": "SEASONAL PLANNING WINDOWS: HALLOWEEN LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "HALLOWEEN 2026-10-15 to 2026-10-31"
+        }
+      ],
+      "priority": 3,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-rental-car-trip-cost-rental-car-total-cost-fall-travel-2026-09-01-to-2026-11-30",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/rental-car-trip-cost/",
+      "category": "RENTAL_CARS",
+      "intent_family": "rental car total cost",
+      "reason": "SEASONAL PLANNING WINDOWS: FALL_TRAVEL ACTIVE. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "FALL_TRAVEL 2026-09-01 to 2026-11-30"
+        }
+      ],
+      "priority": 4,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-rental-car-trip-cost-rental-car-total-cost-thanksgiving-2026-11-26-to-2026-11-29",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/rental-car-trip-cost/",
+      "category": "RENTAL_CARS",
+      "intent_family": "rental car total cost",
+      "reason": "SEASONAL PLANNING WINDOWS: THANKSGIVING LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "THANKSGIVING 2026-11-26 to 2026-11-29"
+        }
+      ],
+      "priority": 5,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-travel-activities-budget-vacation-activities-budget-fall-travel-2026-09-01-to-2026-11-30",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/travel-activities-budget/",
+      "category": "ACTIVITIES",
+      "intent_family": "vacation activities budget",
+      "reason": "SEASONAL PLANNING WINDOWS: FALL_TRAVEL ACTIVE. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "FALL_TRAVEL 2026-09-01 to 2026-11-30"
+        }
+      ],
+      "priority": 6,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-travel-activities-budget-vacation-activities-budget-halloween-2026-10-15-to-2026-10-31",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/travel-activities-budget/",
+      "category": "ACTIVITIES",
+      "intent_family": "vacation activities budget",
+      "reason": "SEASONAL PLANNING WINDOWS: HALLOWEEN LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "HALLOWEEN 2026-10-15 to 2026-10-31"
+        }
+      ],
+      "priority": 7,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "seasonal-demand-travel-insurance-guide-travel-insurance-planning-thanksgiving-2026-11-26-to-2026-11-29",
+      "type": "SEASONAL_DEMAND",
+      "target_page": "/travel-insurance-guide/",
+      "category": "TRAVEL_INSURANCE",
+      "intent_family": "travel insurance planning",
+      "reason": "SEASONAL PLANNING WINDOWS: THANKSGIVING LEAD. Not observed search demand.",
+      "evidence": [
+        {
+          "kind": "CALENDAR",
+          "detail": "THANKSGIVING 2026-11-26 to 2026-11-29"
+        }
+      ],
+      "priority": 8,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "CALENDAR",
+        "severity": "INFO"
+      },
+      "recommended_action": "Review existing cost/terms content and relevant internal links before this calendar window.",
+      "status": "READY_FOR_CONTENT",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-airport-transfer-cost-planner-airport-transfer-cost-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/airport-transfer-cost-planner/",
+      "category": "TRANSFERS",
+      "intent_family": "airport transfer cost",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 9,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-flight-cost-planner-true-flight-trip-cost-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/flight-cost-planner/",
+      "category": "FLIGHTS",
+      "intent_family": "true flight trip cost",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 10,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-flight-delay-compensation-guide-flight-delay-compensation-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/flight-delay-compensation-guide/",
+      "category": "FLIGHT_COMPENSATION",
+      "intent_family": "flight delay compensation",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 11,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-plan-my-trip-vacation-budget-planner-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/plan-my-trip/",
+      "category": "ACCOMMODATION",
+      "intent_family": "vacation budget planner",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 12,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-rental-car-trip-cost-rental-car-total-cost-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/rental-car-trip-cost/",
+      "category": "RENTAL_CARS",
+      "intent_family": "rental car total cost",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 13,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-travel-activities-budget-vacation-activities-budget-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/travel-activities-budget/",
+      "category": "ACTIVITIES",
+      "intent_family": "vacation activities budget",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 14,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-travel-esim-cost-planner-travel-esim-cost-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/travel-esim-cost-planner/",
+      "category": "ESIM",
+      "intent_family": "travel esim cost",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 15,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    },
+    {
+      "id": "monetization-route-gap-travel-insurance-guide-travel-insurance-planning-registry-has-no-account-verified-direct-action",
+      "type": "MONETIZATION_ROUTE_GAP",
+      "target_page": "/travel-insurance-guide/",
+      "category": "TRAVEL_INSURANCE",
+      "intent_family": "travel insurance planning",
+      "reason": "New direct route is not verified; existing Drive remains separate.",
+      "evidence": [
+        {
+          "kind": "REPOSITORY",
+          "detail": "Registry has no account-verified direct action."
+        }
+      ],
+      "priority": 16,
+      "freshness": {
+        "as_of": "2026-10-07",
+        "basis": "REPOSITORY",
+        "severity": "INFO"
+      },
+      "recommended_action": "Inspect legitimate Drive/account reports and exact permitted route before adding any direct URL.",
+      "status": "DEFERRED",
+      "created_at": "2026-10-06",
+      "updated_at": "2026-10-06"
+    }
+  ],
+  "new_page_policy": {
+    "maximum": 4,
+    "candidates": [
+      {
+        "page": "/flight-vs-driving-cost/",
+        "category": "FLIGHTS",
+        "intent_family": "flight vs driving cost",
+        "decision": "Distinct mode decision, not another airfare estimate.",
+        "capability": "Existing flight total plus TransportLodgingIntelligence.drivingFuelCost.",
+        "useful": true
+      },
+      {
+        "page": "/group-trip-budget-planner/",
+        "category": "ACCOMMODATION",
+        "intent_family": "group trip cost planner",
+        "decision": "Already covered by Plan My Trip group funding/dropout and quote workspaces.",
+        "useful": false
+      },
+      {
+        "page": "/rental-car-vs-airport-transfer/",
+        "category": "RENTAL_CARS",
+        "intent_family": "rental car vs other ground transport",
+        "decision": "Existing rental and transfer tools support manual comparison; defer separate page until evidence justifies it.",
+        "useful": false
+      },
+      {
+        "page": "/esim-vs-roaming-cost/",
+        "category": "ESIM",
+        "intent_family": "esim vs roaming cost",
+        "decision": "Existing eSIM page can explain plan-vs-roaming comparison without duplicating a page.",
+        "useful": false
+      }
+    ]
+  },
+  "notes": "No live search/provider data connected. Calendar windows are planning heuristics. No automatic content publication or account scraping."
+}
