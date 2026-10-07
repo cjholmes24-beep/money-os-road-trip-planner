@@ -17,6 +17,8 @@
   let trip = B.createTrip();
   let step = 0;
   let activeEiaFuel = null;
+  const openedPlanningTools = new Set();
+  const friendly = text => String(text ?? "").replaceAll("_", " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
   const steps = [...document.querySelectorAll(".planner-step")];
 
   function money(n, currency) {
@@ -28,13 +30,13 @@
     }
   }
 
-  function showStep(index) {
+  function showStep(index, focus = true) {
     step = Math.max(0, Math.min(steps.length - 1, index));
     steps.forEach((el, i) => { el.hidden = i !== step; });
     $("stepLabel").textContent = `Step ${step + 1} of ${steps.length}`;
     $("prevStep").hidden = step === 0;
     $("nextStep").hidden = step === steps.length - 1;
-    steps[step].querySelector("input, select, textarea, button")?.focus();
+    if(focus)steps[step].querySelector("input, select, textarea, button")?.focus();
   }
 
   function collect() {
@@ -81,7 +83,7 @@
       <label>Payment responsibility<input data-field="payment_responsibility" value="${escape(t.payment_responsibility)}" placeholder="Self / organizer"></label>
       <label>Committed<input data-field="amount_committed" type="number" min="0" step=".01" value="${Number(t.amount_committed)||0}"></label>
       <label>Paid<input data-field="amount_paid" type="number" min="0" step=".01" value="${Number(t.amount_paid)||0}"></label>
-      <label>Commitment state<select data-field="commitment_state">${B.COMMITMENT_STATES.map(s=>`<option ${s===(t.commitment_state||"INVITED")?"selected":""}>${s}</option>`).join("")}</select></label>
+      <label>Trip commitment<select data-field="commitment_state">${B.COMMITMENT_STATES.map(s=>`<option value="${s}" ${s===(t.commitment_state||"INVITED")?"selected":""}>${friendly(s)}</option>`).join("")}</select></label>
       <button class="secondary remove-row" type="button">Remove</button>
     </div>`;
   }
@@ -100,7 +102,7 @@
     return `<div class="editor-row reservation-row">
       <label>Category<select data-field="category">${B.RESERVATION_CATEGORIES.map(x=>`<option ${x===(r.category||"other")?"selected":""}>${x}</option>`).join("")}</select></label>
       ${fields.map(([key,label,type="text"])=>`<label>${label}<input data-field="${key}" type="${type}" ${type==="number"?'min="0" step=".01"':''} value="${escape(r[key])}"></label>`).join("")}
-      <label>Policy status<select data-field="policy_status"><option>UNKNOWN</option><option ${r.policy_status==="USER-ENTERED"?"selected":""}>USER-ENTERED</option><option ${r.policy_status==="VERIFIED"?"selected":""}>VERIFIED</option></select></label>
+      <label>Policy status<select data-field="policy_status"><option value="UNKNOWN">Not checked</option><option value="USER-ENTERED" ${r.policy_status==="USER-ENTERED"?"selected":""}>Entered from policy</option><option value="VERIFIED" ${r.policy_status==="VERIFIED"?"selected":""}>Checked against policy</option></select></label>
       <button class="secondary remove-row" type="button">Remove</button>
     </div>`;
   }
@@ -108,7 +110,7 @@
   function feeRows() {
     $("feeRows").innerHTML = trip.hidden_fees.map((f,i)=>`<div class="fee-row" data-index="${i}">
       <strong>${escape(f.category)}</strong>
-      <label>Status<select data-field="status">${B.FEE_STATUSES.map(s=>`<option ${s===f.status?"selected":""}>${s}</option>`).join("")}</select></label>
+      <label>Status<select data-field="status">${B.FEE_STATUSES.map(s=>`<option value="${s}" ${s===f.status?"selected":""}>${s==="UNKNOWN"?"Not checked":friendly(s)}</option>`).join("")}</select></label>
       <label>Amount (blank if unknown)<input data-field="amount" type="number" min="0" step=".01" value="${f.amount==null?"":f.amount}"></label>
       <label>Source / note<input data-field="source" value="${escape(f.source)}"></label>
     </div>`).join("");
@@ -155,16 +157,20 @@
     const currency = trip.budget.currency;
 
     $("blueprintSummary").innerHTML = [
-      ["TRIP TYPE",trip.identity.purpose||"Not set"],
-      ["GROUP",`${trip.traveler_count} planned · ${b.committed} committed · ${b.funded} funded`],
-      ["DATES",trip.dates.start?`${trip.dates.start} → ${trip.dates.end||"open"} (${trip.dates.flexibility})`:"Not set"],
-      ["DESTINATION",trip.destination_unknown?"Find me somewhere":trip.destination||"Not set"],
-      ["BUDGET",money(b.total,currency)],["RESERVE",money(b.reserve,currency)],
-      ["FUNDED AMOUNT",money(b.fundedAmount,currency)],["FUNDING GAP",money(b.unfundedGap,currency)],
-      ["PER-PERSON SHARE",money(b.plannedShare,currency)],["DROPOUT EXPOSURE",money(one.totalFundingShortage,currency)],
-      ["TRANSPORTATION",trip.preferences.transport],["LODGING",trip.preferences.lodging],
-      ["INTERESTS",trip.preferences.interests.join(", ")||"None selected"],["SPECIAL MODES",special]
+      ["Trip",trip.identity.title||trip.identity.purpose||"Your trip"],
+      ["Travelers",`${trip.traveler_count} planned · ${b.committed} committed · ${b.funded} funded`],
+      ["Dates",trip.dates.start?`${trip.dates.start} → ${trip.dates.end||"open"}`:"Add your travel dates"],
+      ["Destination",trip.destination_unknown?"Destination undecided":trip.destination||"Add your destination"]
     ].map(([a,v])=>`<div><span>${escape(a)}</span><strong>${escape(v)}</strong></div>`).join("");
+    $("budgetSummary").innerHTML = [["Total budget",b.total],["Protected reserve",b.reserve],["Available to plan",b.spendable],["Money paid",b.fundedAmount],["Still to fund",b.unfundedGap],["Planned per traveler",b.plannedShare]].map(([label,n])=>`<div><span>${escape(label)}</span><strong>${money(n,currency)}</strong></div>`).join("");
+    $("groupRiskSection").hidden=trip.traveler_count<2;
+    $("cancellationSection").hidden=!trip.reservations.length;
+    const needs=[];
+    if(trip.needs.pet_service_animal)needs.push(["Pets / service animals",trip.needs.pet_service_animal]);
+    if(trip.needs.accessibility)needs.push(["Accessibility",trip.needs.accessibility]);
+    if(trip.modes.business||trip.modes.vendor_business_opportunity)needs.push(["Business planning",trip.identity.purpose||"Business records selected"]);
+    $("enteredTripNeeds").hidden=!needs.length;
+    $("tripNeedsSummary").innerHTML=needs.map(([title,text])=>`<p><strong>${escape(title)}:</strong> ${escape(text)}</p>`).join('');
 
     $("dropoutResults").innerHTML = [
       ["1 person drops",one],["2 people drop",two],["One unpaid traveler never pays",unpaid]
@@ -175,10 +181,11 @@
       ["Estimated recoverable",c.estimatedRecoverable],["Estimated nonrefundable exposure",c.estimatedNonrefundable],
       ["Estimated change/cancellation fees",c.estimatedFees],["Net estimated loss",c.netEstimatedLoss]
     ].map(([k,v])=>`<div><span>${k}</span><strong>${money(v,currency)}</strong></div>`).join("") +
-      `<div><span>Credits / vouchers</span><strong>${escape(c.creditsVouchers.join(", ")||"UNKNOWN")}</strong></div><p class="source-note">${c.unknownPolicies} reservation policy record(s) are UNKNOWN. No provider rule was invented.</p>`;
+      `<div><span>Credits / vouchers</span><strong>${escape(c.creditsVouchers.join(", ")||"Check your booking terms")}</strong></div><p class="source-note">${c.unknownPolicies} policy detail(s) still need checking. Confirm them before relying on the estimate.</p>`;
 
-    $("feeSummary").textContent = `${money(fees.total,currency)} in entered/known/verified fees · ${fees.unknown} unknown item(s). Unknown fees are not silently priced.`;
-    $("resilienceCards").innerHTML = B.resilience(trip).map(x=>`<article class="status-card status-${x.status.toLowerCase()}"><span>${x.status}</span><h4>${escape(x.label)}</h4><p>${escape(x.reason)}</p></article>`).join("");
+    $("feeSummary").textContent = `${money(fees.total,currency)} in added fees. ${fees.unknown} fee categories still need checking; blank amounts are not treated as free. ${b.unfundedGap>0?money(b.unfundedGap,currency)+" of your budget still needs funding.":""}`;
+    const relevantRisks=B.resilience(trip).filter(x=>({"Funding readiness":b.total>0,"Cancellation exposure":trip.reservations.length>0,"Transportation backup":trip.transportation_options.length>0,"Emergency reserve":b.total>0,"Group commitment":trip.traveler_count>1||trip.travelers.length>0,"Lodging flexibility":trip.preferences.lodging!=="No lodging"&&trip.lodging_options.length>0,"Schedule flexibility":!!trip.dates.start})[x.label]);
+    $("resilienceCards").innerHTML = relevantRisks.map(x=>`<article class="status-card status-${x.status.toLowerCase()}"><span>${{STRONG:"Plan in place",WATCH:"Worth checking",EXPOSED:"Needs attention",UNKNOWN:"Add details"}[x.status]||"Review"}</span><h4>${escape(x.label)}</h4><p>${escape(x.reason)}</p></article>`).join("") || '<p class="empty-state">Add a budget, dates or booking details to see the checks that apply to your trip.</p>';
     renderIntelligence();
     $("planResults").hidden = false;
     window.dispatchEvent(new CustomEvent("suitcasebrain:blueprint",{detail:trip}));
@@ -187,6 +194,8 @@
 
   function populate(t) {
     trip = t;
+    openedPlanningTools.clear();
+    $("planResults").hidden=true;
     resetEventEditor();
     trip.transportation_options ||= [];
     trip.lodging_options ||= [];
@@ -221,41 +230,65 @@
 
   function optionCard(option, kind) {
     const validation = kind==="transport" ? T.validateTransportOption(option) : T.validateLodgingOption(option);
-    if (!validation.valid) {
-      return `<article class="option-card status-exposed"><strong>INVALID SAVED OPTION</strong><p>${escape(validation.errors.join(" "))}</p></article>`;
-    }
+    if (!validation.valid) return '<article class="option-card"><p>This saved option needs correction. Remove it and add the details again.</p></article>';
     const p=T.priceCompleteness(option,kind), cancel=T.cancellationExposure(option);
-    const title=kind==="transport"?`${option.mode.replaceAll("_"," ")} · ${option.provider}`:`${option.property} · ${option.category.replaceAll("_"," ")}`;
-    const unit=kind==="transport"&&option.traveler_count?`${money(p.knownTotal/option.traveler_count,option.currency)} / traveler`:kind==="lodging"&&option.nights?`${money(p.knownTotal/option.nights,option.currency)} / night`:"UNKNOWN";
+    const required=kind==="transport"?(T.TRANSPORT_MANDATORY_BY_MODE[option.mode]||T.TRANSPORT_MANDATORY_BY_MODE.OTHER):T.LODGING_MANDATORY;
+    const hasRequiredPrice=p.unknownMandatoryComponents.length<required.length||p.knownTotal>0;
+    const title=kind==="transport"?`${friendly(option.mode)}${option.provider&&option.provider!=="UNKNOWN"?" · "+option.provider:""}`:option.property;
+    const unit=kind==="transport"?`${money(p.knownTotal/option.traveler_count,option.currency)} / traveler`:`${money(p.knownTotal/option.nights,option.currency)} / night`;
     const booking=T.bookingUrl(option);
     const edit=option.record_origin==="USER_ENTERED"?`<button class="secondary edit-option" data-kind="${kind}" data-id="${escape(option.id)}" type="button">Edit</button>`:"";
-    const bookingCta=booking?`<a class="primary button-link" href="${escape(booking)}" target="_blank" rel="sponsored noopener">Continue to verified provider ↗</a>`:"";
+    const bookingCta=booking?`<a class="primary button-link" href="${escape(booking)}" target="_blank" rel="sponsored noopener">Continue to provider ↗</a>`:"";
+    const origin=option.record_origin==="USER_ENTERED"?"Your quote":option.record_origin==="IMPORTED"?"Imported quote — check details":"Source-backed quote";
     return `<article class="option-card" data-option-id="${escape(option.id)}">
-      <div class="option-head"><span class="intel-badge">${escape(option.record_origin)}</span><h4>${escape(title)}</h4></div>
-      <strong class="intel-value">${money(p.knownTotal,option.currency)} known required</strong>
-      <p>${escape(unit)} · ${escape(p.label)}</p>
-      <p class="muted">Entered optional add-ons: ${money(p.knownOptionalAddOns,option.currency)}. Known-cost coverage: ${escape(p.coverageLabel)}. Deposit/hold: ${p.depositHold==null?"UNKNOWN":money(p.depositHold,option.currency)}. ${escape(cancel.label)}.</p>
-      <p class="muted">Source: ${escape(sourceLine(option))} · Availability: ${escape(option.availability_status)}</p>
+      <div class="option-head"><span class="intel-badge">${origin}</span><h4>${escape(title)}</h4></div>
+      <strong class="intel-value">${hasRequiredPrice?money(p.knownTotal,option.currency)+" in known required costs":"Add prices to see a total"}</strong>
+      <p>${p.mandatoryComplete?escape(unit):`${p.unknownMandatoryComponents.length} required cost(s) still need checking. This is not a complete price.`}</p>
+      <details class="method-notes"><summary>About these numbers</summary><p>Optional costs: ${money(p.knownOptionalAddOns,option.currency)} known. Deposit/hold: ${p.depositHold==null?"Not added":money(p.depositHold,option.currency)}. ${cancel.complete?"Known cancellation exposure: "+money(cancel.potentialExposure,option.currency):"Check cancellation terms before booking."}</p><p>Cost coverage: ${escape(p.coverageLabel)}. Source: ${escape(sourceLine(option))} · Availability: ${escape(option.availability_status)}. ${escape(cancel.label)}</p></details>
       <div class="button-row">${edit}<button class="secondary remove-option" data-kind="${kind}" data-id="${escape(option.id)}" type="button">Remove</button>${bookingCta}</div>
     </article>`;
   }
 
-  function comparisonCards(results, options) {
-    return results.map(x=>{
+  function comparisonCards(results, options, kind) {
+    const valid=options.filter(o=>(kind==="transport"?T.validateTransportOption(o):T.validateLodgingOption(o)).valid);
+    const complete=valid.filter(o=>T.priceCompleteness(o,kind).mandatoryComplete);
+    const sameCurrency=new Set(complete.map(o=>o.currency)).size<=1;
+    const usable=results.filter(x=>x.status==="COMPARABLE"||x.status==="TIE — NO SINGLE WINNER");
+    if(complete.length<2||!sameCurrency||!usable.length){
+      const instruction=kind==="lodging"?'Add at least two complete stays to compare price, nightly cost, fees and flexibility.':'Add at least two complete options to compare price, travel time, fees and flexibility.';
+      return `<div class="comparison-empty"><p>${instruction}${!sameCurrency?' Use the same currency for price comparisons.':''}</p><button type="button" class="secondary open-quote" data-kind="${kind}">${kind==="lodging"?'Add a stay':'Add an option'}</button></div>`;
+    }
+    const labels={"LOWEST KNOWN COST":"Lowest complete price","LOWEST KNOWN COST PER TRAVELER":"Lowest cost per traveler","FASTEST KNOWN OPTION":"Shortest travel time","FEWEST UNKNOWN COSTS":"Most costs accounted for","MOST FLEXIBLE KNOWN POLICY":"Lowest known cancellation exposure","LOWEST KNOWN REQUIRED TOTAL + HOLD":"Lowest total including hold","GROUP-FRIENDLY":"Fits your group","LOWEST KNOWN TOTAL":"Lowest complete stay price","LOWEST KNOWN TOTAL PER NIGHT":"Lowest nightly cost","FEWEST UNKNOWN MANDATORY FEES":"Most required fees accounted for","MOST FLEXIBLE KNOWN CANCELLATION":"Lowest known cancellation exposure","LOWEST DEPOSIT/HOLD":"Lowest deposit or hold","PARKING INCLUDED":"Parking included","BREAKFAST INCLUDED":"Breakfast included","BEST LOCATION FIT":"Fits your preferred location"};
+    return usable.map(x=>{
       const winner=options.find(o=>o.id===x.winner_id);
-      const name=winner?(winner.property||winner.service_name||winner.provider||winner.mode):x.status;
-      return `<article class="comparison-card"><strong>${escape(x.label)}</strong><span>${escape(name)}</span><p>${escape(x.basis)}</p></article>`;
+      const name=winner?(winner.property||winner.service_name||(winner.provider!=="UNKNOWN"&&winner.provider)||friendly(winner.mode)):"More than one option matches";
+      const cost=["LOWEST KNOWN COST","LOWEST KNOWN COST PER TRAVELER","MOST FLEXIBLE KNOWN POLICY","LOWEST KNOWN REQUIRED TOTAL + HOLD","LOWEST KNOWN TOTAL","LOWEST KNOWN TOTAL PER NIGHT","MOST FLEXIBLE KNOWN CANCELLATION","LOWEST DEPOSIT/HOLD"].includes(x.label);
+      const metric=cost?money(x.value,complete[0].currency):x.label==="FASTEST KNOWN OPTION"?`${x.value} minutes`:"";
+      return `<article class="comparison-card"><strong>${escape(labels[x.label]||friendly(x.label))}</strong><span>${escape(name)}</span>${metric?`<p>${escape(metric)}</p>`:""}<details class="method-notes"><summary>How this comparison works</summary><p>${escape(x.basis)}</p></details></article>`;
     }).join("");
+  }
+
+  function planningVisibility(){
+    const has=(name,records,relevant)=>openedPlanningTools.has(name)||records.length>0||relevant;
+    $("transportWorkspace").hidden=!has("transport",trip.transportation_options,!!trip.preferences.transport);
+    $("lodgingWorkspace").hidden=!has("lodging",trip.lodging_options,trip.preferences.lodging!=="No lodging"&&!!trip.preferences.lodging);
+    $("eventsWorkspace").hidden=!has("events",trip.events,trip.preferences.interests.includes("Events")||/festival|concert|event/i.test(trip.identity.purpose));
+    const fuelWasHidden=$("fuelReference").hidden;
+    const fuel=openedPlanningTools.has('fuel')||['Drive','Rental car'].includes(trip.preferences.transport)||trip.transportation_options.some(o=>['DRIVE','RENTAL_CAR'].includes(o.mode));
+    const weather=openedPlanningTools.has('weather')||!!trip.destination||!!trip.dates.start;
+    $("fuelReference").hidden=!fuel;$("weatherReference").hidden=!weather;$("tripDataSection").hidden=!fuel&&!weather;
+    if(fuel&&fuelWasHidden&&!$("planResults").hidden)window.dispatchEvent(new CustomEvent("suitcasebrain:fuel-request",{detail:trip}));
   }
 
   function renderIntelligence(){
     renderEvents();
     trip.transportation_options ||= [];
     trip.lodging_options ||= [];
-    $("transportOptions").innerHTML=trip.transportation_options.length?trip.transportation_options.map(x=>optionCard(x,"transport")).join(""):'<p class="empty-state">No user-entered or source-backed transportation quotes yet.</p>';
-    $("lodgingOptions").innerHTML=trip.lodging_options.length?trip.lodging_options.map(x=>optionCard(x,"lodging")).join(""):'<p class="empty-state">No user-entered or source-backed lodging quotes yet.</p>';
-    $("transportComparison").innerHTML=comparisonCards(T.compareTransport(trip.transportation_options),trip.transportation_options);
-    $("lodgingComparison").innerHTML=comparisonCards(T.compareLodging(trip.lodging_options),trip.lodging_options);
+    $("transportOptions").innerHTML=trip.transportation_options.map(x=>optionCard(x,"transport")).join("");
+    $("lodgingOptions").innerHTML=trip.lodging_options.map(x=>optionCard(x,"lodging")).join("");
+    $("transportComparison").innerHTML=comparisonCards(T.compareTransport(trip.transportation_options),trip.transportation_options,"transport");
+    $("lodgingComparison").innerHTML=comparisonCards(T.compareLodging(trip.lodging_options),trip.lodging_options,"lodging");
+    planningVisibility();
   }
 
   function fieldComponent(id, source = null) {
@@ -439,16 +472,24 @@
   function resetEventEditor() {
     $('eventForm').reset(); $('event_category').value='OTHER'; $('event_price_type').value='UNKNOWN'; $('event_event_status').value='UNKNOWN'; $('eventEditId').value=''; $('eventFormError').textContent='';
   }
+  function eventDate(date, occurrence) {
+    if(!date)return 'Date not added';
+    try{
+      if(occurrence.all_day)return new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeZone:'UTC'}).format(new Date(date+'T12:00:00Z'));
+      const zone=occurrence.timezone||'UTC';
+      return new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short',timeZone:zone}).format(new Date(date))+' '+zone;
+    }catch(_){return date;}
+  }
   function eventCard(event, reasons = []) {
     const p=E.priceTruth(event);
-    const times=event.occurrences.map(o=>`${o.start_date_time || 'UNKNOWN'} → ${o.end_date_time || 'UNKNOWN'} · ${o.timezone || 'TIMEZONE UNKNOWN'} · ${E.occurrenceTimeState(o,Date.now())} · organizer: ${o.status} · source: ${o.source.source_name} · ${E.occurrenceSourceState(event,o)} · retrieved ${o.source.retrieved_at || 'UNKNOWN'}`).join('; ');
-    return `<article class="option-card"><span class="intel-badge">${escape(event.record_origin.replaceAll('_',' '))}</span><h4>${escape(event.title)}</h4>
-      <p>${escape(event.category)} · ${escape(event.location || event.city || 'LOCATION UNKNOWN')} · organizer: ${escape(event.event_status)}</p>
-      <p>${escape(times || 'DATE_UNKNOWN')}</p><p>${escape(event.price_type)} · ${escape(money(p.knownRequiredCost,event.currency))} known required · ${escape(p.label)} · ${escape(p.coverage)}</p>
-      <p>Unknown required: ${escape(p.unknownRequiredComponents.join(', ') || 'None')}. Known optional travel costs: ${escape(money(p.knownOptionalCost,event.currency))}. Minimum age: ${event.minimum_age ?? 'UNKNOWN'} (verify eligibility; unknown traveler ages do not establish fit). Family-friendly: ${event.family_friendly === null ? 'UNKNOWN' : event.family_friendly ? 'YES' : 'NO'}.</p>
-      <p>Source/freshness: ${escape(E.sourceState(event))} · ${escape(event.source.source_name)} · retrieved ${escape(event.source.retrieved_at || 'UNKNOWN')} · ${escape(event.source.notes)}. Source URL (unverified text): ${escape(event.official_event_url || 'UNKNOWN')}</p>
-      <p>${escape(event.notes)}</p>${reasons.length?`<p>Match reasons: ${escape(reasons.join(' · '))}</p>`:''}
-      <div class="button-row">${event.record_origin==='USER_ENTERED'?`<button type="button" class="secondary edit-event" data-id="${escape(event.id)}">EDIT EVENT</button>`:''}<button type="button" class="secondary remove-event" data-id="${escape(event.id)}">REMOVE EVENT</button></div></article>`;
+    const times=event.occurrences.map(o=>`${eventDate(o.start_date_time,o)} → ${o.end_date_time?eventDate(o.end_date_time,o):'End not added'} · ${E.occurrenceTimeState(o,Date.now())==='DATE_UNKNOWN'?'Check event dates':friendly(E.occurrenceTimeState(o,Date.now()))}`).join('; ');
+    const provenance=event.occurrences.map(o=>`${o.timezone||'UNKNOWN'} · organizer: ${o.status} · source: ${o.source.source_name} · ${E.occurrenceSourceState(event,o)} · retrieved ${o.source.retrieved_at||'UNKNOWN'}`).join('; ');
+    return `<article class="option-card"><span class="intel-badge">${event.record_origin==='USER_ENTERED'?'Added by you':event.record_origin==='IMPORTED'?'Imported — check details':'Source-backed event'}</span><h4>${escape(event.title)}</h4>
+      <p>${escape(friendly(event.category))} · ${escape(event.location||event.city||'Add a location')} · ${escape(event.event_status==='UNKNOWN'?'Check organizer status':friendly(event.event_status))}</p>
+      <p>${escape(times||'Add an event date')}</p><p>${p.unknownRequiredComponents.length===2?'Add admission prices':money(p.knownRequiredCost,event.currency)+' in known admission costs'}${p.requiredComplete?'':' · Check missing prices before budgeting.'}</p>
+      <details class="method-notes"><summary>Event information notes</summary><p>These planning details are not live ticket inventory. Price type: ${escape(friendly(event.price_type))}. Coverage: ${escape(p.coverage)}. Missing required costs: ${escape(p.unknownRequiredComponents.map(friendly).join(', ')||'None')}. Known optional travel costs: ${money(p.knownOptionalCost,event.currency)}.</p><p>Minimum age: ${event.minimum_age??'Not known'}; verify eligibility. Family-friendly: ${event.family_friendly===null?'Not known':event.family_friendly?'Yes':'No'}.</p><p>${escape(provenance)}. Source/freshness: ${escape(E.sourceState(event))} · ${escape(event.source.source_name)} · retrieved ${escape(event.source.retrieved_at||'UNKNOWN')} · ${escape(event.source.notes)}. Website (not independently verified): ${escape(event.official_event_url||'Not added')}</p></details>
+      ${event.notes?`<p>${escape(event.notes)}</p>`:''}${reasons.length?`<p>Why it fits: ${escape(reasons.map(friendly).join(' · '))}</p>`:''}
+      <div class="button-row">${event.record_origin==='USER_ENTERED'?`<button type="button" class="secondary edit-event" data-id="${escape(event.id)}">Edit event</button>`:''}<button type="button" class="secondary remove-event" data-id="${escape(event.id)}">Remove event</button></div></article>`;
   }
   function renderEvents() {
     const filters={};
@@ -456,15 +497,15 @@
     if (value('eventFilter_age')!=='') filters.age=Number(value('eventFilter_age'));
     if (value('eventFilter_family_friendly')!=='') filters.family_friendly=value('eventFilter_family_friendly')==='true';
     const events=E.filterEvents(trip.events,filters);
-    $('eventCounts').textContent=`USER-ENTERED EVENTS: ${trip.events.filter(e=>e.record_origin==='USER_ENTERED').length} · LIVE SOURCE-BACKED EVENTS: ${trip.events.filter(e=>e.record_origin==='SOURCE_BACKED').length} · IMPORTED UNVERIFIED SNAPSHOTS: ${trip.events.filter(e=>e.record_origin==='IMPORTED').length} · ${events.length} local filter result(s)`;
-    $('eventRecords').innerHTML=events.map(e=>eventCard(e)).join('') || '<p class="empty-state">NO MATCHING EVENT DATA for these local filters.</p>';
+    $('eventCounts').textContent=trip.events.length?`${events.length} of ${trip.events.length} saved event(s) shown`:'';
+    $('eventRecords').innerHTML=events.map(e=>eventCard(e)).join('') || `<div class="empty-state"><p>${trip.events.length?'Try another filter or add an event.':'Add a concert, festival, game or attraction to your plan.'}</p><button class="secondary open-event" type="button">Add an event</button></div>`;
     const matchingTrip={...trip,destination:value('destination'),dates:{start:value('startDate'),end:value('endDate')},identity:{purpose:value('purpose'),vibe:value('vibe')},preferences:{interests:[...document.querySelectorAll('[name="interest"]:checked')].map(x=>x.value)}};
     const matches=E.matchTripEvents(matchingTrip);
-    $('eventMatches').innerHTML=matches.map(m=>eventCard(m.event,m.reasons)).join('') || '<p class="empty-state">NO MATCHING EVENT DATA. Enter trip dates, destination, and real events. LIVE EVENT SOURCE NOT CONNECTED.</p>';
+    $('eventMatches').innerHTML=matches.map(m=>eventCard(m.event,m.reasons)).join('') || '<p class="empty-state">Add trip dates and an event with matching dates and location to see it here.</p>';
   }
   const eventSelectOptions={category:E.CATEGORIES,price_type:E.PRICE_TYPES,event_status:E.STATUSES,seasonal_theme:E.SEASONS,indoor_outdoor:['UNKNOWN','INDOOR','OUTDOOR','BOTH'],family_friendly:['','true','false']};
   for (const [key,options] of Object.entries(eventSelectOptions)) {
-    const labels=x=>x===''?'UNKNOWN':x==='true'?'YES':x==='false'?'NO':x;
+    const labels=x=>x===''||x==='UNKNOWN'?'Not sure':x==='true'?'Yes':x==='false'?'No':friendly(x);
     $('event_'+key).innerHTML=(key==='seasonal_theme'?['',...options]:options).map(x=>`<option value="${x}">${labels(x)}</option>`).join('');
     $('eventFilter_'+key).innerHTML='<option value="">Any</option>'+options.filter(Boolean).map(x=>`<option value="${x}">${labels(x)}</option>`).join('');
   }
@@ -489,7 +530,7 @@
       const event=E.normalizeEvent(input);
       const index=trip.events.findIndex(x=>x.id===event.id);
       if(index<0)trip.events.push(event);else trip.events[index]=event;
-      resetEventEditor();renderEvents();
+      resetEventEditor();renderEvents();planningVisibility();
     } catch(err){$('eventFormError').textContent=err.message;}
   };
   $('cancelEventEdit').onclick=resetEventEditor;
@@ -498,7 +539,7 @@
     if(e.target.matches('.remove-event')){
       trip.events=trip.events.filter(x=>x.id!==e.target.dataset.id);
       if(value('eventEditId')===e.target.dataset.id) resetEventEditor();
-      renderEvents();
+      renderEvents();planningVisibility();
     }
     if(e.target.matches('.edit-event')){
       const event=trip.events.find(x=>x.id===e.target.dataset.id);
@@ -548,7 +589,7 @@
       const original=JSON.parse(raw),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
-      $("persistenceStatus").textContent=original.schema_version<3?`Saved V${original.schema_version} trip migrated to V3 in memory. Save to retain the migration.`:"Saved trip loaded.";
+      $("persistenceStatus").textContent=original.schema_version<3?`Your older saved trip is ready. Save it again to keep the updated format.`:"Saved trip loaded.";
     }catch(e){$("persistenceStatus").textContent=e.message;}
   };
 
@@ -571,18 +612,19 @@
       const original=JSON.parse(await e.target.files[0].text()),t=T.sanitizePersistedTripOptions(B.migrateTrip(original)),v=validateWholeTrip(t);
       if(!v.valid)throw Error(v.errors.join(" "));
       populate(t);
-      $("persistenceStatus").textContent=`Validated trip imported${original.schema_version<3?` and migrated from V${original.schema_version} to V3`:""}. Save it to retain it in this browser.`;
+      $("persistenceStatus").textContent=`Trip uploaded. Save it to keep it in this browser.`;
     }catch(err){$("persistenceStatus").textContent=`Import rejected: ${err.message}`;}
     e.target.value="";
   };
 
   $("emergencyToggle").onclick=()=>{
     $("emergencyPanel").hidden=!$("emergencyPanel").hidden;
+    $("emergencyToggle").setAttribute("aria-expanded",String(!$("emergencyPanel").hidden));
     if(!$("emergencyPanel").hidden)$("emergencyScenario").focus();
   };
 
-  $("quoteTransportMode").innerHTML=T.TRANSPORT_MODES.map(x=>`<option>${x}</option>`).join("");
-  $("quoteLodgingCategory").innerHTML=T.LODGING_CATEGORIES.map(x=>`<option>${x}</option>`).join("");
+  $("quoteTransportMode").innerHTML=T.TRANSPORT_MODES.map(x=>`<option value="${x}">${friendly(x)}</option>`).join("");
+  $("quoteLodgingCategory").innerHTML=T.LODGING_CATEGORIES.map(x=>`<option value="${x}">${friendly(x)}</option>`).join("");
 
   $("transportQuoteForm").onsubmit=e=>{
     e.preventDefault();
@@ -615,12 +657,12 @@
     const selectedCurrency=value("currency")||trip.budget.currency||"USD";
     if(selectedCurrency!=="USD"){
       activeEiaFuel=null;
-      $("quoteTransportFuelSourceStatus").textContent="EIA gasoline is USD per gallon. FX conversion is not connected; use USD or enter your own converted pump quote.";
+      $("quoteTransportFuelSourceStatus").textContent="EIA gasoline is USD per gallon. use USD or enter a pump price in your selected currency.";
       return;
     }
     const api=window.SourceIntelligence;
     if(!api?.loadFuelReference){
-      $("quoteTransportFuelSourceStatus").textContent="EIA adapter is not available yet.";
+      $("quoteTransportFuelSourceStatus").textContent="Use a pump price for now; the weekly estimate is unavailable.";
       return;
     }
     const button=$("useEiaFuelReference");
@@ -633,7 +675,7 @@
       $("quoteTransportFuelSourceStatus").textContent=`${activeEiaFuel.label} · week ending ${activeEiaFuel.period_end} · ${activeEiaFuel.freshness.status.toUpperCase()} · not a station quote`;
     }catch(err){
       activeEiaFuel=null;
-      $("quoteTransportFuelSourceStatus").textContent="EIA reference unavailable. No substitute price was invented.";
+      $("quoteTransportFuelSourceStatus").textContent="The weekly estimate could not load. Try again or enter a pump price.";
     }finally{button.disabled=false;}
   };
 
@@ -641,13 +683,22 @@
   $("quoteTransportFuelPrice").addEventListener("input",()=>{
     if(activeEiaFuel&&optionalNumber("quoteTransportFuelPrice")!=null&&Math.abs(optionalNumber("quoteTransportFuelPrice")-activeEiaFuel.value)>0.0005){
       activeEiaFuel=null;setField("quoteTransportFuelBasis","USER ENTERED PUMP PRICE");
-      $("quoteTransportFuelSourceStatus").textContent="Fuel price changed manually; basis is now USER ENTERED.";
+      $("quoteTransportFuelSourceStatus").textContent="Using the pump price you entered.";
     }
   });
   $("destination").addEventListener("input",()=>{activeEiaFuel=null;});
 
+  document.addEventListener('click',event=>{
+    const reveal=event.target.closest('.reveal-planning');
+    if(reveal){openedPlanningTools.add(reveal.dataset.workspace);planningVisibility();const name=reveal.dataset.workspace;const target=$(({transport:'transportWorkspace',lodging:'lodgingWorkspace',events:'eventsWorkspace',fuel:'fuelReference',weather:'weatherReference'})[name]);target?.scrollIntoView({block:'start',behavior:'auto'});}
+    const add=event.target.closest('.open-quote');
+    if(add){const editor=$(add.dataset.kind==='lodging'?'lodgingEditor':'transportEditor');editor.open=true;editor.querySelector('input:not([type="hidden"]),select')?.focus();}
+    if(event.target.closest('.open-event')){$('eventEditor').open=true;$('event_title').focus();}
+  });
+  $('useFuelEstimate').onclick=()=>{openedPlanningTools.add('transport');planningVisibility();$('transportEditor').open=true;$('transportEditor .quote-advanced').open=true;$('useEiaFuelReference').click();$('quoteTransportDistance').focus();};
+
   feeRows();
   renderIntelligence();
   resetQuoteForm("transport");
-  showStep(0);
+  showStep(0,false);
 })();
