@@ -27,6 +27,8 @@ jobs:
         run: |
           node --check scripts/check-google-indexing-readiness.js
           node --check tests/gsc-indexing-tests.js
+          node --check tests/browser-homepage-smoke.js
+          node --check tests/homepage-tests.js
           node --check tests/browser-organic-smoke.js
           node --check organic-demand-engine.js
           node --check organic-acquisition-ui.js
@@ -64,3 +66,45 @@ jobs:
           python3 -m json.tool data/source-registry.json >/dev/null
           python3 -m json.tool data/eia-gas-latest.json >/dev/null
           python3 -m json.tool data/provider-capability-registry.json >/dev/null
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Prepare isolated browser test tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/homepage-browser" --no-audit --no-fund playwright@1.62.1
+          node "$RUNNER_TEMP/homepage-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Homepage and existing organic browser regressions
+        env:
+          NODE_PATH: ${{ runner.temp }}/homepage-browser/node_modules
+          SUITCASE_SCREENSHOTS: ${{ runner.temp }}/homepage-screenshots
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 > "$RUNNER_TEMP/homepage-http.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          python3 - <<'PYWAIT'
+          import time, urllib.request
+          for attempt in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:8000/', timeout=1) as response:
+                      assert response.status == 200
+                      break
+              except OSError:
+                  time.sleep(0.1)
+          else:
+              raise SystemExit('Local static server did not become ready.')
+          PYWAIT
+          node tests/browser-homepage-smoke.js
+          node tests/browser-organic-smoke.js
+      - name: Save homepage viewport screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: homepage-viewport-screenshots
+          path: ${{ runner.temp }}/homepage-screenshots/
+          retention-days: 7

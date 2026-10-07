@@ -1,0 +1,27 @@
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('assert'),crypto=require('crypto');
+const {parsePage}=require('../scripts/organic-site-audit');
+module.exports=()=>{
+ let n=0;const ok=(v,m)=>{assert.ok(v,m);n++;};
+ const root=path.resolve(__dirname,'..'),html=fs.readFileSync(path.join(root,'index.html'),'utf8'),page=parsePage(html,'/');
+ for(const banned of [/powered by money os/i,/\bMoney OS\b/i,/\bV1\b/,/canonical trip profile/i,/being built/i,/useful math, not fake certainty/i,/\bmonetization\b/i,/offers stay secondary/i,/trademark clearance/i,/working brand/i,/Road Trip Ledger/i])ok(!banned.test(page.visible),'consumer copy excludes '+banned);
+ ok(html.includes('property="og:site_name" content="Suitcase Brain"'),'social brand');
+ ok(/class="home-button home-primary" href="plan-my-trip\/">Plan my trip/.test(html),'primary planning CTA');
+ ok(html.includes('href="#popular-tools">Explore travel tools'),'tools CTA');
+ const featured=[...html.matchAll(/class="travel-tool [^"]+" href="([^"]+)"/g)].map(m=>m[1]);
+ ok(JSON.stringify(featured)===JSON.stringify(['plan-my-trip/','flight-cost-planner/','flight-vs-driving-cost/','road-trip-cost-calculator/','rental-car-trip-cost/','travel-activities-budget/']),'ordered visitor priorities');
+ for(const href of featured)ok(fs.existsSync(path.join(root,href,'index.html')),'actual existing tool '+href);
+ ok(page.drive_count===1,'original Drive loader exactly once');ok(page.visible.includes('Affiliate disclosure'),'disclosure');
+ ok(page.canonical==='https://cjholmes24-beep.github.io/money-os-road-trip-planner/','exact canonical');
+ ok(page.schemas.length===1&&page.schemas[0]['@type']==='WebSite'&&page.schemas[0].name==='Suitcase Brain','truthful schema');
+ ok(fs.readFileSync(path.join(root,'google4493b9dd4b73c0e8.html'),'utf8')==='google-site-verification: google4493b9dd4b73c0e8.html','exact verification file retained');
+ const digest=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex');
+ ok(digest('sitemap.xml')==='be37be0e43e71472b6e8432c7ee99461dc442e85668465ba44f1be71d835cd50','sitemap byte preservation');
+ ok(digest('robots.txt')==='7de70fd9be627777a8a1bdd94984abdc4e9f9225b48b37fcd95f8d918062648e','robots byte preservation');
+ ok(/<details id="privacy-settings"[^>]*>/.test(html)&&!/<details id="privacy-settings"[^>]*\bopen/.test(html),'collapsed native privacy settings');
+ ok(html.includes('id="homePrivacyControls"'),'retained opt-in control host');
+ ok(!page.links.some(h=>h.includes('google4493')),'verification file not navigation');
+ ok(fs.readFileSync(path.join(root,'revenue-dashboard/index.html'),'utf8').includes('noindex'),'private dashboard unchanged');
+ const art=fs.readFileSync(path.join(root,'assets/travel-coast.svg'),'utf8');ok(Buffer.byteLength(art)<10000,'small local artwork');ok(!/<script|https?:|\bonload\s*=/.test(art.replace('http://www.w3.org/2000/svg','')),'self-contained artwork');
+ return n;
+};

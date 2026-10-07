@@ -29,7 +29,14 @@
   if(footer){
     const notice=document.createElement('div');notice.className='local-telemetry';
     notice.innerHTML=`<strong>Optional local planning history</strong><p>Off by default. Saves broad activity and budget/date/group bands in this browser only. No names, destination text, exact address, or precise location. Existing Travelpayouts offers have separate affiliate processing.</p><label class="check"><input id="telemetryConsent" type="checkbox"> Save local planning history</label><p id="telemetryStatus" role="status"></p><a href="${new URL('revenue-dashboard/',scriptUrl).href}">View / clear / export local history and reports →</a>`;
-    footer.appendChild(notice);$('telemetryConsent').checked=consent;
+    // The homepage keeps opt-in controls in its collapsed privacy settings.
+    const privacyHost=$('homePrivacyControls');
+    if(privacyHost){
+      notice.querySelector('strong').textContent='Your planning history';
+      notice.querySelector('p').textContent='Choose to save planning activity on this device. Off by default. We do not save names, destination details or precise location. Travel offer links have separate provider privacy practices.';
+      notice.querySelector('a').textContent='Manage or delete saved history →';
+    }
+    (privacyHost||footer).appendChild(notice);$('telemetryConsent').checked=consent;
     $('telemetryConsent').disabled=!storage;
     $('telemetryConsent').onchange=()=>{try{consent=$('telemetryConsent').checked;storage.setItem(R.CONSENT_KEY,consent?'yes':'no');if(consent)observed=new WeakSet();status(consent?'Local history enabled. No data is sent to an analytics service.':'Local capture paused. Existing history can be cleared in the dashboard.');if(consent){record('PAGE_VIEWED');document.querySelectorAll('[data-provider-category],[data-comparison-type]').forEach(node=>{visibleObserver?.unobserve(node);visibleObserver?.observe(node);});}}catch(_){consent=false;$('telemetryConsent').checked=false;status('Browser storage unavailable.');}};
   }
