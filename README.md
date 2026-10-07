@@ -86,16 +86,18 @@ Plan My Trip now stores schema V2 transportation and lodging options. Travelers 
 
 The reusable engine is `transport-lodging-intelligence.js`; provider capability decisions are in `data/provider-capability-registry.json`; research and architecture are documented in `docs/TRANSPORT_LODGING_SOURCE_AUDIT_2026-10-03.md` and `docs/TRANSPORT_LODGING_ARCHITECTURE.md`. The only factual connection newly exposed to driving comparisons is the existing EIA weekly reference. A GTFS Schedule adapter foundation is present, but no nationwide live feed or lodging/flight/rental inventory is claimed.
 
-## Events Intelligence Core V1 (pending PR review)
+## Events Intelligence Core V1
 
 Schema V3 persists browser-local canonical events and explicit occurrences. The Plan My Trip event workspace supports add/edit/remove, local date/category/location/season/price/age/family/status filters, and explainable trip-date matches. Category does not imply age, cost, or family fit. Organizer status is independent of UPCOMING/IN_PROGRESS/PAST/DATE_UNKNOWN. Unknown prices stay null; complete required admission cost needs base and mandatory fees.
 
 User-entered events cannot claim official runtime verification. Reload/import downgrades source-backed snapshots and candidate URLs require runtime trust to become official links. No live event feed, nationwide inventory, paid integration, affiliate event ranking, or vendor engine was connected. Source failures become UNAVAILABLE without replacing user records or breaking transport/lodging. See `docs/EVENT_INTELLIGENCE_ARCHITECTURE.md`, `docs/EVENT_SOURCE_AUDIT_2026-10-05.md`, and `data/event-source-registry.json`.
 
-## Revenue Activation + Demand Capture V1 (task branch; pending review)
+## Revenue Activation + Demand Capture V1
 
 Existing high-intent tools and Plan My Trip now offer relevant comparison checklists with a reusable runtime-verified provider action gate. Drive and disclosures remain unchanged; no new direct affiliate URL or account approval is assumed. Optional local history is off by default and captures broad enumerated planning signals only, with view/clear/export at `/revenue-dashboard/`. It does not save destination text, exact budget/dates, identities, precise location, health, or payment data.
 
 The dashboard separates ATTENTION, INTENT and MONEY. Clicks do not become bookings or revenue. Redacted provider-report JSON imports are labeled USER IMPORTED — UNVERIFIED and cannot unlock verified money milestones. With no live payout/report adapter, verified CLEARED REVENUE remains $0. The trip schema stays V3. No paid service, backend, customer payment, autonomous traffic, or national-trend claim was introduced. See `docs/REVENUE_ACTIVATION_ARCHITECTURE.md` and `docs/TRAVELPAYOUTS_REVENUE_ACTIVATION_AUDIT_2026-10-06.md`.
 
-First-dollar sprint V1 improves existing result-to-decision paths and adds local Money Blockers/opportunity-gap diagnostics. No new verified direct provider route or reporting API is configured. See [money-path audit](docs/FIRST_DOLLAR_MONETIZATION_AUDIT_2026-10-06.md) and [operations checklist](docs/FIRST_DOLLAR_OPERATIONS.md). This task is pending independent review; no revenue is claimed.
+First-dollar sprint V1 improves existing result-to-decision paths and adds local Money Blockers/opportunity-gap diagnostics. No new verified direct provider route or reporting API is configured. See [money-path audit](docs/FIRST_DOLLAR_MONETIZATION_AUDIT_2026-10-06.md) and [operations checklist](docs/FIRST_DOLLAR_OPERATIONS.md). No revenue is claimed.
+
+Organic Demand Engine V1 adds daily read-only opportunity/site-health analysis, reviewed seasonal planning windows, visible answers on eight money pages, and one [flight-versus-driving comparison](flight-vs-driving-cost/). It generates neither visitors nor live search claims. See [architecture and import rules](docs/ORGANIC_DEMAND_ENGINE.md), [opportunity snapshot](docs/ORGANIC_OPPORTUNITIES_LATEST.md), and [dated owner-observed traffic baseline](docs/TRAFFIC_BASELINE_2026-10-06.md). Search imports stay unverified and memory-only in the local dashboard; no private report or provider token is published. Owner cost introduced remains $0.
