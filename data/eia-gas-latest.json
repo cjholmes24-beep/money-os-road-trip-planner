@@ -10,7 +10,7 @@
     "machine_source": "https://api.eia.gov/bulk/PET.zip"
   },
   "period_end": "2026-10-05",
-  "retrieved_at": "2026-10-07T00:43:12Z",
+  "retrieved_at": "2026-10-14T00:18:44Z",
   "status": "fresh",
   "confidence": "high",
   "note": "Weekly reference averages, not a promise of the price at a specific station.",
