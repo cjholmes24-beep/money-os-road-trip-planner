@@ -29,6 +29,8 @@ jobs:
           node --check tests/gsc-indexing-tests.js
           node --check tests/browser-homepage-smoke.js
           node --check tests/homepage-tests.js
+          node --check tests/consumer-planner-tests.js
+          node --check tests/browser-planner-smoke.js
           node --check tests/browser-organic-smoke.js
           node --check organic-demand-engine.js
           node --check organic-acquisition-ui.js
@@ -79,7 +81,7 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/homepage-browser" --no-audit --no-fund playwright@1.62.1
           node "$RUNNER_TEMP/homepage-browser/node_modules/playwright/cli.js" install --with-deps chromium
-      - name: Homepage and existing organic browser regressions
+      - name: Homepage, planner, and organic browser regressions
         env:
           NODE_PATH: ${{ runner.temp }}/homepage-browser/node_modules
           SUITCASE_SCREENSHOTS: ${{ runner.temp }}/homepage-screenshots
@@ -101,6 +103,7 @@ jobs:
           PYWAIT
           node tests/browser-homepage-smoke.js
           node tests/browser-organic-smoke.js
+          node tests/browser-planner-smoke.js
       - name: Save homepage viewport screenshots
         if: always()
         uses: actions/upload-artifact@v4
