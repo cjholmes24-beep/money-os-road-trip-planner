@@ -9,8 +9,8 @@
     "url": "https://www.eia.gov/petroleum/gasdiesel/",
     "machine_source": "https://api.eia.gov/bulk/PET.zip"
   },
-  "period_end": "2026-11-02",
-  "retrieved_at": "2026-11-04T01:21:53Z",
+  "period_end": "2026-11-09",
+  "retrieved_at": "2026-11-11T01:14:15Z",
   "status": "fresh",
   "confidence": "high",
   "note": "Weekly reference averages, not a promise of the price at a specific station.",
@@ -23,7 +23,7 @@
         "us",
         "u.s."
       ],
-      "value": 4.29
+      "value": 4.134
     },
     {
       "label": "East Coast",
@@ -31,7 +31,7 @@
       "aliases": [
         "east coast"
       ],
-      "value": 4.057
+      "value": 3.968
     },
     {
       "label": "New England",
@@ -39,7 +39,7 @@
       "aliases": [
         "new england"
       ],
-      "value": 4.287
+      "value": 4.201
     },
     {
       "label": "Central Atlantic",
@@ -47,7 +47,7 @@
       "aliases": [
         "central atlantic"
       ],
-      "value": 4.355
+      "value": 4.269
     },
     {
       "label": "Lower Atlantic",
@@ -55,7 +55,7 @@
       "aliases": [
         "lower atlantic"
       ],
-      "value": 3.806
+      "value": 3.721
     },
     {
       "label": "Midwest",
@@ -63,7 +63,7 @@
       "aliases": [
         "midwest"
       ],
-      "value": 4.195
+      "value": 3.964
     },
     {
       "label": "Gulf Coast",
@@ -71,7 +71,7 @@
       "aliases": [
         "gulf coast"
       ],
-      "value": 3.741
+      "value": 3.588
     },
     {
       "label": "Rocky Mountain",
@@ -80,7 +80,7 @@
         "rocky mountain",
         "rockies"
       ],
-      "value": 4.353
+      "value": 4.09
     },
     {
       "label": "West Coast",
@@ -88,7 +88,7 @@
       "aliases": [
         "west coast"
       ],
-      "value": 5.437
+      "value": 5.252
     },
     {
       "label": "California",
@@ -97,7 +97,7 @@
         "california",
         "ca"
       ],
-      "value": 5.862
+      "value": 5.68
     },
     {
       "label": "Colorado",
@@ -106,7 +106,7 @@
         "colorado",
         "co"
       ],
-      "value": 4.224
+      "value": 3.895
     },
     {
       "label": "Florida",
@@ -115,7 +115,7 @@
         "florida",
         "fl"
       ],
-      "value": 3.895
+      "value": 3.83
     },
     {
       "label": "Massachusetts",
@@ -124,7 +124,7 @@
         "massachusetts",
         "ma"
       ],
-      "value": 4.283
+      "value": 4.184
     },
     {
       "label": "Minnesota",
@@ -133,7 +133,7 @@
         "minnesota",
         "mn"
       ],
-      "value": 4.092
+      "value": 3.925
     },
     {
       "label": "New York",
@@ -142,7 +142,7 @@
         "new york",
         "ny"
       ],
-      "value": 4.353
+      "value": 4.249
     },
     {
       "label": "Ohio",
@@ -151,7 +151,7 @@
         "ohio",
         "oh"
       ],
-      "value": 4.191
+      "value": 3.87
     },
     {
       "label": "Texas",
@@ -160,7 +160,7 @@
         "texas",
         "tx"
       ],
-      "value": 3.688
+      "value": 3.52
     },
     {
       "label": "Washington",
@@ -170,7 +170,7 @@
         "washington",
         "wa"
       ],
-      "value": 5.191
+      "value": 4.971
     },
     {
       "label": "Boston",
@@ -178,7 +178,7 @@
       "aliases": [
         "boston"
       ],
-      "value": 4.318
+      "value": 4.206
     },
     {
       "label": "Chicago",
@@ -186,7 +186,7 @@
       "aliases": [
         "chicago"
       ],
-      "value": 4.889
+      "value": 4.648
     },
     {
       "label": "Cleveland",
@@ -194,7 +194,7 @@
       "aliases": [
         "cleveland"
       ],
-      "value": 4.222
+      "value": 3.933
     },
     {
       "label": "Denver",
@@ -202,7 +202,7 @@
       "aliases": [
         "denver"
       ],
-      "value": 4.204
+      "value": 3.816
     },
     {
       "label": "Houston",
@@ -210,7 +210,7 @@
       "aliases": [
         "houston"
       ],
-      "value": 3.772
+      "value": 3.635
     },
     {
       "label": "Los Angeles",
@@ -219,7 +219,7 @@
         "los angeles",
         "la"
       ],
-      "value": 5.855
+      "value": 5.673
     },
     {
       "label": "Miami",
@@ -227,7 +227,7 @@
       "aliases": [
         "miami"
       ],
-      "value": 4.016
+      "value": 3.934
     },
     {
       "label": "New York City",
@@ -236,7 +236,7 @@
         "new york city",
         "nyc"
       ],
-      "value": 4.298
+      "value": 4.195
     },
     {
       "label": "San Francisco",
@@ -244,7 +244,7 @@
       "aliases": [
         "san francisco"
       ],
-      "value": 5.855
+      "value": 5.618
     },
     {
       "label": "Seattle",
@@ -252,7 +252,7 @@
       "aliases": [
         "seattle"
       ],
-      "value": 5.394
+      "value": 5.183
     }
   ]
 }
